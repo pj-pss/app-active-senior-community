@@ -166,8 +166,8 @@ Common.setInfo = function(url) {
     Common.accessData.unitUrl = _.first(urlSplit, 3).join("/") + "/";
     Common.accessData.cellUrl = _.first(urlSplit, 4).join("/") + "/";
     Common.accessData.cellName = Common.getCellNameFromUrl(Common.accessData.cellUrl);
-    Common.setBoxUrl(url);
-    Common.accessData.boxName = _.last(_.compact(urlSplit));
+    Common.setBoxUrl(url + "/");
+    Common.accessData.boxName = _.last(urlSplit);
 };
 
 Common.getUnitUrl = function() {
