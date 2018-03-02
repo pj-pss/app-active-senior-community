@@ -1,0 +1,166 @@
+{
+    "msg": {
+        "welcome" : "ようこそ",
+        "userName" : "$t(user.001) さん",
+        "backToTop" : "$t(pageTitle.top)に戻る",
+        "backToArticle" : "記事本文に戻る",
+        "readMore" : "もっと見る",
+        "join" : "参加します",
+        "consider" : "検討中",
+        "comment" : "コメント",
+        "touchNFC" : "支援する入居者のNFCタグをNFCリーダにかざしてください",
+        "startOpHelp" : "入居者：$t(user.001)さん の操作支援を開始します",
+        "duringOpHelp" : "支援者：$t(user.002)が操作しています",
+        "endOpHelp" : "入居者:$t(user.001)さん の操作支援を終了しますか?",
+        "registerImg" : "※登録された写真は公開されます",
+        "canNotEditInfo" : "以下の情報は変更できません",
+        "scrollToTop" : "先頭へ戻る",
+        "latest" : "最新50件まで",
+
+        "op" : {
+            "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
+            "comment" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］にコメントしました",
+            "join" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］に参加する!と表明しました",
+            "access" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］より外部サイトにアクセスしました"
+        },
+        "helperOp" : {
+            "endOp" : "$t(userImg.002) がメニューより操作支援終了を選択しました",
+            "join" : "$t(userImg.002)が、$t(pageTitle.bbs)[$t(article.002)]に参加する!と表明しました",
+            "access" : "$t(userImg.002)が、$t(pageTitle.bbs)[$t(article.002)]より、外部サイトにアクセスしました。",
+            "openArticle" : "$t(userImg.002)が、お知らせ画面より$t(pageTitle.bbs)[$t(article.002)]を開きました。"
+        },
+        "concern" : {
+            "001" : "$t(userImg.001)が$t(userImg.002)に、操作支援を同意しました。",
+            "002" : "$t(userImg.001)が$t(userImg.003)に、操作支援を同意しました。"
+        },
+        "history" : {
+            "vital" : "$t(userImg.004)が、$t(profile.vital)を参照しました。",
+            "medicine" : "$t(userImg.005)が、$t(profile.medicine)を参照しました。"
+        },
+
+        "dataExport" : {
+            "title" : "データエクスポート",
+            "start" : "$t(msg.dataExport.title)を実施する",
+            "notice" : "※情報量によって、$t(msg.dataExport.title)の完了までの時間が変動します",
+            "doing" : "※現在、$t(msg.dataExport.title)中です",
+            "wait" : "完了まで暫くお待ち下さい",
+            "complete" : "$t(msg.dataExport.title)が完了しました",
+            "QRcode" : "QRコードからダウンロードを行って下さい"
+        }
+    },
+    "user": {
+        "001" : "富士通 太郎",
+        "002" : "富士通 桜子"
+    },
+    "userImg" : {
+        "001" : "<img src=\"./image/parts_ico_gentleman.png\">",
+        "002" : "<img src=\"./image/parts_ico_operator.png\" onClick=\"openPersonalInfo();\">",
+        "003" : "<img src=\"./image/parts_ico_detective.png\" onClick=\"openPersonalInfo2();\">",
+        "004" : "<img src=\"./image/parts_ico_doctor.png\" onClick=\"openPersonalInfo3();\">",
+        "005" : "<img src=\"./image/parts_ico_doctor2.png\" onClick=\"openPersonalInfo3();\">"
+    },
+    "article" : {
+        "001" : "【配信協力】留学生×市民 みんなで楽しもう！INTERNATIONAL CURRY PARTY",
+        "002" : "柏の葉 街まるごとオープンキャンパス2017のお知らせ"
+    },
+    "btn": {
+        "ok" : "OK",
+        "cancel": "キャンセル",
+        "yes" : "はい",
+        "no" : "いいえ",
+        "edit": "編集",
+        "save": "保存",
+        "release": "解除",
+        "approve": "承諾",
+        "decline": "拒否",
+        "changeImg" : "写真を変更する",
+        "deleteImg" : "写真を削除する",
+        "saveProfile" : "プロフィールを保存する",
+        "postComment" : "コメントを投稿する",
+        "saveDiscInfo" : "開示情報を保存する",
+        "editProfile" : "わたしの情報を変更する"
+    },
+    "pageTitle" : {
+        "action" : "アクション",
+        "top" : "カレンダー",
+        "monitoring" : "見守り",
+        "opHistory" : "私の操作履歴",
+        "helperOpHistory" : "支援者の操作履歴",
+        "consentHistory" : "私の同意履歴",
+        "startHelpOp" : "操作支援",
+        "endHelpOp" : "操作支援終了",
+        "viewHistory" : "私の情報参照履歴",
+        "viewInforDisclosureHistory" : "私の情報開示状況",
+        "viewDataPortability" : "データポータビリティ",
+        "dataExport" : "データエクスポート",
+        "profileEdit" : "プロフィール変更",
+        "vital" : "バイタル情報",
+        "location" : "在宅状況",
+        "bbs" : "みんなの掲示板",
+        "bbsComment" : "みんなの掲示板: コメント"
+    },
+    "modalTitle" : {
+        "postComment" : "コメントを投稿する",
+        "personalInfo" : "人物情報"
+    },
+    "profile" : {
+        "prefix" : "情報開示詳細: ",
+        "location" : "現在地",
+        "basicInfo" : "基本情報",
+        "basicContact" : "連絡先",
+        "basicRoom" : "部屋情報",
+        "option" : "オプション・カスタマイズ",
+        "family" : "家族構成",
+        "pet" : "ペット情報",
+        "crtfctRsdnc" : "住民票",
+        "emrgncyCntct" : "緊急連絡先",
+        "lifestyle" : "生活習慣等",
+        "affltnCrcl" : "所属サークル",
+        "evacuation" : "避難(区分)",
+        "contractInfo" : "契約情報",
+        "enterLeave" : "入退去状況",
+        "operator" : "賃貸契約時の管理会社",
+        "sgmntOwnr" : "区分所有者",
+        "rcptsCnfrmtn" : "受領書類・確認",
+        "healthInfo" : "健康情報",
+        "vital" : "バイタル",
+        "healthInsurance" : "健康保険",
+        "prmryNursingCare" : "要介護認定",
+        "disability" : "身体障害",
+        "prmryCrDctr" : "掛かりつけ医",
+        "anamnesis" : "既往症・通院治療中の病気",
+        "prsntSmptm" : "現症状",
+        "medicine" : "内服薬・外用薬",
+        "vaccination" : "予防接種",
+        "examination" : "検診受診状況",
+        "careService" : "介護サービス"
+    },
+    "vital" : {
+        "bloodPressure" : "血圧",
+        "maxPressure" : "最高血圧",
+        "minPressure" : "最低血圧",
+        "pulse" : "脈拍",
+        "bodyTemp" : "体温",
+        "prevRatio" : "前回比"
+    },
+    "topMenu" : {
+        "top" : "カレンダー",
+        "myHealth" : "私の健康",
+        "monitoring" : "見守り"
+    },
+    "top" : {
+        "participation" : "参加表明",
+        "event" : "イベント",
+        "info" : "お知らせ",
+        "eventHistory" : "活動履歴"
+    },
+    "comment" : {
+        "nickname" : "ニックネームで投稿",
+        "realname" : "実名で投稿",
+        "anonymous" : "匿名で投稿"
+    },
+    "locationState" : {
+        "indoor" : "在宅",
+        "outdoor" : "外出中"
+    }
+}

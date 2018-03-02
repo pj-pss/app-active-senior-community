@@ -1,0 +1,16 @@
+<div class="main_box">
+    <br>
+    <div class="container-fluid">
+        <div class="row" id="topEvent">
+        </div>
+    </div>
+    <br>
+
+    <button class="btn btn-default" onclick="sortArticle('updated')">更新日時</button>
+    <button class="btn btn-default" onclick="sortArticle('start_date')">開催日時</button><br>
+    <button class="btn btn-default" onclick="sortArticle('updated', true)">更新日時(降順)</button>
+    <button class="btn btn-default" onclick="sortArticle('start_date', true)">開催日時(降順)</button><br>
+    <button id="filterInfo" class="btn btn-default">filter: お知らせ</button>
+    <button id="filterEvent" class="btn btn-default">filter: イベント</button>
+    <button class="btn btn-primary" onclick="clearSort()">クリア</button>
+</div>

@@ -1,0 +1,335 @@
+<h2><i class="fa fa-fw fa-medkit icon" aria-hidden="true"></i><span data-i18n="pageTitle.vital"></span></h2>
+<div class="main_box">
+	<div id="vitalPanel">
+		<div id="bloodPressurePanel1">
+			<div class="vitalTitle"><i class="fa fa-heart" aria-hidden="true"></i>&nbsp;<span data-i18n="vital.bloodPressure"></span></div>
+			<div class="vitalUnitBefore"><span data-i18n="vital.maxPressure"></span></div>
+			<div class="vitalValue">126</div>
+			<div class="vitalUnitAfter">mmHg</div>
+			<div class="vitalPrev"><span data-i18n="vital.prevRatio"></span>&nbsp;&nbsp;<span class="vitalPrevValue">+5</span>&nbsp;&nbsp;mmHg</div>
+		</div>
+		<div id="bloodPressurePanel2">
+			<div class="vitalTitle"><span>&nbsp;</span></div>
+			<div class="vitalUnitBefore"><span data-i18n="vital.minPressure"></span></div>
+			<div class="vitalValue">87</div>
+			<div class="vitalUnitAfter">mmHg</div>
+			<div class="vitalPrev"><span data-i18n="vital.prevRatio"></span>&nbsp;&nbsp;<span class="vitalPrevValue">-3</span>&nbsp;&nbsp;mmHg</div>
+		</div>
+		<div id="pulsePanel">
+			<div class="vitalTitle"><i class="fa fa-heart" aria-hidden="true"></i>&nbsp;<span data-i18n="vital.pulse"></span></div>
+			<div class="vitalValue">71</div>
+			<div class="vitalUnitAfter">bpm</div>
+			<div class="vitalPrev"><span data-i18n="vital.prevRatio"></span>&nbsp;&nbsp;<span class="vitalPrevValue">+1</span>&nbsp;&nbsp;bpm</div>
+		</div>
+		<div id="temperaturPanele">
+			<div class="vitalTitle"><i class="fa fa-heart" aria-hidden="true"></i>&nbsp;<span data-i18n="vital.bodyTemp"></span></div>
+			<div class="vitalValue">36.4</div>
+			<div class="vitalUnitAfter">℃</div>
+			<div class="vitalPrev"><span data-i18n="vital.prevRatio"></span>&nbsp;&nbsp;<span class="vitalPrevValue">-0.2</span>&nbsp;&nbsp;℃</div>
+		</div>
+	</div>
+	<div class="panel-group">
+		<div class="panel panel-default">
+			<div class="panel-heading profile-parent" data-toggle="collapse" data-target="#profileHealth">
+				<a href="#profileHealth" class="collapsed header-text" data-toggle="collapse" data-i18n="profile.healthInfo"></a>
+			</div>
+			<div id="profileHealth" class="panel-collapse collapse">
+				<div class="panel-body">
+					<dl>
+						<dt>身長：</dt>
+						<dd>164.3cm</dd>
+						<dt>体重：</dt>
+						<dd>56.7kg</dd>
+						<dt>BMI：</dt>
+						<dd>21</dd>
+						<dt>腹囲：</dt>
+						<dd>78cm</dd>
+					</dl>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileVital">
+								<span class="header-text" data-i18n="profile.vital"></span>
+								<span onclick="viewInfoDisclosureDetail('vital')" class="watching badge">10</span>
+							</div>
+							<div id="profileVital" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>体温(℃)：</dt>
+										<dd>36.4</dd>
+										<dt>血圧 左(mmHg)：</dt>
+										<dd>135 - 80</dd>
+										<dt>血圧 右(mmHg)：</dt>
+										<dd>132 - 65</dd>
+										<dt>血圧 左右2回目(mmHg)：</dt>
+										<dd>129 - 73</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileHealthInsurance">
+								<span class="header-text" data-i18n="profile.healthInsurance"></span>
+								<span onclick="viewInfoDisclosureDetail('healthInsurance')" class="watching badge">1</span>
+							</div>
+							<div id="profileHealthInsurance" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>健康保険種別：</dt>
+										<dd>社会保険</dd>
+										<dt>記号：</dt>
+										<dd>21700023</dd>
+										<dt>番号：</dt>
+										<dd>21</dd>
+										<dt>期限：</dt>
+										<dd>&nbsp;</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profilePrmryNursingCare">
+								<span class="header-text" data-i18n="profile.prmryNursingCare"></span>
+								<span onclick="viewInfoDisclosureDetail('prmryNursingCare')" class="watching badge">2</span>
+							</div>
+							<div id="profilePrmryNursingCare" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>要介護度：</dt>
+										<dd>要介護2</dd>
+										<dt>介護保険の利用：</dt>
+										<dd>あり</dd>
+										<dt>認定日：</dt>
+										<dd>平成26年3月5日</dd>
+										<dt>認定有効期限：</dt>
+										<dd>平成33年3月4日</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileDisability">
+								<span class="header-text" data-i18n="profile.disability"></span>
+								<span onclick="viewInfoDisclosureDetail('disability')" class="watching badge">2</span>
+							</div>
+							<div id="profileDisability" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>身体障害者手帳：</dt>
+										<dd>あり</dd>
+										<dt>等級：</dt>
+										<dd>2級</dd>
+										<dt>備考：</dt>
+										<dd>&nbsp;</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profilePrmryCrDctr">
+								<span class="header-text" data-i18n="profile.prmryCrDctr"></span>
+								<span onclick="viewInfoDisclosureDetail('prmryCrDctr')" class="watching badge">3</span>
+							</div>
+							<div id="profilePrmryCrDctr" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>病院：</dt>
+										<dd>富士通クリニック</dd>
+										<dt>診療科：</dt>
+										<dd>整形外科</dd>
+										<dt>担当医：</dt>
+										<dd>骨接　太郎</dd>
+										<dt>電話番号：</dt>
+										<dd>045-123-4567</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileAnamnesis">
+								<span class="header-text" data-i18n="profile.anamnesis"></span>
+								<span onclick="viewInfoDisclosureDetail('anamnesis')" class="watching badge">3</span>
+							</div>
+							<div id="profileAnamnesis" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>病名：</dt>
+										<dd>脳梗塞</dd>
+										<dt>状況：</dt>
+										<dd>完治</dd>
+										<dt>罹患年齢：</dt>
+										<dd>55歳</dd>
+										<dt>完治年齢：</dt>
+										<dd>58歳</dd>
+										<dt>詳細：</dt>
+										<dd>右半身麻痺が残る</dd>
+										<dt>病院：</dt>
+										<dd>東京大学病院</dd>
+										<dt>感染症：</dt>
+										<dd>肺結核</dd>
+										<dt>状況：</dt>
+										<dd>完治</dd>
+										<dt>罹患年齢：</dt>
+										<dd>61歳</dd>
+										<dt>完治年齢：</dt>
+										<dd>61歳</dd>
+										<dt>詳細：</dt>
+										<dd>同居家族より2次感染</dd>
+										<dt>病院：</dt>
+										<dd>神奈川病院</dd>
+										<dt>アレルギー・禁忌(薬物・食品等)：</dt>
+										<dd>花粉症(杉)、小麦粉</dd>
+										<dt>特徴(身体)：</dt>
+										<dd>右半身に少々麻痺あり</dd>
+										<dt>特徴(性格)：</dt>
+										<dd>気が短い</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profilePrsntSmptm">
+								<span class="header-text" data-i18n="profile.prsntSmptm"></span>
+								<span onclick="viewInfoDisclosureDetail('prsntSmptm')" class="watching badge">5</span>
+							</div>
+							<div id="profilePrsntSmptm" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>食欲：</dt>
+										<dd>あり</dd>
+										<dt>アルコール：</dt>
+										<dd>平均1合</dd>
+										<dt>喫煙：</dt>
+										<dd>平均20本</dd>
+										<dt>睡眠：</dt>
+										<dd>平均6時間</dd>
+										<dt>自覚症状：</dt>
+										<dd>腰の痛み</dd>
+										<dt>運動習慣：</dt>
+										<dd>週3回の散歩</dd>
+										<dt>家族歴：</dt>
+										<dd>肝臓がん</dd>
+										<dt>その他：</dt>
+										<dd>&nbsp;</dd>
+										<dt>麻痺[有]：</dt>
+										<dd>右半身</dd>
+										<dt>麻痺[無]：</dt>
+										<dd>&nbsp;</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileMedicine">
+								<span class="header-text" data-i18n="profile.medicine"></span>
+								<span onclick="viewInfoDisclosureDetail('medicine')" class="watching badge">5</span>
+							</div>
+							<div id="profileMedicine" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>日付：</dt>
+										<dd>平成29年11月28日</dd>
+										<dt>詳細：</dt>
+										<dd>抗血小板薬</dd>
+										<dt>日付：</dt>
+										<dd>平成29年12月14日</dd>
+										<dt>詳細：</dt>
+										<dd>冷湿布薬</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileVaccination">
+								<span class="header-text" data-i18n="profile.vaccination"></span>
+								<span onclick="viewInfoDisclosureDetail('vaccination')" class="watching badge">2</span>
+							</div>
+							<div id="profileVaccination" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>日付：</dt>
+										<dd>平成29年10月4日</dd>
+										<dt>種類：</dt>
+										<dd>インフルエンザ予防</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileExamination">
+								<span class="header-text" data-i18n="profile.examination"></span>
+								<span onclick="viewInfoDisclosureDetail('examination')" class="watching badge">2</span>
+							</div>
+							<div id="profileExamination" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>日付：</dt>
+										<dd>平成29年6月21日</dd>
+										<dt>状況：</dt>
+										<dd>人間ドック受診</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="list-group-item" data-toggle="collapse" data-target="#profileCareService">
+								<span class="header-text" data-i18n="profile.careService"></span>
+								<span onclick="viewInfoDisclosureDetail('careService')" class="watching badge">2</span>
+							</div>
+							<div id="profileCareService" class="panel-collapse collapse">
+								<div class="panel-body">
+									<dl>
+										<dt>利用中サービス：</dt>
+										<dd>デイサービス(筋トレ)</dd>
+										<dt>サービス提供者：</dt>
+										<dd>株式会社ケアネット</dd>
+										<dt>連絡先：</dt>
+										<dd>神奈川県川崎市中原区上小田中4-1-1</dd>
+										<dt>担当ケアマネージャー：</dt>
+										<dd>鈴木　有統</dd>
+										<dt>会社名：</dt>
+										<dd>株式会社ケアネット</dd>
+										<dt>連絡先：</dt>
+										<dd>080-1234-5678</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<p class="scrollToTop"><a href="#top" data-i18n="msg.scrollToTop"></a></p>
+</div>
