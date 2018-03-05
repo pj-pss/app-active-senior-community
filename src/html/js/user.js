@@ -567,7 +567,6 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
         alert('already done it');
         return;
     }
-    var box = 'app-fst-community-user';
     var oData = 'test_reply';
     var entityType = 'reply_history';
 
