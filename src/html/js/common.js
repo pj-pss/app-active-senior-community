@@ -96,6 +96,44 @@ $(document).ready(function() {
                         console.log(error.responseJSON.message.value);
                         Common.irrecoverableErrorHandler("msg.error.failedToGetBoxUrl");
                     });
+
+                $.ajax({
+                    type: "GET",
+                    url: cellUrl + "__ctl/Account",
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Accept': 'application/json'
+                    }
+                }).done($.proxy(function (data, textStatus, request) {
+                    $.ajax({
+                        type: "GET",
+                        url: cellUrl + "__ctl/Account(Name='" + data.d.results[0].Name + "')/$links/_Role",
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json'
+                        }
+                    }).done(function (data2, textStatus2, request2) {
+                        var appCellName = Common.getAppCellUrl().split("/")[3];
+                        var reg = new RegExp("Name=\'(.*)\',\_Box\.Name=\'" + appCellName + "\'");
+                        var supportRole = _.find(data2.d.results, $.proxy(function (d) {
+                            var matchword = d.uri.match(reg);
+                            if (matchword !== null) {
+                                return matchword[1] === "test_supporter" || matchword[1] === "test_organization";
+                            }
+                            return false
+                        }, this));
+                        if (supportRole !== undefined) {
+                            $("#supporter").show();
+                        }
+                        $("#user").show();
+                    }).fail(function () {
+                        console.log("fail");
+                    });
+                }, this))
+                .fail(function (error) {
+                    console.log("fail");
+                });
+
             });
 
             Common.updateContent();
@@ -119,7 +157,7 @@ Common.setAppCellUrl = function() {
     if (_.contains(appUrlSplit, "localhost") || _.contains(appUrlSplit, "file:")) {
         Common.accessData.appUrl = APP_URL; // APP_URL must be defined by each App
     } else {
-        Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/"; 
+        Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/";
     }
 
     return;
@@ -166,7 +204,7 @@ Common.getBoxUrlFromResponse = function(info) {
     let urlFromBody = info.data.Url;
     let urlDefaultBox = info.targetCellUrl + APP_BOX_NAME;
     let boxUrl = urlFromHeader || urlFromBody || urlDefaultBox;
-    
+
     return boxUrl;
 };
 
@@ -327,7 +365,7 @@ Common.appendSessionExpiredDialog = function() {
     $("body")
         .append(html)
         .localize();
-    $('#b-session-relogin-ok').on('click', function() { 
+    $('#b-session-relogin-ok').on('click', function() {
         Common.closeTab();
     });
 };
@@ -488,7 +526,7 @@ Common.getProtectedBoxAccessToken4ExtCell = function(cellUrl, tcat, aaat) {
 };
 
 /*
- * idling check 
+ * idling check
  * Common.lastActivity + Common.accessData.expires * 1000
  */
 Common.checkIdleTime = function() {
