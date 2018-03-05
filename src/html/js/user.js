@@ -214,7 +214,7 @@ $(function() {
 
 function getArticleList(divId) {
     callArticleFunction(function (token){
-        var oData = 'test_article';
+        var oData = 'article';
         var entityType = 'provide_information';
 
         $.ajax({
@@ -263,7 +263,7 @@ function getArticleList(divId) {
 }
 
 function getArticleListImage(id, token) {
-    var DAV = 'test_article_image';
+    var DAV = 'article_image';
 
     $.ajax({
         type: 'GET',
@@ -298,7 +298,7 @@ function getArticleListImage(id, token) {
 
 function getJoinInfoList(token) {
     // get reply list
-    var oData = 'test_reply';
+    var oData = 'reply';
     var entityType = 'reply_history';
 
     $.ajax({
@@ -345,9 +345,9 @@ function getJoinInfoList(token) {
 function getArticleDetail(id) {
 
     callArticleFunction(function (token) {
-        var oData = 'test_article';
+        var oData = 'article';
         var entityType = 'provide_information';
-        var DAV = 'test_article_image';
+        var DAV = 'article_image';
 
         var err = [];
 
@@ -389,7 +389,7 @@ function getArticleDetail(id) {
             // get reply info
             $.ajax({
                 type: 'GET',
-                url: Common.getToCellBoxUrl() + "test_reply/reply_history",
+                url: Common.getToCellBoxUrl() + "reply/reply_history",
                 headers: {
                     'Authorization': 'Bearer ' + token,
                     'Accept': 'application/json'
@@ -460,7 +460,7 @@ function getArticleDetail(id) {
             $.when(
                 $.ajax({
                     type: 'GET',
-                    url: Common.getBoxUrl() + "test_reply/reply_history",
+                    url: Common.getBoxUrl() + "reply/reply_history",
                     headers: {
                         "Authorization": "Bearer " + Common.getToken(),
                         "Accept": "application/json"
@@ -471,7 +471,7 @@ function getArticleDetail(id) {
                 }),
                 $.ajax({
                     type: 'GET',
-                    url: Common.getToCellBoxUrl() + "test_reply/reply_history",
+                    url: Common.getToCellBoxUrl() + "reply/reply_history",
                     headers: {
                         "Authorization": "Bearer " + token,
                         "Accept": "application/json"
@@ -534,7 +534,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
         alert('already done it');
         return;
     }
-    var oData = 'test_reply';
+    var oData = 'reply';
     var entityType = 'reply_history';
 
     callArticleFunction(function(token) {

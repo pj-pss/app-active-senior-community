@@ -54,9 +54,9 @@ function openComment(id){
     });
 
 	callArticleFunction($.proxy(function(token) {
-		var collection1 = 'test_article';
+		var collection1 = 'article';
 	    var entity1 = 'provide_information';
-		var collection2 = 'test_reply';
+		var collection2 = 'reply';
 	    var entity2 = 'reply_history';
 		var displayData = [
 		    $.ajax({
@@ -506,7 +506,7 @@ function saveArticle(editId) {
       return;
     }
 
-    var oData = 'test_article';
+    var oData = 'article';
     var entityType = 'provide_information';
 
     var err = [];
@@ -554,7 +554,7 @@ function saveArticle(editId) {
 
     // save img
     var saveImg = function(res){
-      var DAV = 'test_article_image';
+      var DAV = 'article_image';
       var id = res.d ? res.d.results.__id : res;
 
       return $.ajax({
@@ -622,9 +622,9 @@ function dataURLtoBlob(dataURL) {
 function getArticleList() {
 
   callArticleFunction(function(token) {
-	var collection1 = 'test_article';
+	var collection1 = 'article';
     var entity1 = 'provide_information';
-	var collection2 = 'test_reply';
+	var collection2 = 'reply';
     var entity2 = 'reply_history';
 	var displayData = [
 	    $.ajax({
@@ -691,9 +691,9 @@ function getArticleList() {
 function getArticleDetail(id) {
 
   callArticleFunction(function(token) {
-    var oData = 'test_article';
+    var oData = 'article';
     var entityType = 'provide_information';
-    var DAV = 'test_article_image';
+    var DAV = 'article_image';
 
     var err = [];
 
@@ -784,9 +784,9 @@ function showDeleteArticleConfirm(id) {
 function deleteArticle(id) {
 
   callArticleFunction(function(token) {
-    var oData = 'test_article';
+    var oData = 'article';
     var entityType = 'provide_information';
-    var DAV = 'test_article_image';
+    var DAV = 'article_image';
 
     var err = [];
 
