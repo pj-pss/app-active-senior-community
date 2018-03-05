@@ -352,7 +352,7 @@ input[type="date"] + .calendar-button {
   /* width: 32px; */
   /* height: 32px; */
   vertical-align: middle;
-  /* background-image: url("../img/calendar.png"); */
+  /* background-image: url("./img/calendar.png"); */
   /* background-size: 32px; */
   /* background-repeat: no-repeat; */
   /* background-position: center; */
@@ -505,7 +505,7 @@ table.no-border-table td:first-child {
   height: 16px;
   margin-left: 8px;
   vertical-align: middle;
-  background-image: url("../img/sort.png");
+  background-image: url("./img/sort.png");
   background-size: 15px 14px;
   background-repeat: no-repeat;
   background-position: center;
@@ -610,7 +610,7 @@ table.no-border-table td:first-child {
   vertical-align: middle;
   width: 16px;
   height: 16px;
-  background-image: url("../img/parts_ico_time.png");
+  background-image: url("./img/parts_ico_time.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 16px;
