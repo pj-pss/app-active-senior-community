@@ -53,11 +53,11 @@
         "002" : "富士通 桜子"
     },
     "userImg" : {
-        "001" : "<img src=\"../image/parts_ico_gentleman.png\">",
-        "002" : "<img src=\"../image/parts_ico_operator.png\" onClick=\"openPersonalInfo();\">",
-        "003" : "<img src=\"../image/parts_ico_detective.png\" onClick=\"openPersonalInfo2();\">",
-        "004" : "<img src=\"../image/parts_ico_doctor.png\" onClick=\"openPersonalInfo3();\">",
-        "005" : "<img src=\"../image/parts_ico_doctor2.png\" onClick=\"openPersonalInfo3();\">"
+        "001" : "<img src=\"../img/parts_ico_gentleman.png\">",
+        "002" : "<img src=\"../img/parts_ico_operator.png\" onClick=\"openPersonalInfo();\">",
+        "003" : "<img src=\"../img/parts_ico_detective.png\" onClick=\"openPersonalInfo2();\">",
+        "004" : "<img src=\"../img/parts_ico_doctor.png\" onClick=\"openPersonalInfo3();\">",
+        "005" : "<img src=\"../img/parts_ico_doctor2.png\" onClick=\"openPersonalInfo3();\">"
     },
     "article" : {
         "001" : "【配信協力】留学生×市民 みんなで楽しもう！INTERNATIONAL CURRY PARTY",
