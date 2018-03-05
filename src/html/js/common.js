@@ -55,7 +55,7 @@ $(document).ready(function() {
             debug: true,
             backend: {
                 // load from i18next-gitbook repo
-                loadPath: './locales/{{lng}}/{{ns}}.json',
+                loadPath: '../locales/{{lng}}/{{ns}}.json',
                 crossDomain: true
             }
         }, function(err, t) {
