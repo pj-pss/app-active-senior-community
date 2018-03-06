@@ -4,6 +4,7 @@
         "userName" : "$t(user.001) さん",
         "backToTop" : "$t(pageTitle.top)に戻る",
         "backToArticle" : "記事本文に戻る",
+        "backToBbs" : "$t(pageTitle.bbs)に戻る",
         "readMore" : "もっと見る",
         "join" : "参加します",
         "consider" : "検討中",
@@ -52,6 +53,7 @@
         "001" : "富士通 太郎",
         "002" : "富士通 桜子"
     },
+	"entry": {"anonymous" : "匿名"},
     "userImg" : {
         "001" : "<img src=\"../img/parts_ico_gentleman.png\">",
         "002" : "<img src=\"../img/parts_ico_operator.png\" onClick=\"openPersonalInfo();\">",
@@ -97,7 +99,9 @@
         "vital" : "バイタル情報",
         "location" : "在宅状況",
         "bbs" : "みんなの掲示板",
-        "bbsComment" : "みんなの掲示板: コメント"
+        "bbsComment" : "みんなの掲示板: コメント",
+		"participate" : "参加する人",
+		"consider" : "検討している人"
     },
     "modalTitle" : {
         "postComment" : "コメントを投稿する",

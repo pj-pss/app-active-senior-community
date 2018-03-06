@@ -1192,6 +1192,20 @@ div.profile-parent > a {
   margin-top: 10px;
 }
 
+#articleDetail .entry {
+  text-align: left;
+  padding: 10px;
+}
+
+#articleDetail .entry .consider-div{
+  padding-left: 5px;
+}
+
+#articleDetail .entry .consider-div,
+#articleDetail .entry .join-div{
+  cursor: pointer;
+}
+
 #articleDetail .url {
   word-break: break-all;
   margin: 20px 0;
@@ -1211,4 +1225,20 @@ pre.text {
 
 .centering {
   text-align: center;
+}
+
+.image-circle-large{
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    border: 1px solid #000;
+    margin: 10px;
+}
+
+#entry-list table{
+	width: 100%;
+}
+
+#entry-list table .td-bd{
+	border-bottom: 1px solid black;
 }

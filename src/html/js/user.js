@@ -19,6 +19,7 @@ var imageList = {};
 var joinList = {};
 var sort_key = 'updated';
 var filter = null;
+var currentTime = moment();
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -26,7 +27,16 @@ getEngineEndPoint = function () {
 
 additionalCallback = function () {
     Common.setIdleTime();
-    getArticleList('topEvent');
+    $.ajax({
+        // get current time on japan
+        type: 'GET',
+        url: 'https://ntp-b1.nict.go.jp/cgi-bin/json'
+    })
+    .done(function(res) {
+        currentTime = moment(res.st * 1000);
+        getArticleList('topEvent');
+        getUserProfile();
+    })
 }
 
 getNamesapces = function () {
@@ -179,7 +189,7 @@ $(function() {
     $("#viewDataExport").load("viewDataExport.html");
     $("#viewQRCode").load("viewQRCode.html");
     $("#articleDetail").load("articleDetail.html");
-
+    $("#entryList").load("entryList.html");
     $("#modal-nfcReader").load("modal-nfcReader.html");
     $("#modal-helpConfirm").load("modal-helpConfirm.html");
     $("#modal-personalInfo").load("modal-personalInfo.html");
@@ -213,51 +223,45 @@ $(function() {
 });
 
 function getArticleList(divId) {
-    callArticleFunction(function (token){
+    getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
 
         $.ajax({
-            // get current time on japan
-            type: 'GET',
-            url: 'https://ntp-b1.nict.go.jp/cgi-bin/json'
-        }).done(function(res){
-            $.ajax({
-                type: "GET",
-                url: Common.getToCellBoxUrl() + oData + '/' + entityType,
-                headers: {
-                    "Authorization": "Bearer " + token,
-                    "Accept" : "application/json"
-                }
-            }).done(function(data) {
-                $('#' + divId).empty();
-                var list = [];
-                var results = data.d.results;
-                articleList = [];
-                for(result of results.reverse()){
-                    if (result.type == TYPE.EVENT && moment(result.end_date) < moment(res.st * 1000)) continue;
+            type: "GET",
+            url: Common.getToCellBoxUrl() + oData + '/' + entityType,
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept" : "application/json"
+            }
+        }).done(function(data) {
+            $('#' + divId).empty();
+            var list = [];
+            var results = data.d.results;
+            articleList = [];
+            for(result of results.reverse()){
+                if (result.type == TYPE.EVENT && moment(result.end_date) < currentTime) continue;
 
-                    var div = createArticleGrid(result.__id, result.title, result.start_date);
-                    list.push(div);
-                    getArticleListImage(result.__id, token);
+                var div = createArticleGrid(result.__id, result.title, result.start_date);
+                list.push(div);
+                getArticleListImage(result.__id, token);
 
-                    articleList.push({
-                        id: result.__id,
-                        type: result.type,
-                        title: result.title,
-                        updated: result.__updated,
-                        start_date: result.start_date
-                    });
-                }
-                $('#' + divId).html(list.join(''));
+                articleList.push({
+                    id: result.__id,
+                    type: result.type,
+                    title: result.title,
+                    updated: result.__updated,
+                    start_date: result.start_date
+                });
+            }
+            $('#' + divId).html(list.join(''));
 
-                clearSort();
+            clearSort();
 
-                getJoinInfoList(token);
-            })
-            .fail(function() {
-                alert('failed to get article list');
-            });
+            getJoinInfoList(token);
+        })
+        .fail(function() {
+            alert('failed to get article list');
         });
     }, divId);
 }
@@ -342,9 +346,83 @@ function getJoinInfoList(token) {
     });
 }
 
+function viewJoinConsiderList(entryFlag,articleId){
+    getExtCellToken(function (token,arg) {
+	    var oData = 'reply';
+	    var entityType = 'reply_history';
+
+	    $.ajax({
+	        type: "GET",
+	        url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=entry_flag eq ' + arg[0] + ' and provide_id eq \'' + arg[1] + '\'&\$orderby=__updated desc',
+	        headers: {
+	            "Authorization": "Bearer " + token,
+	            "Accept": "application/json"
+	        }
+	    })
+	    .done(function(res) {
+			var list = [];
+			this.entryDatas = res.d.results;
+			_.each(this.entryDatas, $.proxy(function(entryData){
+			    list.push($.ajax({
+			        type: "GET",
+					dataType: 'json',
+			        url : entryData.user_cell_url + '__/profile.json',
+			        headers: {
+			            "Authorization": "Bearer " + token,
+			            "Accept" : "application/json"
+			        }
+		    	}));
+			},this));
+
+			this.multi = list.length !== 1 ? true : false;
+			$.when.apply($, list).done($.proxy(function () {
+				var profiles = arguments;
+				if(!this.multi){
+					profiles = {0:arguments}
+				}
+				$("#entry-list table").children().remove();
+				if(arg[0] === REPLY.JOIN){
+					$("#entry-list-title").attr("data-i18n", "pageTitle.participate");
+				}else{
+					$("#entry-list-title").attr("data-i18n", "pageTitle.consider");
+				}
+
+				$("#entry-list-count").text(this.entryDatas.length.toString());
+
+				for(var i = 0; i < this.entryDatas.length; i++){
+					var updated = moment(new Date(parseInt(this.entryDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
+					var dispname = '<td data-i18n=\"entry.anonymous\"></td>';
+					var dispdescription = "";
+					var	imgsrc = "image/user-circle.png";
+					if(!this.entryDatas[i].anonymous){
+						dispname = '<td>' + profiles[i][0].DisplayName + '</td>';
+						dispdescription = profiles[i][0].Description;
+						if(profiles[i][0].Image !== ""){
+							imgsrc = profiles[i][0].Image;
+						}
+					}
+
+					var img = '<img class=\"image-circle-large\" src=\"' + imgsrc + '\" alt=\"image\"></img>';
+					var elem = '<tr><td rowspan="3" class="td-bd">' + img + '</td>' + dispname + '<td rowspan="3" class="td-bd"><i class="fa fa-fw fa-angle-right icon" aria-hidden="true"></i></td></tr><tr><td>' + dispdescription + '</td></tr><tr><td class="td-bd">' + updated.format("YYYY/MM/DD") + '</td></tr>';
+
+					$("#entry-list table").append(elem);
+				}
+				view('entryList');
+
+			},this)).fail(function() {
+				console.log('error: get profile.json');
+			});
+	    })
+	    .fail(function() {
+	        alert('error: get reply_history');
+	    });
+
+    }, [entryFlag,articleId]);
+}
+
 function getArticleDetail(id) {
 
-    callArticleFunction(function (token) {
+    getExtCellToken(function (token) {
         var oData = 'article';
         var entityType = 'provide_information';
         var DAV = 'article_image';
@@ -455,7 +533,8 @@ function getArticleDetail(id) {
             }
             $('#joinNum').html(join);
             $('#considerNum').html(consider);
-
+            $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
+            $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id  + "');return false;");
             // get reply information
             $.when(
                 $.ajax({
@@ -504,7 +583,7 @@ function getArticleDetail(id) {
     }, id);
 }
 
-function callArticleFunction(callback, id) {
+function getExtCellToken(callback, id) {
     if (Common.getCellUrl() == ORGANIZATION_CELL_URL) {
         callback(Common.getToken(), id);
     } else {
@@ -537,7 +616,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
     var oData = 'reply';
     var entityType = 'reply_history';
 
-    callArticleFunction(function(token) {
+    getExtCellToken(function(token) {
         var err = [];
         var anonymous = $('[name=checkAnonymous]').prop('checked');
 
@@ -760,4 +839,107 @@ function addLinkToGrid() {
             window.location = $(this).attr('data-href');
         });
     });
+}
+
+function getUserProfile() {
+    $.when(
+        $.ajax({
+            type: 'GET',
+            url: Common.getBoxUrl() + "user_info/user_basic_information",
+            headers: {
+                "Authorization": "Bearer " + Common.getToken(),
+                "Accept": "application/json"
+            }
+        }),
+        $.ajax({
+            type: 'GET',
+            url: Common.getBoxUrl() + "user_info/user_health_information",
+            headers: {
+                "Authorization": "Bearer " + Common.getToken(),
+                "Accept": "application/json"
+            }
+        }),
+        $.ajax({
+            type: 'GET',
+            url: Common.getBoxUrl() + "user_info/user_vital",
+            headers: {
+                "Authorization": "Bearer " + Common.getToken(),
+                "Accept": "application/json"
+            }
+        })
+    )
+    .done(function(res1, res2, res3){
+        vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated});
+        vitalList.reverse();
+
+        var basicInfo = res1[0].d.results[0];
+        var healthInfo = res2[0].d.results[0];
+        var vital = vitalList[0];
+        var preVital = vitalList[1];
+
+        if(preVital != null) {
+            var tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
+            var minDiff = vital.min_pressure - preVital.min_pressure;
+            var maxDiff = vital.max_pressure - preVital.max_pressure;
+            var pulseDiff = vital.pulse - preVital.pulse;
+
+            tempDiff = tempDiff < 0 ? tempDiff : '+' + tempDiff;
+            minDiff = minDiff < 0 ? minDiff : '+' + minDiff;
+            maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
+            pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
+        }
+
+        var sex;
+        switch(basicInfo.sex) {
+            case 'male': sex = '男性'; break;
+            case 'female': sex = '女性'; break;
+            default: sex = 'その他';
+        }
+
+        var basicInfoHtml = '<dt>'
+            + '<dt>姓名:</dt>'
+            + '<dd>' + basicInfo.name + '</dd>'
+            + '<dt>ふりがな:</dt>'
+            + '<dd>' + basicInfo.name_kana + '</dd>'
+            + '<dt>性別:</dt>'
+            + '<dd>' + sex + '</dd>'
+            + '<dt>生年月日:</dt>'
+            + '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + '歳)</dd>'
+            + '<dt>郵便番号:</dt>'
+            + '<dd>' + basicInfo.postal_code + '</dd>'
+            + '<dt>住所:</dt>'
+            + '<dd>' + basicInfo.address + '</dd>'
+            + '<dt>コメント:</dt>'
+            + '<dd>' + basicInfo.comment + '</dd>'
+            + '</dt>';
+        $('#basicInfo').html(basicInfoHtml);
+
+        var healthInfoHtml = '<dt>'
+            + '<dt>身長:</dt>'
+            + '<dd>' + healthInfo.height + ' cm</dd>'
+            + '<dt>体重:</dt>'
+            + '<dd>' + healthInfo.weight + ' kg</dd>'
+            + '<dt>BMI:</dt>'
+            + '<dd>' + healthInfo.bmi + '</dd>'
+            + '<dt>腹囲:</dt>'
+            + '<dd>' + healthInfo.grith_abdomen + ' cm</dd>'
+            + '</dt>';
+        $('#healthInfo').html(healthInfoHtml);
+
+        var vitalHtml = '<dt>'
+            + '<dt>体温 (℃):</dt>'
+            + '<dd>' + vital.temperature + ' (' + (tempDiff || '-') + ')' + '</dd>'
+            + '<dt>血圧:</dt>'
+            + '<dd>最高: ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>'
+            + '<dd>最低: ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>'
+            + '<dt>脈拍:</dt>'
+            + '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>'
+            + '</dt>';
+        $('#vital').html(vitalHtml);
+
+    })
+    .fail(function() {
+        alert('error: get user profile');
+    });
+
 }
