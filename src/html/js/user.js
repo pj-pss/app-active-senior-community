@@ -393,7 +393,7 @@ function viewJoinConsiderList(entryFlag,articleId){
 					var updated = moment(new Date(parseInt(this.entryDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
 					var dispname = '<td data-i18n=\"entry.anonymous\"></td>';
 					var dispdescription = "";
-					var	imgsrc = "image/user-circle.png";
+					var	imgsrc = "../img/user-circle.png";
 					if(!this.entryDatas[i].anonymous){
 						dispname = '<td>' + profiles[i][0].DisplayName + '</td>';
 						dispdescription = profiles[i][0].Description;
