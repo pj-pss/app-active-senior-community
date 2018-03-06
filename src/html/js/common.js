@@ -55,7 +55,7 @@ $(document).ready(function() {
             debug: true,
             backend: {
                 // load from i18next-gitbook repo
-                loadPath: './locales/{{lng}}/{{ns}}.json',
+                loadPath: '../locales/{{lng}}/{{ns}}.json',
                 crossDomain: true
             }
         }, function(err, t) {
@@ -78,7 +78,12 @@ $(document).ready(function() {
                 let token = Common.getToken();
                 Common.getBoxUrlAPI(cellUrl, token)
                     .done(function(data, textStatus, request) {
-                        let boxUrl = Common.getBoxUrlFromResponseHeader(request);
+                        let tempInfo = {
+                            data: data,
+                            request: request,
+                            targetCellUrl: cellUrl
+                        };
+                        let boxUrl = Common.getBoxUrlFromResponse(tempInfo);
                         console.log(boxUrl);
                         Common.setInfo(boxUrl);
                         // define your own additionalCallback for each App/screen
@@ -91,6 +96,44 @@ $(document).ready(function() {
                         console.log(error.responseJSON.message.value);
                         Common.irrecoverableErrorHandler("msg.error.failedToGetBoxUrl");
                     });
+
+                $.ajax({
+                    type: "GET",
+                    url: cellUrl + "__ctl/Account",
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Accept': 'application/json'
+                    }
+                }).done($.proxy(function (data, textStatus, request) {
+                    $.ajax({
+                        type: "GET",
+                        url: cellUrl + "__ctl/Account(Name='" + data.d.results[0].Name + "')/$links/_Role",
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json'
+                        }
+                    }).done(function (data2, textStatus2, request2) {
+                        var appCellName = Common.getAppCellUrl().split("/")[3];
+                        var reg = new RegExp("Name=\'(.*)\',\_Box\.Name=\'" + appCellName + "\'");
+                        var supportRole = _.find(data2.d.results, $.proxy(function (d) {
+                            var matchword = d.uri.match(reg);
+                            if (matchword !== null) {
+                                return matchword[1] === "test_supporter" || matchword[1] === "test_organization";
+                            }
+                            return false
+                        }, this));
+                        if (supportRole !== undefined) {
+                            $("#supporter").show();
+                        }
+                        $("#user").show();
+                    }).fail(function () {
+                        console.log("fail");
+                    });
+                }, this))
+                .fail(function (error) {
+                    console.log("fail");
+                });
+
             });
 
             Common.updateContent();
@@ -114,7 +157,7 @@ Common.setAppCellUrl = function() {
     if (_.contains(appUrlSplit, "localhost") || _.contains(appUrlSplit, "file:")) {
         Common.accessData.appUrl = APP_URL; // APP_URL must be defined by each App
     } else {
-        Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/"; 
+        Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/";
     }
 
     return;
@@ -156,8 +199,12 @@ Common.getBoxUrlAPI = function(cellUrl, token) {
  * Currently the REST API does not support CORS.
  * Therefore, for CORS case, the default Box name is used.
  */
-Common.getBoxUrlFromResponseHeader = function(request) {
-    let boxUrl = request.getResponseHeader("Location") || (Common.getCellUrl() + APP_BOX_NAME);
+Common.getBoxUrlFromResponse = function(info) {
+    let urlFromHeader = info.request.getResponseHeader("Location");
+    let urlFromBody = info.data.Url;
+    let urlDefaultBox = info.targetCellUrl + APP_BOX_NAME;
+    let boxUrl = urlFromHeader || urlFromBody || urlDefaultBox;
+
     return boxUrl;
 };
 
@@ -166,8 +213,8 @@ Common.setInfo = function(url) {
     Common.accessData.unitUrl = _.first(urlSplit, 3).join("/") + "/";
     Common.accessData.cellUrl = _.first(urlSplit, 4).join("/") + "/";
     Common.accessData.cellName = Common.getCellNameFromUrl(Common.accessData.cellUrl);
-    Common.setBoxUrl(url + "/");
-    Common.accessData.boxName = _.last(urlSplit);
+    Common.setBoxUrl(url);
+    Common.accessData.boxName = _.last(_.compact(urlSplit));
 };
 
 Common.getUnitUrl = function() {
@@ -318,7 +365,7 @@ Common.appendSessionExpiredDialog = function() {
     $("body")
         .append(html)
         .localize();
-    $('#b-session-relogin-ok').on('click', function() { 
+    $('#b-session-relogin-ok').on('click', function() {
         Common.closeTab();
     });
 };
@@ -440,7 +487,12 @@ Common.perpareToCellInfo = function(cellUrl, tcat, aaat, callback) {
         Common.setToCellToken(appCellToken.access_token);
         Common.getBoxUrlAPI(cellUrl, appCellToken.access_token)
             .done(function(data, textStatus, request) {
-                let boxUrl = Common.getBoxUrlFromResponseHeader(request);
+                let tempInfo = {
+                    data: data,
+                    request: request,
+                    targetCellUrl: cellUrl
+                };
+                let boxUrl = Common.getBoxUrlFromResponse(tempInfo);
                 Common.setToCellBoxUrl(boxUrl);
                 // callback
                 if ((typeof callback !== "undefined") && $.isFunction(callback)) {
@@ -474,7 +526,7 @@ Common.getProtectedBoxAccessToken4ExtCell = function(cellUrl, tcat, aaat) {
 };
 
 /*
- * idling check 
+ * idling check
  * Common.lastActivity + Common.accessData.expires * 1000
  */
 Common.checkIdleTime = function() {

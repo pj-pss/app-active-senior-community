@@ -14,39 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const TYPE = {
-    INFO: 0,
-    EVENT: 1
-}
-
-const SEX = {
-    ALL: 0,
-    MALE: 1,
-    FEMALE: 2
-}
-
-const AGE = {
-    ALL: 0,
-    OVER_EIGHTY: 1,
-    SEVENTY: 2,
-    SIXTY: 3,
-    UNDER_FIFTY: 4
-}
-
-const REPLY = {
-    CONSIDER: 0,
-    JOIN: 1
-}
-
-Object.freeze(TYPE);
-Object.freeze(SEX);
-Object.freeze(AGE);
-Object.freeze(REPLY);
-
-const APP_URL = "https://demo.personium.io/app-fst-community-user/";
-const APP_BOX_NAME = 'io_personium_demo_app-fst-community-user';
-const ORGANIZATION_CELL_URL = 'https://demo.personium.io/fst-community-organization/'
-
 var articleList = [];
 var imageList = {};
 var joinList = {};
@@ -247,7 +214,7 @@ $(function() {
 
 function getArticleList(divId) {
     callArticleFunction(function (token){
-        var oData = 'test_article';
+        var oData = 'article';
         var entityType = 'provide_information';
 
         $.ajax({
@@ -296,7 +263,7 @@ function getArticleList(divId) {
 }
 
 function getArticleListImage(id, token) {
-    var DAV = 'test_article_image';
+    var DAV = 'article_image';
 
     $.ajax({
         type: 'GET',
@@ -331,7 +298,7 @@ function getArticleListImage(id, token) {
 
 function getJoinInfoList(token) {
     // get reply list
-    var oData = 'test_reply';
+    var oData = 'reply';
     var entityType = 'reply_history';
 
     $.ajax({
@@ -378,9 +345,9 @@ function getJoinInfoList(token) {
 function getArticleDetail(id) {
 
     callArticleFunction(function (token) {
-        var oData = 'test_article';
+        var oData = 'article';
         var entityType = 'provide_information';
-        var DAV = 'test_article_image';
+        var DAV = 'article_image';
 
         var err = [];
 
@@ -422,7 +389,7 @@ function getArticleDetail(id) {
             // get reply info
             $.ajax({
                 type: 'GET',
-                url: Common.getToCellBoxUrl() + "test_reply/reply_history",
+                url: Common.getToCellBoxUrl() + "reply/reply_history",
                 headers: {
                     'Authorization': 'Bearer ' + token,
                     'Accept': 'application/json'
@@ -493,7 +460,7 @@ function getArticleDetail(id) {
             $.when(
                 $.ajax({
                     type: 'GET',
-                    url: Common.getBoxUrl() + "test_reply/reply_history",
+                    url: Common.getBoxUrl() + "reply/reply_history",
                     headers: {
                         "Authorization": "Bearer " + Common.getToken(),
                         "Accept": "application/json"
@@ -504,7 +471,7 @@ function getArticleDetail(id) {
                 }),
                 $.ajax({
                     type: 'GET',
-                    url: Common.getToCellBoxUrl() + "test_reply/reply_history",
+                    url: Common.getToCellBoxUrl() + "reply/reply_history",
                     headers: {
                         "Authorization": "Bearer " + token,
                         "Accept": "application/json"
@@ -567,8 +534,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
         alert('already done it');
         return;
     }
-    var box = 'app-fst-community-user';
-    var oData = 'test_reply';
+    var oData = 'reply';
     var entityType = 'reply_history';
 
     callArticleFunction(function(token) {

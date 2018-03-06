@@ -1,30 +1,3 @@
-const TYPE = {
-  INFO: 0,
-  EVENT: 1
-}
-
-const SEX = {
-  ALL: 0,
-  MALE: 1,
-  FEMALE: 2
-}
-
-const AGE = {
-  ALL: 0,
-  OVER_EIGHTY: 1,
-  SEVENTY: 2,
-  SIXTY: 3,
-  UNDER_FIFTY: 4
-}
-
-Object.freeze(TYPE);
-Object.freeze(SEX);
-Object.freeze(AGE);
-
-const APP_URL = "https://demo.personium.io/app-fst-community-user/";
-const APP_BOX_NAME = 'io_personium_demo_app-fst-community-user';
-const ORGANIZATION_CELL_URL = 'https://demo.personium.io/fst-community-organization/'
-
 getEngineEndPoint = function () {
   return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
 };
@@ -81,9 +54,9 @@ function openComment(id){
     });
 
 	callArticleFunction($.proxy(function(token) {
-		var collection1 = 'test_article';
+		var collection1 = 'article';
 	    var entity1 = 'provide_information';
-		var collection2 = 'test_reply';
+		var collection2 = 'reply';
 	    var entity2 = 'reply_history';
 		var displayData = [
 		    $.ajax({
@@ -533,10 +506,7 @@ function saveArticle(editId) {
       return;
     }
 
-    var base = 'https://demo.personium.io';
-    var cell = 'fst-community-organization';
-    var box = 'app-fst-community-user';
-    var oData = 'test_article';
+    var oData = 'article';
     var entityType = 'provide_information';
 
     var err = [];
@@ -544,7 +514,7 @@ function saveArticle(editId) {
     // save text
     var saveText = function(){
       var method = 'POST';
-      var url = base + '/' + cell + '/' + box + '/' + oData + '/' + entityType;
+      var url = Common.getToCellBoxUrl() + oData + '/' + entityType;
       if(editId){
         method = 'PUT';
         url += "('" + editId + "')";
@@ -584,12 +554,12 @@ function saveArticle(editId) {
 
     // save img
     var saveImg = function(res){
-      var DAV = 'test_article_image';
+      var DAV = 'article_image';
       var id = res.d ? res.d.results.__id : res;
 
       return $.ajax({
         type : 'PUT',
-        url : base + '/' + cell + '/' + box + '/' + DAV + '/' + id,
+        url : Common.getToCellBoxUrl() + DAV + '/' + id,
         processData: false,
         headers : {
           'Authorization': 'Bearer ' + token,
@@ -607,7 +577,7 @@ function saveArticle(editId) {
           if (!editId){
             $.ajax({
               type : 'DELETE',
-              url : base + '/' + cell + '/' + box + '/' + oData + '/' + entityType + "('" + id + "')",
+              url : Common.getToCellBoxUrl() + oData + '/' + entityType + "('" + id + "')",
               headers : {
                 'Authorization': 'Bearer ' + token
               }
@@ -652,9 +622,9 @@ function dataURLtoBlob(dataURL) {
 function getArticleList() {
 
   callArticleFunction(function(token) {
-	var collection1 = 'test_article';
+	var collection1 = 'article';
     var entity1 = 'provide_information';
-	var collection2 = 'test_reply';
+	var collection2 = 'reply';
     var entity2 = 'reply_history';
 	var displayData = [
 	    $.ajax({
@@ -721,12 +691,9 @@ function getArticleList() {
 function getArticleDetail(id) {
 
   callArticleFunction(function(token) {
-    var base = 'https://demo.personium.io';
-    var cell = 'fst-community-organization';
-    var box = 'app-fst-community-user';
-    var oData = 'test_article';
+    var oData = 'article';
     var entityType = 'provide_information';
-    var DAV = 'test_article_image';
+    var DAV = 'article_image';
 
     var err = [];
 
@@ -734,7 +701,7 @@ function getArticleDetail(id) {
       // get text
       $.ajax({
         type: 'GET',
-        url : base + '/' + cell + '/' + box + '/' + oData + '/' + entityType + "('" + id + "')",
+        url : Common.getToCellBoxUrl() + oData + '/' + entityType + "('" + id + "')",
         headers: {
           'Authorization': 'Bearer ' + token,
             'Accept' : 'application/json'
@@ -750,7 +717,7 @@ function getArticleDetail(id) {
       // get image
       $.ajax({
         type: 'GET',
-        url : base + '/' + cell + '/' + box + '/' + DAV + '/' + id,
+        url : Common.getToCellBoxUrl() + DAV + '/' + id,
         dataType: 'binary',
         processData: false,
         responseType: 'blob',
@@ -817,19 +784,16 @@ function showDeleteArticleConfirm(id) {
 function deleteArticle(id) {
 
   callArticleFunction(function(token) {
-    var base = 'https://demo.personium.io';
-    var cell = 'fst-community-organization';
-    var box = 'app-fst-community-user';
-    var oData = 'test_article';
+    var oData = 'article';
     var entityType = 'provide_information';
-    var DAV = 'test_article_image';
+    var DAV = 'article_image';
 
     var err = [];
 
     var deleteImage = function(){
       return $.ajax({
         type: 'DELETE',
-        url : base + '/' + cell + '/' + box + '/' + DAV + '/' + id,
+        url : Common.getToCellBoxUrl() + DAV + '/' + id,
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -848,7 +812,7 @@ function deleteArticle(id) {
     var deleteText = function() {
       return $.ajax({
         type: 'DELETE',
-        url : base + '/' + cell + '/' + box + '/' + oData + '/' + entityType + "('" + id + "')",
+        url : Common.getToCellBoxUrl() + oData + '/' + entityType + "('" + id + "')",
         headers: {
           'Authorization': 'Bearer ' + token
         }
@@ -864,7 +828,7 @@ function deleteArticle(id) {
           var img = dataURLtoBlob(getImage);
           $.ajax({
             type : 'PUT',
-            url : base + '/' + cell + '/' + box + '/' + DAV + '/' + id,
+            url : Common.getToCellBoxUrl() + DAV + '/' + id,
             processData: false,
             headers : {
               'Authorization': 'Bearer ' + token,
