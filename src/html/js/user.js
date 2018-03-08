@@ -211,6 +211,49 @@ function authorizedNfcReader() {
     .done(function(res) {
         Common.updateSessionStorage(res);
 
+        let getExtCellList = function () {
+            return $.ajax({
+                type: 'GET',
+                url: opUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + Common.getToken(),
+                    'Accept': 'application/json'
+                }
+            });
+        };
+
+        let deleteExtCell = function () {
+            return $.ajax({
+                type: 'DELETE',
+                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + Common.getToken()
+                }
+            });
+        };
+
+        let createExtCell = function () {
+            return $.ajax({
+                type: 'POST',
+                url: opUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + Common.getToken()
+                },
+                data: JSON.stringify({
+                    'Url': Common.getCellUrl()
+                })
+            })
+            .then(
+                function (res) {
+                    return res;
+                },
+                function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                    return Promise.reject();
+                }
+            );
+        };
+
         let setRole = function () {
             return $.ajax({
                 type: 'POST',
@@ -224,43 +267,48 @@ function authorizedNfcReader() {
             })
             .then(
                 function (res) {
-                    helpAuthorized = true;
-                    Common.setCellUrl(opUrl);
+                    return res;
                 },
                 function (XMLHttpRequest, textStatus, errorThrown) {
-                    if (XMLHttpRequest.status == '409') {
-                        helpAuthorized = true;
-                        Common.setCellUrl(opUrl);
-                    } else {
-                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
-                    }
+                    alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
                 }
             );
         };
 
-        $.ajax({
-            type: 'POST',
-            url: opUrl + '__ctl/ExtCell',
-            headers: {
-                'Authorization': 'Bearer ' + Common.getToken()
-            },
-            data: JSON.stringify({
-                'Url': Common.getCellUrl()
-            })
-        })
-        .then(
-            function (res) {
-                setRole();
-            },
-            function (XMLHttpRequest, textStatus, errorThrown) {
-                if(XMLHttpRequest.status == '409') {
-                    setRole();
-                } else {
-                    alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+        getExtCellList().done(function(res) {
+            let existFlg = false;
+            for(let result of res.d.results) {
+                if(result.Url == Common.getCellUrl()) {
+                    existFlg = true;
                 }
             }
-        );
 
+            if(existFlg) {
+                deleteExtCell().then(createExtCell).then(setRole)
+                .done(function() {
+                    helpAuthorized = true;
+                    Common.setCellUrl(opUrl);
+                    startHelpOp();
+                })
+                .fail(function () {
+                    alert('error: help operation');
+                });
+            } else {
+                createExtCell().then(setRole)
+                .done(function() {
+                    helpAuthorized = true;
+                    Common.setCellUrl(opUrl);
+                    startHelpOp();
+                })
+                .fail(function() {
+                    alert('error: help operation');
+                });
+            }
+        });
+
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $('#modal-nfcReader').modal('hide');
 
     })
     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
@@ -289,6 +337,23 @@ function closeHelpConfirm(f) {
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
 	$('#modal-helpConfirm').modal('hide');
+}
+
+function startHelpOp() {
+    $('#modal-startHelpOp').localize();
+    $('#modal-startHelpOp').modal('show');
+
+    $(".startHelpOp").addClass('hidden');
+    $(".endHelpOp").removeClass("hidden");
+
+    $('header').css('background-color', '#FF0000');
+    $('h1').css('background-color', '#FF0000');
+
+    $("#during_help").removeClass("hidden");
+}
+
+function endHelpOp() {
+
 }
 
 function viewInfoDisclosureDetail(type){
@@ -367,20 +432,6 @@ $(function() {
     $("#modal-clubHistory").load("modal-clubHistory.html");
     $("#modal-sendReply").load("modal-sendReply.html");
 
-	$('#modal-nfcReader').on('hidden.bs.modal', function () {
-		if(helpAuthorized) {
-            $('#modal-startHelpOp').localize();
-			$('#modal-startHelpOp').modal('show');
-
-			$(".startHelpOp").addClass('hidden');
-			$(".endHelpOp").removeClass("hidden");
-
-			$('header').css('background-color', '#FF0000');
-			$('h1').css('background-color', '#FF0000');
-
-			$("#during_help").removeClass("hidden");
-		}
-	});
     $('#dvOverlay').on('click', function() {
         $(".overlay").removeClass('overlay-on');
         $(".slide-menu").removeClass('slide-on');
