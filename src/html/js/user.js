@@ -126,6 +126,12 @@ function saveProfile(){
 	}
 }
 
+editDisplayNameBlurEvent = function() {
+	var displayName = $("#nickname").val();
+	var displayNameSpan = "popupEditDisplayNameErrorMsg";
+	validateDisplayName(displayName, displayNameSpan);
+};
+
 function validateDisplayName(displayName, displayNameSpan) {
 	var MINLENGTH = 1;
         var lenDisplayName = displayName.length;
