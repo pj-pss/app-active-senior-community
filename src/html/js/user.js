@@ -20,6 +20,7 @@ var joinList = {};
 var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
+var opUrl = null;
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -162,7 +163,7 @@ function readURL(input) {
                 $("#editPicturePreview").data("attached", true)
             }
             ut.setCropperModalOkBtnFunc(okFunc);
-            
+
             // Remove focus from input
             document.activeElement.blur()
 
@@ -201,14 +202,66 @@ function openClubHistory() {
 }
 
 function authorizedNfcReader() {
+    opUrl = $('#nfcUrl').val();
     $.ajax({
-        url: $('#nfcUrl').val() + '__token',
+        url: opUrl + '__token',
         type: 'POST',
         data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
     })
     .done(function(res) {
-        console.log(res);
-        helpAuthorized = true;
+        Common.updateSessionStorage(res);
+
+        let setRole = function () {
+            return $.ajax({
+                type: 'POST',
+                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')/$links/_Role",
+                headers: {
+                    'Authorization': 'Bearer ' + Common.getToken()
+                },
+                data: JSON.stringify({
+                    'uri': opUrl + "__ctl/Role(Name='supporter',_Box.Name='app-life-enrichers-community')"
+                })
+            })
+            .then(
+                function (res) {
+                    helpAuthorized = true;
+                    Common.setCellUrl(opUrl);
+                },
+                function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.status == '409') {
+                        helpAuthorized = true;
+                        Common.setCellUrl(opUrl);
+                    } else {
+                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                    }
+                }
+            );
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: opUrl + '__ctl/ExtCell',
+            headers: {
+                'Authorization': 'Bearer ' + Common.getToken()
+            },
+            data: JSON.stringify({
+                'Url': Common.getCellUrl()
+            })
+        })
+        .then(
+            function (res) {
+                setRole();
+            },
+            function (XMLHttpRequest, textStatus, errorThrown) {
+                if(XMLHttpRequest.status == '409') {
+                    setRole();
+                } else {
+                    alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                }
+            }
+        );
+
+
     })
     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
         alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
