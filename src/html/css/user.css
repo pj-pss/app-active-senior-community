@@ -1227,7 +1227,7 @@ pre.text {
   text-align: center;
 }
 
-.image-circle-large{
+.image-circle-large-list{
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -1241,4 +1241,44 @@ pre.text {
 
 #entry-list table .td-bd{
 	border-bottom: 1px solid black;
+}
+
+#profileForm .picture-td {
+  position: relative;
+}
+
+#profileForm .picture-container {
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  width: 106px;
+  margin: auto;
+}
+#profileForm .picture {
+  width: 106px;
+  height: 106px;
+  background-color: #999999;
+  border: 4px solid #CCCCCC;
+  color: #FFFFFF;
+  border-radius: 50%;
+  margin: 5px auto;
+  overflow: hidden;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+}
+#profileForm .picture:hover {
+  border-color: #2ca8ff;
+}
+#profileForm .picture input[type="file"] {
+  cursor: pointer;
+  display: block;
+  height: 100%;
+  left: 0;
+  opacity: 0 !important;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+#profileForm .picture-src {
+  width: 100%;
 }

@@ -3,11 +3,19 @@
     <form id="profileForm">
     <table class="tbl_prof">
         <tr>
-            <th><img class="img-thumbnail" src="../img/parts_ico_gentleman.png"></th>
-            <td class="photoBtnArea"><button class="btn btn-success" onclick="return false;" data-i18n="btn.changeImg"></button>&nbsp;<button class="btn btn-warning" onclick="return false;" data-i18n="btn.changeImg"></button><br><span class="text-warning" cata-i18n="msg.registerImg"></span></td>
+	    <td colspan="2">
+	        <div class="picture-td">
+                    <div class="picture-container" rel="tooltip" data-i18n="[title]edit.profile.Image.tooltip;[data-original-title]edit.profile.Image.tooltip">
+                        <div class="picture">
+                            <img src="../img/default-avatar.png" class="picture-src" id="editPicturePreview" title="">
+                            <input type="file" id="edit-picture">
+                        </div>
+                    </div>
+                </div>
+            </td>
         </tr>
-        <tr><th>ニックネーム：</th><td><input type="text" name="nickname" value="ペコ太郎"></td></tr>
-        <tr><td colspan="2" class="cls_center"><button class="btn btn-primary" onclick="view('monitoring');return false;" data-i18n="btn.saveProfile"></button>&nbsp;<button class="btn btn-default" onclick="view('monitoring');return false;" data-i18n="btn.cancel"></button></td></tr>
+        <tr><th>ニックネーム：</th><td><input type="text" name="nickname" id="nickname"></td></tr>
+        <tr><td colspan="2" class="cls_center"><button class="btn btn-primary" onclick="saveProfile();return false;" data-i18n="btn.saveProfile"></button>&nbsp;<button class="btn btn-default" onclick="view('monitoring');return false;" data-i18n="btn.cancel"></button></td></tr>
         <tr><td colspan="2" class="cls_center"><span class="profNotice" data-i18n="msg.canNotEditInfo"></span></td></tr>
         <tr><th>氏名：</th><td>富士通　太郎 <br>(ふじつう　たろう)</td></tr>
         <tr><th>生年月日：</th><td>1955/11/16 62才</td></tr>
