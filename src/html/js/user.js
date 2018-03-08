@@ -92,6 +92,7 @@ function viewProfile(){
 			$("#editPicturePreview").attr("src", arguments[0].Image);
 		}
 		$("#nickname").val(arguments[0].DisplayName);
+		$("#popupEditDisplayNameErrorMsg").html("");
 		view('profileEdit');
 	});
 }
