@@ -176,7 +176,7 @@ function readURL(input) {
 var helpAuthorized = false;
 
 function openNfcReader() {
-	helpAuthorized = false
+	helpAuthorized = false;
     $('#modal-nfcReader').localize();
     $('#modal-nfcReader').modal('show');
 }
@@ -201,7 +201,19 @@ function openClubHistory() {
 }
 
 function authorizedNfcReader() {
-	helpAuthorized = true;
+    $.ajax({
+        url: $('#nfcUrl').val() + '__token',
+        type: 'POST',
+        data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
+    })
+    .done(function(res) {
+        console.log(res);
+        helpAuthorized = true;
+    })
+    .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+    });
+
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
 	$('#modal-nfcReader').modal('hide');
