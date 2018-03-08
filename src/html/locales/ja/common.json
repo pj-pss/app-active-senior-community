@@ -175,5 +175,7 @@
             }
         }
     },
+	"pleaseEnterName": "名前を入力して下さい。",
+	"errorValidateNameLength": "名前は128文字以下で入力して下さい。",
 	"Cancel": "キャンセル"
 }

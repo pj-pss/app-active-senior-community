@@ -93,6 +93,7 @@ function viewProfile(){
 			$("#editPicturePreview").attr("src", arguments[0].Image);
 		}
 		$("#nickname").val(arguments[0].DisplayName);
+		$("#popupEditDisplayNameErrorMsg").html("");
 		view('profileEdit');
 	});
 }
@@ -126,6 +127,12 @@ function saveProfile(){
 		});
 	}
 }
+
+editDisplayNameBlurEvent = function() {
+	var displayName = $("#nickname").val();
+	var displayNameSpan = "popupEditDisplayNameErrorMsg";
+	validateDisplayName(displayName, displayNameSpan);
+};
 
 function validateDisplayName(displayName, displayNameSpan) {
 	var MINLENGTH = 1;

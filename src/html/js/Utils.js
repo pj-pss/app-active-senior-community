@@ -234,9 +234,8 @@ ut.createModalFooterTag = function (id, callback) {
     let cancelBtnTag = $("<button>", {
         type: "button",
         class: "btn btn-default",
-        "data-dismiss": "modal",
-        "data-i18n": "Cancel"
-    });
+        "data-dismiss": "modal"
+    }).html("Cancel");
     footerTag.append(cancelBtnTag);
 
     let okBtnTag = $("<button>", {
