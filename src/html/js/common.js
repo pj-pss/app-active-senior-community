@@ -118,7 +118,7 @@ $(document).ready(function() {
                         var supportRole = _.find(data2.d.results, $.proxy(function (d) {
                             var matchword = d.uri.match(reg);
                             if (matchword !== null) {
-                                return matchword[1] === "test_supporter" || matchword[1] === "test_organization";
+                                return matchword[1] === "supporter" || matchword[1] === "organization";
                             }
                             return false
                         }, this));
