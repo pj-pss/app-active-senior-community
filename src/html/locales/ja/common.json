@@ -166,5 +166,14 @@
     "locationState" : {
         "indoor" : "在宅",
         "outdoor" : "外出中"
-    }
+    },
+    "edit": {
+        "profile": {
+            "Image": {
+                "label": "プロフィール画像",
+                "tooltip": "ファイル選択"
+            }
+        }
+    },
+	"Cancel": "キャンセル"
 }

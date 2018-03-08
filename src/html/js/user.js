@@ -69,6 +69,109 @@ function view(menuId) {
 	window.scrollTo(0, 0);
 }
 
+function viewProfile(){
+    $("#edit-picture").click(function() {
+        clearInput(this);
+    }).change(function(){
+        readURL(this);
+    });
+	ut.createCropperModal({ dispCircleMaskBool: true });
+
+	$.ajax({
+        type: "GET",
+		dataType: 'json',
+        url : Common.getCellUrl() + '__/profile.json',
+        headers: {
+            "Accept" : "application/json"
+        }
+	}).done(function(){
+		if(arguments[0].Image.length === 0){
+			var cellImgDef = ut.getJdenticon(Common.getCellUrl());
+    		$("#editPicturePreview").attr("src", cellImgDef);
+		}else{
+			$("#editPicturePreview").attr("src", arguments[0].Image);
+		}
+		$("#nickname").val(arguments[0].DisplayName);
+		view('profileEdit');
+	});
+}
+
+function saveProfile(){
+	if(validateDisplayName($("#nickname").val(), "popupEditDisplayNameErrorMsg")){
+	    Common.refreshToken(function(){
+			$.ajax({
+		        type: "GET",
+				dataType: 'json',
+		        url : Common.getCellUrl() + '__/profile.json',
+		        headers: {
+		            "Accept" : "application/json"
+		        }
+			}).done(function(){
+				var saveData = _.clone(arguments[0]);
+				saveData.DisplayName = $("#nickname").val();
+				saveData.Image = $("#editPicturePreview").attr("src");
+			    $.ajax({
+			        type: "PUT",
+			        url: Common.getCellUrl() + '__/profile.json',
+			        data: JSON.stringify(saveData),
+			        headers: {
+			            'Accept': 'application/json',
+			            'Authorization': 'Bearer ' + Common.getToken()
+			        }
+			    }).done(function(){
+					view('monitoring');
+				});
+			});
+		});
+	}
+}
+
+function validateDisplayName(displayName, displayNameSpan) {
+	var MINLENGTH = 1;
+        var lenDisplayName = displayName.length;
+        if(lenDisplayName < MINLENGTH || displayName == undefined || displayName == null || displayName == "") {
+            $("#" + displayNameSpan).html(i18next.t("pleaseEnterName"));
+            return false;
+	}
+
+	var MAXLENGTH = 128;
+        $("#" + displayNameSpan).html("");
+        if (lenDisplayName > MAXLENGTH) {
+            $("#" + displayNameSpan).html(i18next.t("errorValidateNameLength"));
+            return false;
+        }
+        return true;
+}
+
+function clearInput(input) {
+    input.value = null;
+}
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        $('#ProfileImageName').val(input.files[0].name);
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // Set images in cropper modal
+            ut.setCropperModalImage(e.target.result);
+            // Set functions in cropper modal ok button
+            let okFunc = function () {
+                let cropImg = ut.getCroppedModalImage();
+                $('#editPicturePreview').attr('src', cropImg).fadeIn('slow');
+                $("#editPicturePreview").data("attached", true)
+            }
+            ut.setCropperModalOkBtnFunc(okFunc);
+            
+            // Remove focus from input
+            document.activeElement.blur()
+
+            // Start cropper modal
+            ut.showCropperModal();
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 
 var helpAuthorized = false;
 
