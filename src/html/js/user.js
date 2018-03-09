@@ -358,19 +358,31 @@ function openHelpConfirm() {
 
 function closeHelpConfirm(f) {
     if(f) {
-        helpAuthorized = false;
-        Common.updateSessionStorage(preAppCellToken);
-        Common.setCellUrl(preCellUrl);
-        Common.setBoxUrl(preCellUrl + Common.getBoxName() + '/');
-        getArticleList();
-        getUserProfile();
+        $.ajax({
+            type: 'DELETE',
+            url: Common.getCellUrl() + "__ctl/ExtCell('" + encodeURIComponent(preCellUrl) + "')",
+            headers: {
+                'Authorization': 'Bearer ' + Common.getToken()
+            }
+        })
+        .done(function() {
+            helpAuthorized = false;
+            Common.updateSessionStorage(preAppCellToken);
+            Common.setCellUrl(preCellUrl);
+            Common.setBoxUrl(preCellUrl + Common.getBoxName() + '/');
+            getArticleList();
+            getUserProfile();
 
-        $(".endHelpOp").addClass('hidden');
-        $(".startHelpOp").removeClass("hidden");
-        $('header').css('background-color', '#008F00');
-        $('h1').css('background-color', '#008F00');
-        $('#during_help').addClass('hidden');
-        view('top');
+            $(".endHelpOp").addClass('hidden');
+            $(".startHelpOp").removeClass("hidden");
+            $('header').css('background-color', '#008F00');
+            $('h1').css('background-color', '#008F00');
+            $('#during_help').addClass('hidden');
+            view('top');
+        })
+        .fail(function() {
+            alert('error: delete ext cell');
+        });
     }
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
