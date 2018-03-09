@@ -347,6 +347,7 @@ function authorizedNfcReader() {
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
     $('#modal-nfcReader').modal('hide');
+    view('top');
 }
 
 
@@ -368,7 +369,8 @@ function closeHelpConfirm(f) {
 		$(".startHelpOp").removeClass("hidden");
 		$('header').css('background-color', '#008F00');
 		$('h1').css('background-color', '#008F00');
-		$('#during_help').addClass('hidden');
+        $('#during_help').addClass('hidden');
+        view('top');
 	}
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
