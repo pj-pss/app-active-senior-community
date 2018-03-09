@@ -357,7 +357,7 @@ function openHelpConfirm() {
 }
 
 function closeHelpConfirm(f) {
-	if(f) {
+    if(f) {
         helpAuthorized = false;
         Common.updateSessionStorage(preAppCellToken);
         Common.setCellUrl(preCellUrl);
@@ -365,16 +365,16 @@ function closeHelpConfirm(f) {
         getArticleList();
         getUserProfile();
 
-		$(".endHelpOp").addClass('hidden');
-		$(".startHelpOp").removeClass("hidden");
-		$('header').css('background-color', '#008F00');
-		$('h1').css('background-color', '#008F00');
+        $(".endHelpOp").addClass('hidden');
+        $(".startHelpOp").removeClass("hidden");
+        $('header').css('background-color', '#008F00');
+        $('h1').css('background-color', '#008F00');
         $('#during_help').addClass('hidden');
         view('top');
-	}
-	$('body').removeClass('modal-open');
-	$('.modal-backdrop').remove();
-	$('#modal-helpConfirm').modal('hide');
+    }
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+    $('#modal-helpConfirm').modal('hide');
 }
 
 function startHelpOp() {
