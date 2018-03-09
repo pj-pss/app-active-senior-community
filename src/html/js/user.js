@@ -211,137 +211,120 @@ function openClubHistory() {
 }
 
 function authorizedNfcReader() {
-    let cellUrl = Common.getCellUrl();
-    Common.getAppAuthToken(cellUrl).done(function (appToken) {
-        Common.getProtectedBoxAccessToken(appToken.access_token, cellUrl).done(function (appCellToken) {
-            // get current appCellToken
-            preAppCellToken = appCellToken;
-            preCellUrl = Common.getCellUrl();
-
-            // get supported user token
-            opUrl = $('#nfcUrl').val();
-            $.ajax({
-                url: opUrl + '__token',
-                type: 'POST',
-                data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
-            })
-            .done(function (res) {
-                // set new appCellToken
-                Common.updateSessionStorage(res);
-
-                let getExtCellList = function () {
-                    return $.ajax({
-                        type: 'GET',
-                        url: opUrl + '__ctl/ExtCell',
-                        headers: {
-                            'Authorization': 'Bearer ' + Common.getToken(),
-                            'Accept': 'application/json'
-                        }
-                    });
-                };
-
-                let deleteExtCell = function () {
-                    return $.ajax({
-                        type: 'DELETE',
-                        url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
-                        headers: {
-                            'Authorization': 'Bearer ' + Common.getToken()
-                        }
-                    });
-                };
-
-                let createExtCell = function () {
-                    return $.ajax({
-                        type: 'POST',
-                        url: opUrl + '__ctl/ExtCell',
-                        headers: {
-                            'Authorization': 'Bearer ' + Common.getToken()
-                        },
-                        data: JSON.stringify({
-                            'Url': Common.getCellUrl()
-                        })
-                    })
-                        .then(
-                            function (res) {
-                                return res;
-                            },
-                            function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
-                                return Promise.reject();
-                            }
-                        );
-                };
-
-                let setRole = function () {
-                    return $.ajax({
-                        type: 'POST',
-                        url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')/$links/_Role",
-                        headers: {
-                            'Authorization': 'Bearer ' + Common.getToken()
-                        },
-                        data: JSON.stringify({
-                            'uri': opUrl + "__ctl/Role(Name='supporter',_Box.Name='app-life-enrichers-community')"
-                        })
-                    })
-                        .then(
-                            function (res) {
-                                return res;
-                            },
-                            function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
-                            }
-                        );
-                };
-
-                getExtCellList().done(function (res) {
-                    let existFlg = false;
-                    for (let result of res.d.results) {
-                        if (result.Url == Common.getCellUrl()) {
-                            existFlg = true;
-                        }
-                    }
-
-                    // if ext role is exist, delete and recreate
-                    if (existFlg) {
-                        deleteExtCell().then(createExtCell).then(setRole)
-                            .done(function () {
-                                // set new url, and reload article/userInfo
-                                helpAuthorized = true;
-                                Common.setCellUrl(opUrl);
-                                Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
-                                getArticleList();
-                                getUserProfile();
-                                startHelpOp();
-                            })
-                            .fail(function () {
-                                alert('error: help operation');
-                            });
-                    } else {
-                        createExtCell().then(setRole)
-                            .done(function () {
-                                helpAuthorized = true;
-                                Common.setCellUrl(opUrl);
-                                Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
-                                getArticleList();
-                                getUserProfile();
-                                startHelpOp();
-                            })
-                            .fail(function () {
-                                alert('error: help operation');
-                            });
-                    }
-                });
-
-            })
-            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+    // get supported user token
+    opUrl = $('#nfcUrl').val();
+    $.ajax({
+        url: opUrl + '__token',
+        type: 'POST',
+        data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
+    })
+    .done(function (res) {
+        let getExtCellList = function () {
+            return $.ajax({
+                type: 'GET',
+                url: opUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token,
+                    'Accept': 'application/json'
+                }
             });
+        };
 
-        }).fail(function (appCellToken) {
-            alert('error: get app cell token');
+        let deleteExtCell = function () {
+            return $.ajax({
+                type: 'DELETE',
+                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                }
+            });
+        };
+
+        let createExtCell = function () {
+            return $.ajax({
+                type: 'POST',
+                url: opUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                },
+                data: JSON.stringify({
+                    'Url': Common.getCellUrl()
+                })
+            })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                        return Promise.reject();
+                    }
+                );
+        };
+
+        let setRole = function () {
+            return $.ajax({
+                type: 'POST',
+                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')/$links/_Role",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                },
+                data: JSON.stringify({
+                    'uri': opUrl + "__ctl/Role(Name='supporter',_Box.Name='app-life-enrichers-community')"
+                })
+            })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                    }
+                );
+        };
+
+        getExtCellList().done(function (res) {
+            let existFlg = false;
+            for (let result of res.d.results) {
+                if (result.Url == Common.getCellUrl()) {
+                    existFlg = true;
+                }
+            }
+
+            // if ext role is exist, delete and recreate
+            if (existFlg) {
+                deleteExtCell().then(createExtCell).then(setRole)
+                    .done(function () {
+                        // set new url, and reload article/userInfo
+                        helpAuthorized = true;
+                        // Common.setCellUrl(opUrl);
+                        // Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
+                        // getArticleList();
+                        // getUserProfile();
+                        startHelpOp();
+                    })
+                    .fail(function () {
+                        alert('error: help operation');
+                    });
+            } else {
+                createExtCell().then(setRole)
+                    .done(function () {
+                        helpAuthorized = true;
+                        Common.setCellUrl(opUrl);
+                        Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
+                        getArticleList();
+                        getUserProfile();
+                        startHelpOp();
+                    })
+                    .fail(function () {
+                        alert('error: help operation');
+                    });
+            }
         });
-    }).fail(function (appToken) {
-        alert('error: get app token');
+
+    })
+    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
     });
 
     $('body').removeClass('modal-open');
@@ -359,29 +342,38 @@ function openHelpConfirm() {
 function closeHelpConfirm(f) {
     if(f) {
         $.ajax({
-            type: 'DELETE',
-            url: Common.getCellUrl() + "__ctl/ExtCell('" + encodeURIComponent(preCellUrl) + "')",
-            headers: {
-                'Authorization': 'Bearer ' + Common.getToken()
-            }
-        })
-        .done(function() {
-            helpAuthorized = false;
-            Common.updateSessionStorage(preAppCellToken);
-            Common.setCellUrl(preCellUrl);
-            Common.setBoxUrl(preCellUrl + Common.getBoxName() + '/');
-            getArticleList();
-            getUserProfile();
+            url: opUrl + '__token',
+            type: 'POST',
+            data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
+        }).done(function(res){
+            $.ajax({
+                type: 'DELETE',
+                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                }
+            })
+            .done(function() {
+                helpAuthorized = false;
+                // Common.updateSessionStorage(preAppCellToken);
+                // Common.setCellUrl(preCellUrl);
+                // Common.setBoxUrl(preCellUrl + Common.getBoxName() + '/');
+                // getArticleList();
+                // getUserProfile();
 
-            $(".endHelpOp").addClass('hidden');
-            $(".startHelpOp").removeClass("hidden");
-            $('header').css('background-color', '#008F00');
-            $('h1').css('background-color', '#008F00');
-            $('#during_help').addClass('hidden');
-            view('top');
+                $(".endHelpOp").addClass('hidden');
+                $(".startHelpOp").removeClass("hidden");
+                $('header').css('background-color', '#008F00');
+                $('h1').css('background-color', '#008F00');
+                $('#during_help').addClass('hidden');
+                view('top');
+            })
+            .fail(function() {
+                alert('error: delete ext cell');
+            });
         })
-        .fail(function() {
-            alert('error: delete ext cell');
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
         });
     }
     $('body').removeClass('modal-open');
