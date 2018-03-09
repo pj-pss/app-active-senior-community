@@ -295,7 +295,7 @@ function authorizedNfcReader() {
                 .done(function() {
                     helpAuthorized = true;
                     Common.setCellUrl(opUrl);
-                    Common.setBoxUrl(opUrl + Common.getAppCellUrl().split('/')[3] + '/');
+                    Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
                     getArticleList();
                     getUserProfile();
                     startHelpOp();
@@ -308,7 +308,7 @@ function authorizedNfcReader() {
                 .done(function() {
                     helpAuthorized = true;
                     Common.setCellUrl(opUrl);
-                    Common.setBoxUrl(opUrl + Common.getAppCellUrl().split('/')[3] + '/');
+                    Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
                     getArticleList();
                     getUserProfile();
                     startHelpOp();
