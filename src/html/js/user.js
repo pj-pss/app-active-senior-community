@@ -1151,8 +1151,9 @@ function getUserProfile() {
             default: sex = 'その他';
         }
 
+        var basicInfoHtml = '';
         if(basicInfo != null) {
-            var basicInfoHtml = '<dt>'
+            basicInfoHtml = '<dt>'
                 + '<dt>姓名:</dt>'
                 + '<dd>' + basicInfo.name + '</dd>'
                 + '<dt>ふりがな:</dt>'
@@ -1168,11 +1169,12 @@ function getUserProfile() {
                 + '<dt>コメント:</dt>'
                 + '<dd>' + basicInfo.comment + '</dd>'
                 + '</dt>';
-            $('#basicInfo').html(basicInfoHtml);
         }
+        $('#basicInfo').html(basicInfoHtml);
 
+        var healthInfoHtml = '';
         if (healthInfo != null) {
-            var healthInfoHtml = '<dt>'
+            healthInfoHtml = '<dt>'
                 + '<dt>身長:</dt>'
                 + '<dd>' + healthInfo.height + ' cm</dd>'
                 + '<dt>体重:</dt>'
@@ -1182,11 +1184,12 @@ function getUserProfile() {
                 + '<dt>腹囲:</dt>'
                 + '<dd>' + healthInfo.grith_abdomen + ' cm</dd>'
                 + '</dt>';
-            $('#healthInfo').html(healthInfoHtml);
         }
+        $('#healthInfo').html(healthInfoHtml);
 
+        var vitalHtml = '';
         if (vital != null) {
-            var vitalHtml = '<dt>'
+            vitalHtml = '<dt>'
                 + '<dt>体温 (℃):</dt>'
                 + '<dd>' + vital.temperature + ' (' + (tempDiff || '-') + ')' + '</dd>'
                 + '<dt>血圧:</dt>'
@@ -1195,8 +1198,8 @@ function getUserProfile() {
                 + '<dt>脈拍:</dt>'
                 + '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>'
                 + '</dt>';
-            $('#vital').html(vitalHtml);
         }
+        $('#vital').html(vitalHtml);
 
     })
     .fail(function() {
