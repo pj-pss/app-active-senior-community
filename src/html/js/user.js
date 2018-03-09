@@ -310,10 +310,10 @@ function authorizedNfcReader() {
                 createExtCell().then(setRole)
                     .done(function () {
                         helpAuthorized = true;
-                        Common.setCellUrl(opUrl);
-                        Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
-                        getArticleList();
-                        getUserProfile();
+                        // Common.setCellUrl(opUrl);
+                        // Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
+                        // getArticleList();
+                        // getUserProfile();
                         startHelpOp();
                     })
                     .fail(function () {
@@ -793,42 +793,45 @@ function getArticleDetail(id) {
             $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
             $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id  + "');return false;");
             // get reply information
-            $.when(
-                $.ajax({
-                    type: 'GET',
-                    url: Common.getBoxUrl() + "reply/reply_history",
-                    headers: {
-                        "Authorization": "Bearer " + Common.getToken(),
-                        "Accept": "application/json"
-                    },
-                    data: {
-                        "\$filter": "provide_id eq '" + article.__id + "'"
-                    }
-                }),
-                $.ajax({
-                    type: 'GET',
-                    url: Common.getToCellBoxUrl() + "reply/reply_history",
-                    headers: {
-                        "Authorization": "Bearer " + token,
-                        "Accept": "application/json"
-                    },
-                    data: {
-                        "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + Common.getCellUrl() /* dummy ID */ + "'"
+            getCurrentCellToken(function(currentToken){
+                let boxUrl = helpAuthorized ? opUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                $.when(
+                    $.ajax({
+                        type: 'GET',
+                        url: boxUrl + "reply/reply_history",
+                        headers: {
+                            "Authorization": "Bearer " + currentToken,
+                            "Accept": "application/json"
+                        },
+                        data: {
+                            "\$filter": "provide_id eq '" + article.__id + "'"
+                        }
+                    }),
+                    $.ajax({
+                        type: 'GET',
+                        url: Common.getToCellBoxUrl() + "reply/reply_history",
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                            "Accept": "application/json"
+                        },
+                        data: {
+                            "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + Common.getCellUrl() /* dummy ID */ + "'"
+                        }
+                    })
+                )
+                .done(function(res1, res2) {
+                    var userCell = res1[0].d ? res1[0].d.results[0] : null;
+                    var orgCell = res2[0].d ? res2[0].d.results[0] : null;
+                    if (userCell && orgCell){
+                        updateReplyLink(userCell.entry_flag, article.__id, userCell.__id, orgCell.__id);
+                    } else {
+                        $('#joinEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.JOIN + ", '" + article.__id + "')");
+                        $('#considerEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.CONSIDER + ", '" + article.__id + "')");
                     }
                 })
-            )
-            .done(function(res1, res2) {
-                var userCell = res1[0].d ? res1[0].d.results[0] : null;
-                var orgCell = res2[0].d ? res2[0].d.results[0] : null;
-                if (userCell && orgCell){
-                    updateReplyLink(userCell.entry_flag, article.__id, userCell.__id, orgCell.__id);
-                } else {
-                    $('#joinEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.JOIN + ", '" + article.__id + "')");
-                    $('#considerEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.CONSIDER + ", '" + article.__id + "')");
-                }
-            })
-            .fail(function() {
-                alert('error: get reply information');
+                .fail(function() {
+                    alert('error: get reply information');
+                });
             });
 
             view('articleDetail');
@@ -1149,113 +1152,116 @@ function addLinkToGrid() {
 }
 
 function getUserProfile() {
-    $.when(
-        $.ajax({
-            type: 'GET',
-            url: Common.getBoxUrl() + "user_info/user_basic_information",
-            headers: {
-                "Authorization": "Bearer " + Common.getToken(),
-                "Accept": "application/json"
+    getCurrentCellToken(function(token){
+        let boxUrl = helpAuthorized ? opUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        $.when(
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_basic_information",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_health_information",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_vital",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            })
+        )
+        .done(function(res1, res2, res3){
+            vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated});
+            vitalList.reverse();
+
+            var basicInfo = res1[0].d.results[0];
+            var healthInfo = res2[0].d.results[0];
+            var vital = vitalList[0];
+            var preVital = vitalList[1];
+
+            if(preVital != null) {
+                var tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
+                var minDiff = vital.min_pressure - preVital.min_pressure;
+                var maxDiff = vital.max_pressure - preVital.max_pressure;
+                var pulseDiff = vital.pulse - preVital.pulse;
+
+                tempDiff = tempDiff < 0 ? tempDiff : '+' + tempDiff;
+                minDiff = minDiff < 0 ? minDiff : '+' + minDiff;
+                maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
+                pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
             }
-        }),
-        $.ajax({
-            type: 'GET',
-            url: Common.getBoxUrl() + "user_info/user_health_information",
-            headers: {
-                "Authorization": "Bearer " + Common.getToken(),
-                "Accept": "application/json"
+
+            var sex;
+            switch(basicInfo.sex) {
+                case 'male': sex = '男性'; break;
+                case 'female': sex = '女性'; break;
+                default: sex = 'その他';
             }
-        }),
-        $.ajax({
-            type: 'GET',
-            url: Common.getBoxUrl() + "user_info/user_vital",
-            headers: {
-                "Authorization": "Bearer " + Common.getToken(),
-                "Accept": "application/json"
+
+            var basicInfoHtml = '';
+            if(basicInfo != null) {
+                basicInfoHtml = '<dt>'
+                    + '<dt>姓名:</dt>'
+                    + '<dd>' + basicInfo.name + '</dd>'
+                    + '<dt>ふりがな:</dt>'
+                    + '<dd>' + basicInfo.name_kana + '</dd>'
+                    + '<dt>性別:</dt>'
+                    + '<dd>' + sex + '</dd>'
+                    + '<dt>生年月日:</dt>'
+                    + '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + '歳)</dd>'
+                    + '<dt>郵便番号:</dt>'
+                    + '<dd>' + basicInfo.postal_code + '</dd>'
+                    + '<dt>住所:</dt>'
+                    + '<dd>' + basicInfo.address + '</dd>'
+                    + '<dt>コメント:</dt>'
+                    + '<dd>' + basicInfo.comment + '</dd>'
+                    + '</dt>';
             }
+            $('#basicInfo').html(basicInfoHtml);
+
+            var healthInfoHtml = '';
+            if (healthInfo != null) {
+                healthInfoHtml = '<dt>'
+                    + '<dt>身長:</dt>'
+                    + '<dd>' + healthInfo.height + ' cm</dd>'
+                    + '<dt>体重:</dt>'
+                    + '<dd>' + healthInfo.weight + ' kg</dd>'
+                    + '<dt>BMI:</dt>'
+                    + '<dd>' + healthInfo.bmi + '</dd>'
+                    + '<dt>腹囲:</dt>'
+                    + '<dd>' + healthInfo.grith_abdomen + ' cm</dd>'
+                    + '</dt>';
+            }
+            $('#healthInfo').html(healthInfoHtml);
+
+            var vitalHtml = '';
+            if (vital != null) {
+                vitalHtml = '<dt>'
+                    + '<dt>体温 (℃):</dt>'
+                    + '<dd>' + vital.temperature + ' (' + (tempDiff || '-') + ')' + '</dd>'
+                    + '<dt>血圧:</dt>'
+                    + '<dd>最高: ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>'
+                    + '<dd>最低: ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>'
+                    + '<dt>脈拍:</dt>'
+                    + '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>'
+                    + '</dt>';
+            }
+            $('#vital').html(vitalHtml);
+
         })
-    )
-    .done(function(res1, res2, res3){
-        vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated});
-        vitalList.reverse();
-
-        var basicInfo = res1[0].d.results[0];
-        var healthInfo = res2[0].d.results[0];
-        var vital = vitalList[0];
-        var preVital = vitalList[1];
-
-        if(preVital != null) {
-            var tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
-            var minDiff = vital.min_pressure - preVital.min_pressure;
-            var maxDiff = vital.max_pressure - preVital.max_pressure;
-            var pulseDiff = vital.pulse - preVital.pulse;
-
-            tempDiff = tempDiff < 0 ? tempDiff : '+' + tempDiff;
-            minDiff = minDiff < 0 ? minDiff : '+' + minDiff;
-            maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
-            pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
-        }
-
-        var sex;
-        switch(basicInfo.sex) {
-            case 'male': sex = '男性'; break;
-            case 'female': sex = '女性'; break;
-            default: sex = 'その他';
-        }
-
-        var basicInfoHtml = '';
-        if(basicInfo != null) {
-            basicInfoHtml = '<dt>'
-                + '<dt>姓名:</dt>'
-                + '<dd>' + basicInfo.name + '</dd>'
-                + '<dt>ふりがな:</dt>'
-                + '<dd>' + basicInfo.name_kana + '</dd>'
-                + '<dt>性別:</dt>'
-                + '<dd>' + sex + '</dd>'
-                + '<dt>生年月日:</dt>'
-                + '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + '歳)</dd>'
-                + '<dt>郵便番号:</dt>'
-                + '<dd>' + basicInfo.postal_code + '</dd>'
-                + '<dt>住所:</dt>'
-                + '<dd>' + basicInfo.address + '</dd>'
-                + '<dt>コメント:</dt>'
-                + '<dd>' + basicInfo.comment + '</dd>'
-                + '</dt>';
-        }
-        $('#basicInfo').html(basicInfoHtml);
-
-        var healthInfoHtml = '';
-        if (healthInfo != null) {
-            healthInfoHtml = '<dt>'
-                + '<dt>身長:</dt>'
-                + '<dd>' + healthInfo.height + ' cm</dd>'
-                + '<dt>体重:</dt>'
-                + '<dd>' + healthInfo.weight + ' kg</dd>'
-                + '<dt>BMI:</dt>'
-                + '<dd>' + healthInfo.bmi + '</dd>'
-                + '<dt>腹囲:</dt>'
-                + '<dd>' + healthInfo.grith_abdomen + ' cm</dd>'
-                + '</dt>';
-        }
-        $('#healthInfo').html(healthInfoHtml);
-
-        var vitalHtml = '';
-        if (vital != null) {
-            vitalHtml = '<dt>'
-                + '<dt>体温 (℃):</dt>'
-                + '<dd>' + vital.temperature + ' (' + (tempDiff || '-') + ')' + '</dd>'
-                + '<dt>血圧:</dt>'
-                + '<dd>最高: ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>'
-                + '<dd>最低: ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>'
-                + '<dt>脈拍:</dt>'
-                + '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>'
-                + '</dt>';
-        }
-        $('#vital').html(vitalHtml);
-
-    })
-    .fail(function() {
-        alert('error: get user profile');
+        .fail(function() {
+            alert('error: get user profile');
+        });
     });
 
 }
