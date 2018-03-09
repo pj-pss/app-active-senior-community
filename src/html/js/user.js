@@ -313,10 +313,6 @@ function authorizedNfcReader() {
             }
         });
 
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        $('#modal-nfcReader').modal('hide');
-
     })
     .fail(function(XMLHttpRequest, textStatus, errorThrown) {
         alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
