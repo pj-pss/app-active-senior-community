@@ -390,10 +390,6 @@ function startHelpOp() {
     $("#during_help").removeClass("hidden");
 }
 
-function endHelpOp() {
-
-}
-
 function viewInfoDisclosureDetail(type){
     $("#modal-inforDisclosureHistory .title_text").attr("data-i18n", "profile." + type);
     $('#modal-inforDisclosureHistory').localize();
