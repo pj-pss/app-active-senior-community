@@ -214,9 +214,11 @@ function authorizedNfcReader() {
     let cellUrl = Common.getCellUrl();
     Common.getAppAuthToken(cellUrl).done(function (appToken) {
         Common.getProtectedBoxAccessToken(appToken.access_token, cellUrl).done(function (appCellToken) {
+            // get current appCellToken
             preAppCellToken = appCellToken;
             preCellUrl = Common.getCellUrl();
 
+            // get supported user token
             opUrl = $('#nfcUrl').val();
             $.ajax({
                 url: opUrl + '__token',
@@ -224,6 +226,7 @@ function authorizedNfcReader() {
                 data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
             })
             .done(function (res) {
+                // set new appCellToken
                 Common.updateSessionStorage(res);
 
                 let getExtCellList = function () {
@@ -298,9 +301,11 @@ function authorizedNfcReader() {
                         }
                     }
 
+                    // if ext role is exist, delete and recreate
                     if (existFlg) {
                         deleteExtCell().then(createExtCell).then(setRole)
                             .done(function () {
+                                // set new url, and reload article/userInfo
                                 helpAuthorized = true;
                                 Common.setCellUrl(opUrl);
                                 Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
