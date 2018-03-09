@@ -296,6 +296,8 @@ function authorizedNfcReader() {
                     helpAuthorized = true;
                     Common.setCellUrl(opUrl);
                     Common.setBoxUrl(opUrl + Common.getAppCellUrl().split('/')[3] + '/');
+                    getArticleList();
+                    getUserProfile();
                     startHelpOp();
                 })
                 .fail(function () {
@@ -307,6 +309,8 @@ function authorizedNfcReader() {
                     helpAuthorized = true;
                     Common.setCellUrl(opUrl);
                     Common.setBoxUrl(opUrl + Common.getAppCellUrl().split('/')[3] + '/');
+                    getArticleList();
+                    getUserProfile();
                     startHelpOp();
                 })
                 .fail(function() {
@@ -1120,46 +1124,52 @@ function getUserProfile() {
             default: sex = 'その他';
         }
 
-        var basicInfoHtml = '<dt>'
-            + '<dt>姓名:</dt>'
-            + '<dd>' + basicInfo.name + '</dd>'
-            + '<dt>ふりがな:</dt>'
-            + '<dd>' + basicInfo.name_kana + '</dd>'
-            + '<dt>性別:</dt>'
-            + '<dd>' + sex + '</dd>'
-            + '<dt>生年月日:</dt>'
-            + '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + '歳)</dd>'
-            + '<dt>郵便番号:</dt>'
-            + '<dd>' + basicInfo.postal_code + '</dd>'
-            + '<dt>住所:</dt>'
-            + '<dd>' + basicInfo.address + '</dd>'
-            + '<dt>コメント:</dt>'
-            + '<dd>' + basicInfo.comment + '</dd>'
-            + '</dt>';
-        $('#basicInfo').html(basicInfoHtml);
+        if(basicInfo != null) {
+            var basicInfoHtml = '<dt>'
+                + '<dt>姓名:</dt>'
+                + '<dd>' + basicInfo.name + '</dd>'
+                + '<dt>ふりがな:</dt>'
+                + '<dd>' + basicInfo.name_kana + '</dd>'
+                + '<dt>性別:</dt>'
+                + '<dd>' + sex + '</dd>'
+                + '<dt>生年月日:</dt>'
+                + '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + '歳)</dd>'
+                + '<dt>郵便番号:</dt>'
+                + '<dd>' + basicInfo.postal_code + '</dd>'
+                + '<dt>住所:</dt>'
+                + '<dd>' + basicInfo.address + '</dd>'
+                + '<dt>コメント:</dt>'
+                + '<dd>' + basicInfo.comment + '</dd>'
+                + '</dt>';
+            $('#basicInfo').html(basicInfoHtml);
+        }
 
-        var healthInfoHtml = '<dt>'
-            + '<dt>身長:</dt>'
-            + '<dd>' + healthInfo.height + ' cm</dd>'
-            + '<dt>体重:</dt>'
-            + '<dd>' + healthInfo.weight + ' kg</dd>'
-            + '<dt>BMI:</dt>'
-            + '<dd>' + healthInfo.bmi + '</dd>'
-            + '<dt>腹囲:</dt>'
-            + '<dd>' + healthInfo.grith_abdomen + ' cm</dd>'
-            + '</dt>';
-        $('#healthInfo').html(healthInfoHtml);
+        if (healthInfo != null) {
+            var healthInfoHtml = '<dt>'
+                + '<dt>身長:</dt>'
+                + '<dd>' + healthInfo.height + ' cm</dd>'
+                + '<dt>体重:</dt>'
+                + '<dd>' + healthInfo.weight + ' kg</dd>'
+                + '<dt>BMI:</dt>'
+                + '<dd>' + healthInfo.bmi + '</dd>'
+                + '<dt>腹囲:</dt>'
+                + '<dd>' + healthInfo.grith_abdomen + ' cm</dd>'
+                + '</dt>';
+            $('#healthInfo').html(healthInfoHtml);
+        }
 
-        var vitalHtml = '<dt>'
-            + '<dt>体温 (℃):</dt>'
-            + '<dd>' + vital.temperature + ' (' + (tempDiff || '-') + ')' + '</dd>'
-            + '<dt>血圧:</dt>'
-            + '<dd>最高: ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>'
-            + '<dd>最低: ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>'
-            + '<dt>脈拍:</dt>'
-            + '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>'
-            + '</dt>';
-        $('#vital').html(vitalHtml);
+        if (vital != null) {
+            var vitalHtml = '<dt>'
+                + '<dt>体温 (℃):</dt>'
+                + '<dd>' + vital.temperature + ' (' + (tempDiff || '-') + ')' + '</dd>'
+                + '<dt>血圧:</dt>'
+                + '<dd>最高: ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>'
+                + '<dd>最低: ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>'
+                + '<dt>脈拍:</dt>'
+                + '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>'
+                + '</dt>';
+            $('#vital').html(vitalHtml);
+        }
 
     })
     .fail(function() {
