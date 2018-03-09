@@ -39,8 +39,8 @@ additionalCallback = function () {
         currentTime = moment(res.st * 1000);
         getArticleList('topEvent');
         getUserProfile();
-    })
-}
+    });
+};
 
 getNamesapces = function () {
     return ['common', 'glossary'];
@@ -51,12 +51,12 @@ var cs = {};
 cs.openSlide = function () {
     $(".overlay").toggleClass('overlay-on');
     $(".slide-menu").toggleClass('slide-on');
-}
+};
 
 cs.closeSlide = function () {
     $(".overlay").removeClass('overlay-on');
     $(".slide-menu").removeClass('slide-on');
-}
+};
 
 var nowViewMenu = "top";
 
@@ -169,16 +169,16 @@ function readURL(input) {
             let okFunc = function () {
                 let cropImg = ut.getCroppedModalImage();
                 $('#editPicturePreview').attr('src', cropImg).fadeIn('slow');
-                $("#editPicturePreview").data("attached", true)
-            }
+                $("#editPicturePreview").data("attached", true);
+            };
             ut.setCropperModalOkBtnFunc(okFunc);
 
             // Remove focus from input
-            document.activeElement.blur()
+            document.activeElement.blur();
 
             // Start cropper modal
             ut.showCropperModal();
-        }
+        };
         reader.readAsDataURL(input.files[0]);
     }
 }
@@ -418,8 +418,8 @@ function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
 // load html
 $(function() {
     $("#top").load("top.html", function() {
-        $('#filterInfo').attr('onclick',"sortArticle('" + sort_key + "', false, " + TYPE.INFO + ')')
-        $('#filterEvent').attr('onclick', "sortArticle('" + sort_key + "', false, " + TYPE.EVENT + ')')
+        $('#filterInfo').attr('onclick',"sortArticle('" + sort_key + "', false, " + TYPE.INFO + ')');
+        $('#filterEvent').attr('onclick', "sortArticle('" + sort_key + "', false, " + TYPE.EVENT + ')');
     });
     $("#monitoring").load("monitoring.html", function () {
         $("#myhealth").load("myhealth.html", function() {
@@ -496,7 +496,7 @@ function getArticleList(divId) {
             var list = [];
             var results = data.d.results;
             articleList = [];
-            for(result of results.reverse()){
+            for(let result of results.reverse()){
                 if (result.type == TYPE.EVENT && moment(result.end_date) < currentTime) continue;
 
                 var div = createArticleGrid(result.__id, result.title, result.start_date);
@@ -572,11 +572,11 @@ function getJoinInfoList(token) {
     })
     .done(function(res) {
         // set num
-        var count = {}
-        for (val of res.d.results) {
+        var count = {};
+        for (let val of res.d.results) {
             if($('#join_' + val.provide_id)[0]) {
                 if(count[val.provide_id] == null) {
-                    count[val.provide_id] = {}
+                    count[val.provide_id] = {};
                     count[val.provide_id].join = 0;
                     count[val.provide_id].consider = 0;
                 }
@@ -584,7 +584,7 @@ function getJoinInfoList(token) {
                 switch(parseInt(val.entry_flag)) {
                     case REPLY.JOIN: count[val.provide_id].join++; break;
                     case REPLY.CONSIDER: count[val.provide_id].consider++; break;
-                    default: alert('error: get reply information'); berak;
+                    default: alert('error: get reply information');
                 }
 
             }
@@ -635,7 +635,7 @@ function viewJoinConsiderList(entryFlag,articleId){
 			$.when.apply($, list).done($.proxy(function () {
 				var profiles = arguments;
 				if(!this.multi){
-					profiles = {0:arguments}
+					profiles = {0:arguments};
 				}
 				$("#entry-list table").children().remove();
 				if(arg[0] === REPLY.JOIN){
@@ -780,7 +780,7 @@ function getArticleDetail(id) {
             }, this);
             reader.readAsArrayBuffer(image[0]);
 
-            var replys = reply[0].d.results
+            var replys = reply[0].d.results;
             var join = 0, consider = 0;
             for(reply of replys) {
                 switch(reply.entry_flag){
@@ -906,7 +906,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
                 function (XMLHttpRequest, textStatus, errorThrown) {
                     err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
                 }
-            )
+            );
         };
 
         var saveToOrganizationCell = function(res) {
@@ -979,8 +979,8 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
 
                     return Promise.reject();
                 }
-            )
-        }
+            );
+        };
 
         saveToUserCell().then(saveToOrganizationCell)
         .fail(function(){
@@ -1003,7 +1003,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
             }
             $('#joinNum').html(join);
             $('#considerNum').html(consider);
-        })
+        });
     }, userReplyId);
 }
 
@@ -1039,7 +1039,7 @@ function sortArticle(key, reverse, type){
     sort_key = key;
 
     var list = [];
-    for(article of aList){
+    for(let article of aList){
         if((filter != null) && article.type != filter) continue;
         var div = createArticleGrid(article.id, article.title, article.start_date);
         list.push(div);
@@ -1049,13 +1049,13 @@ function sortArticle(key, reverse, type){
 
     $.each(imageList, function(key, value) {
         $('#' + key).css('background-image', "url('" + value + "')");
-    })
+    });
 
     $.each(joinList, function(key, value) {
         if ($('#join_' + key)[0]){
             $('#join_' + key).html(value);
         }
-    })
+    });
 
     addLinkToGrid();
 }
