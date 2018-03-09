@@ -844,17 +844,67 @@ function getExtCellToken(callback, id) {
     if (Common.getCellUrl() == ORGANIZATION_CELL_URL) {
         callback(Common.getToken(), id);
     } else {
-        $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+        if(helpAuthorized) {
+            $.when(Common.getTranscellToken(opUrl), Common.getAppAuthToken(opUrl))
+                .done(function (result1, result2) {
+                    let tempTCAT = result1[0].access_token; // Transcell Access Token
+                    let tempAAAT = result2[0].access_token; // App Authentication Access Token
+                    Common.getProtectedBoxAccessToken4ExtCell(opUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
+                        // Common.updateSessionStorage(appCellToken);
+                        // Common.setCellUrl(opUrl);
+                        $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+                            .done(function (result11, result12) {
+                                let tempTCAT2 = result11[0].access_token; // Transcell Access Token
+                                let tempAAAT2 = result12[0].access_token; // App Authentication Access Token
+                                Common.getProtectedBoxAccessToken4ExtCell(ORGANIZATION_CELL_URL, tempTCAT2, tempAAAT2).done(function (appCellToken2) {
+                                    callback(appCellToken2.access_token, id);
+                                }).fail(function (error) {
+                                    alert("error: get org cell token");
+                                });
+                            })
+                            .fail(function (error) {
+                                alert("error: get trance cell token");
+                            });
+                    }).fail(function (error) {
+                        alert("error: get ext cell token");
+                    });
+                })
+                .fail(function () {
+                    alert("error: get ext cell token");
+                });
+        } else {
+            $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+                .done(function (result1, result2) {
+                    let tempTCAT = result1[0].access_token; // Transcell Access Token
+                    let tempAAAT = result2[0].access_token; // App Authentication Access Token
+                    Common.perpareToCellInfo(ORGANIZATION_CELL_URL, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
+                        callback(token, id);
+                    });
+                })
+                .fail(function () {
+                    alert('failed to get token');
+                });
+        }
+    }
+}
+
+function getCurrentCellToken(callback, id) {
+    if(helpAuthorized) {
+        $.when(Common.getTranscellToken(opUrl), Common.getAppAuthToken(opUrl))
             .done(function (result1, result2) {
                 let tempTCAT = result1[0].access_token; // Transcell Access Token
                 let tempAAAT = result2[0].access_token; // App Authentication Access Token
-                Common.perpareToCellInfo(ORGANIZATION_CELL_URL, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
-                    callback(token, id);
+                 Common.getProtectedBoxAccessToken4ExtCell(opUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
+                    callback(appCellToken.access_token, id);
+                }).fail(function (error) {
+                    alert("error: get ext cell access token");
                 });
             })
             .fail(function () {
-                alert('failed to get token');
+                alert("error: get trance cell token");
             });
+    } else {
+        callback(Common.getToken(), id);
     }
 }
 
