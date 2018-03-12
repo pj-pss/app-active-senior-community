@@ -840,8 +840,6 @@ function getExtCellToken(callback, id) {
                     let tempTCAT = result1[0].access_token; // Transcell Access Token
                     let tempAAAT = result2[0].access_token; // App Authentication Access Token
                     Common.getProtectedBoxAccessToken4ExtCell(opUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
-                        // Common.updateSessionStorage(appCellToken);
-                        // Common.setCellUrl(opUrl);
                         $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
                             .done(function (result11, result12) {
                                 let tempTCAT2 = result11[0].access_token; // Transcell Access Token
