@@ -929,133 +929,137 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
     getExtCellToken(function(token) {
         var err = [];
         var anonymous = $('[name=checkAnonymous]').prop('checked');
+        var boxUrl = helpAuthorized ? opUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var userCellUrl = helpAuthorized ? opUrl : Common.getCellUrl();
 
-        var saveToUserCell = function(){
-            var method = 'POST';
-            var url = Common.getBoxUrl() + oData + '/' + entityType;
-            if(userReplyId) {
-                method = 'PUT';
-                url += "('" + userReplyId + "')";
-            }
-
-            return $.ajax({
-                type: method,
-                url: url,
-                headers: {
-                    "Authorization": "Bearer " + Common.getToken()
-                },
-                data: JSON.stringify({
-                    // 'update_user_id'
-                    'user_cell_url': Common.getCellUrl(), // dummy ID
-                    'provide_id': articleId,
-                    'entry_flag': reply,
-                    'anonymous': anonymous
-                })
-            })
-            .then(
-                function(res) {
-                    return userReplyId || res;
-                },
-                function (XMLHttpRequest, textStatus, errorThrown) {
-                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+        getCurrentCellToken(function(currentToken) {
+            var saveToUserCell = function(){
+                var method = 'POST';
+                var url = boxUrl + oData + '/' + entityType;
+                if(userReplyId) {
+                    method = 'PUT';
+                    url += "('" + userReplyId + "')";
                 }
-            );
-        };
 
-        var saveToOrganizationCell = function(res) {
-            var id = res.d ? res.d.results.__id : res;
-
-            var method = 'POST';
-            var url = Common.getToCellBoxUrl() + oData + '/' + entityType;
-            if (orgReplyId) {
-                method = 'PUT';
-                url += "('" + orgReplyId + "')";
-            }
-
-            return $.ajax({
-                type: method,
-                url: url,
-                headers: {
-                    "Authorization": "Bearer " +  token
-                },
-                data: JSON.stringify({
-                    // 'update_user_id'
-                    'user_cell_url': Common.getCellUrl(), // dummy ID
-                    'provide_id': articleId,
-                    'entry_flag': reply,
-                    'user_reply_id': id,
-                    'anonymous': anonymous
+                return $.ajax({
+                    type: method,
+                    url: url,
+                    headers: {
+                        "Authorization": "Bearer " + currentToken
+                    },
+                    data: JSON.stringify({
+                        // 'update_user_id'
+                        'user_cell_url': userCellUrl, // dummy ID
+                        'provide_id': articleId,
+                        'entry_flag': reply,
+                        'anonymous': anonymous
+                    })
                 })
-            })
-            .then(
-                function (res) {
-                    return res;
-                },
-                function (XMLHttpRequest, textStatus, errorThrown) {
-                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
-
-                    // delete/change the reply on user cell
-                    if(!userReplyId){
-                        $.ajax({
-                            type: 'DELETE',
-                            url: Common.getBoxUrl() + oData + '/' + entityType + "('" + id + "')",
-                            headers: {
-                                'Authorization': 'Bearer ' + Common.getToken()
-                            }
-                        })
-                        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                            alert('delete failed');
-                        })
-                        .done(function() {
-                            alert('delete done');
-                        });
-                    } else {
-                        $.ajax({
-                            type: 'PUT',
-                            url: Common.getBoxUrl() + oData + '/' + entityType + "('" + id + "')",
-                            headers: {
-                                'Authorization': 'Bearer ' + Common.getToken()
-                            },
-                            data: JSON.stringify({
-                                // 'update_user_id'
-                                'provide_id': articleId,
-                                'entry_flag': reply == REPLY.JOIN ? REPLY.CONSIDER : REPLY.JOIN
-                            })
-                        })
-                            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert('change failed');
-                            })
-                            .done(function () {
-                                alert('change done');
-                            });
+                .then(
+                    function(res) {
+                        return userReplyId || res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
                     }
+                );
+            };
 
-                    return Promise.reject();
+            var saveToOrganizationCell = function(res) {
+                var id = res.d ? res.d.results.__id : res;
+
+                var method = 'POST';
+                var url = Common.getToCellBoxUrl() + oData + '/' + entityType;
+                if (orgReplyId) {
+                    method = 'PUT';
+                    url += "('" + orgReplyId + "')";
                 }
-            );
-        };
 
-        saveToUserCell().then(saveToOrganizationCell)
-        .fail(function(){
-            alert('faild to send reply\n' + err.join('\n'));
-        })
-        .done(function(res) {
-            var userId = userReplyId || res.d.results.user_reply_id;
-            var orgId = orgReplyId || res.d.results.__id;
-            alert('done');
-            updateReplyLink(reply, articleId, userId, orgId);
+                return $.ajax({
+                    type: method,
+                    url: url,
+                    headers: {
+                        "Authorization": "Bearer " +  token
+                    },
+                    data: JSON.stringify({
+                        // 'update_user_id'
+                        'user_cell_url': userCellUrl, // dummy ID
+                        'provide_id': articleId,
+                        'entry_flag': reply,
+                        'user_reply_id': id,
+                        'anonymous': anonymous
+                    })
+                })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
 
-            var join = $('#joinNum').html();
-            var consider = $('#considerNum').html();
-            if(reply == REPLY.JOIN) {
-                join++;
-                consider = --consider < 0 ? 0 : consider;
-            } else {
-                join = --join < 0 ? 0 : join;
-                consider++;
-            }
-            $('#joinNum').html(join);
-            $('#considerNum').html(consider);
+                        // delete/change the reply on user cell
+                        if(!userReplyId){
+                            $.ajax({
+                                type: 'DELETE',
+                                url: boxUrl + oData + '/' + entityType + "('" + id + "')",
+                                headers: {
+                                    'Authorization': 'Bearer ' + currentToken
+                                }
+                            })
+                            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert('delete failed');
+                            })
+                            .done(function() {
+                                alert('delete done');
+                            });
+                        } else {
+                            $.ajax({
+                                type: 'PUT',
+                                url: boxUrl + oData + '/' + entityType + "('" + id + "')",
+                                headers: {
+                                    'Authorization': 'Bearer ' + currentToken
+                                },
+                                data: JSON.stringify({
+                                    // 'update_user_id'
+                                    'provide_id': articleId,
+                                    'entry_flag': reply == REPLY.JOIN ? REPLY.CONSIDER : REPLY.JOIN
+                                })
+                            })
+                                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                    alert('change failed');
+                                })
+                                .done(function () {
+                                    alert('change done');
+                                });
+                        }
+
+                        return Promise.reject();
+                    }
+                );
+            };
+
+            saveToUserCell().then(saveToOrganizationCell)
+            .fail(function(){
+                alert('faild to send reply\n' + err.join('\n'));
+            })
+            .done(function(res) {
+                var userId = userReplyId || res.d.results.user_reply_id;
+                var orgId = orgReplyId || res.d.results.__id;
+                alert('done');
+                updateReplyLink(reply, articleId, userId, orgId);
+
+                var join = $('#joinNum').html();
+                var consider = $('#considerNum').html();
+                if(reply == REPLY.JOIN) {
+                    join++;
+                    consider = --consider < 0 ? 0 : consider;
+                } else {
+                    join = --join < 0 ? 0 : join;
+                    consider++;
+                }
+                $('#joinNum').html(join);
+                $('#considerNum').html(consider);
+            });
         });
     }, userReplyId);
 }
