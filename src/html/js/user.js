@@ -782,6 +782,7 @@ function getArticleDetail(id) {
             // get reply information
             getCurrentCellToken(function(currentToken){
                 let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
                 $.when(
                     $.ajax({
                         type: 'GET',
@@ -802,7 +803,7 @@ function getArticleDetail(id) {
                             "Accept": "application/json"
                         },
                         data: {
-                            "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + Common.getCellUrl() /* dummy ID */ + "'"
+                            "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'"
                         }
                     })
                 )
