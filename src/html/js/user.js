@@ -20,7 +20,7 @@ var joinList = {};
 var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
-var opUrl = '';
+var operationCellUrl = '';
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -210,9 +210,9 @@ function openClubHistory() {
 
 function authorizedNfcReader() {
     // get supported user token
-    opUrl = $('#nfcUrl').val();
+    operationCellUrl = $('#nfcUrl').val();
     $.ajax({
-        url: opUrl + '__token',
+        url: operationCellUrl + '__token',
         type: 'POST',
         data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
     })
@@ -220,7 +220,7 @@ function authorizedNfcReader() {
         let getExtCellList = function () {
             return $.ajax({
                 type: 'GET',
-                url: opUrl + '__ctl/ExtCell',
+                url: operationCellUrl + '__ctl/ExtCell',
                 headers: {
                     'Authorization': 'Bearer ' + res.access_token,
                     'Accept': 'application/json'
@@ -231,7 +231,7 @@ function authorizedNfcReader() {
         let deleteExtCell = function () {
             return $.ajax({
                 type: 'DELETE',
-                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
                 headers: {
                     'Authorization': 'Bearer ' + res.access_token
                 }
@@ -241,7 +241,7 @@ function authorizedNfcReader() {
         let createExtCell = function () {
             return $.ajax({
                 type: 'POST',
-                url: opUrl + '__ctl/ExtCell',
+                url: operationCellUrl + '__ctl/ExtCell',
                 headers: {
                     'Authorization': 'Bearer ' + res.access_token
                 },
@@ -263,12 +263,12 @@ function authorizedNfcReader() {
         let setRole = function () {
             return $.ajax({
                 type: 'POST',
-                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')/$links/_Role",
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')/$links/_Role",
                 headers: {
                     'Authorization': 'Bearer ' + res.access_token
                 },
                 data: JSON.stringify({
-                    'uri': opUrl + "__ctl/Role(Name='supporter',_Box.Name='app-life-enrichers-community')"
+                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='app-life-enrichers-community')"
                 })
             })
                 .then(
@@ -333,13 +333,13 @@ function openHelpConfirm() {
 function closeHelpConfirm(f) {
     if(f) {
         $.ajax({
-            url: opUrl + '__token',
+            url: operationCellUrl + '__token',
             type: 'POST',
             data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
         }).done(function(res){
             $.ajax({
                 type: 'DELETE',
-                url: opUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
                 headers: {
                     'Authorization': 'Bearer ' + res.access_token
                 }
@@ -781,7 +781,7 @@ function getArticleDetail(id) {
             $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id  + "');return false;");
             // get reply information
             getCurrentCellToken(function(currentToken){
-                let boxUrl = helpAuthorized ? opUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
                 $.when(
                     $.ajax({
                         type: 'GET',
@@ -835,11 +835,11 @@ function getExtCellToken(callback, id) {
         callback(Common.getToken(), id);
     } else {
         if(helpAuthorized) {
-            $.when(Common.getTranscellToken(opUrl), Common.getAppAuthToken(opUrl))
+            $.when(Common.getTranscellToken(operationCellUrl), Common.getAppAuthToken(operationCellUrl))
                 .done(function (result1, result2) {
                     let tempTCAT = result1[0].access_token; // Transcell Access Token
                     let tempAAAT = result2[0].access_token; // App Authentication Access Token
-                    Common.getProtectedBoxAccessToken4ExtCell(opUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
+                    Common.getProtectedBoxAccessToken4ExtCell(operationCellUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
                         $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
                             .done(function (result11, result12) {
                                 let tempTCAT2 = result11[0].access_token; // Transcell Access Token
@@ -878,11 +878,11 @@ function getExtCellToken(callback, id) {
 
 function getCurrentCellToken(callback, id) {
     if(helpAuthorized) {
-        $.when(Common.getTranscellToken(opUrl), Common.getAppAuthToken(opUrl))
+        $.when(Common.getTranscellToken(operationCellUrl), Common.getAppAuthToken(operationCellUrl))
             .done(function (result1, result2) {
                 let tempTCAT = result1[0].access_token; // Transcell Access Token
                 let tempAAAT = result2[0].access_token; // App Authentication Access Token
-                 Common.getProtectedBoxAccessToken4ExtCell(opUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
+                 Common.getProtectedBoxAccessToken4ExtCell(operationCellUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
                     callback(appCellToken.access_token, id);
                 }).fail(function (error) {
                     alert("error: get ext cell access token");
@@ -914,8 +914,8 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
     getExtCellToken(function(token) {
         var err = [];
         var anonymous = $('[name=checkAnonymous]').prop('checked');
-        var boxUrl = helpAuthorized ? opUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
-        var userCellUrl = helpAuthorized ? opUrl : Common.getCellUrl();
+        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var userCellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
 
         getCurrentCellToken(function(currentToken) {
             var saveToUserCell = function(){
@@ -1142,7 +1142,7 @@ function addLinkToGrid() {
 
 function getUserProfile() {
     getCurrentCellToken(function(token){
-        let boxUrl = helpAuthorized ? opUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
         $.when(
             $.ajax({
                 type: 'GET',
