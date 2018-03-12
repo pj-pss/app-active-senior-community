@@ -293,12 +293,8 @@ function authorizedNfcReader() {
             if (existFlg) {
                 deleteExtCell().then(createExtCell).then(setRole)
                     .done(function () {
-                        // set new url, and reload article/userInfo
                         helpAuthorized = true;
-                        // Common.setCellUrl(opUrl);
-                        // Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
-                        // getArticleList();
-                        // getUserProfile();
+                        $('#editPrflBtn button').prop('disabled', true);
                         startHelpOp();
                     })
                     .fail(function () {
@@ -308,10 +304,7 @@ function authorizedNfcReader() {
                 createExtCell().then(setRole)
                     .done(function () {
                         helpAuthorized = true;
-                        // Common.setCellUrl(opUrl);
-                        // Common.setBoxUrl(opUrl + Common.getBoxName() + '/');
-                        // getArticleList();
-                        // getUserProfile();
+                        $('#editPrflBtn button').prop('disabled', true);
                         startHelpOp();
                     })
                     .fail(function () {
@@ -353,11 +346,7 @@ function closeHelpConfirm(f) {
             })
             .done(function() {
                 helpAuthorized = false;
-                // Common.updateSessionStorage(preAppCellToken);
-                // Common.setCellUrl(preCellUrl);
-                // Common.setBoxUrl(preCellUrl + Common.getBoxName() + '/');
-                // getArticleList();
-                // getUserProfile();
+                $('#editPrflBtn button').prop('disabled', false);
 
                 $(".endHelpOp").addClass('hidden');
                 $(".startHelpOp").removeClass("hidden");
@@ -1183,7 +1172,7 @@ function getUserProfile() {
             })
         )
         .done(function(res1, res2, res3){
-            vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated});
+            vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
             vitalList.reverse();
 
             var basicInfo = res1[0].d.results[0];
