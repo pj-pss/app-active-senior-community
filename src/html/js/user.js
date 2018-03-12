@@ -21,8 +21,6 @@ var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
 var opUrl = '';
-var preCellUrl = '';
-var preAppCellToken = null;
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";

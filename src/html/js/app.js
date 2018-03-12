@@ -31,7 +31,14 @@ const APP_URL = "https://demo.personium.io/app-life-enrichers-community/";
 const APP_BOX_NAME = 'io_personium_demo_app-life-enrichers-community';
 const ORGANIZATION_CELL_URL = 'https://demo.personium.io/fst-community-organization/';
 
+additionalCallback = function () {
+    switchAppUrl();
+};
+
 function switchAppUrl() {
+    let cellUrl = Common.getCellUrl();
+    let token = Common.getToken();
+
     $.ajax({
         type: "GET",
         url: cellUrl + "__ctl/Account",
