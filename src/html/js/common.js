@@ -96,44 +96,6 @@ $(document).ready(function() {
                         console.log(error.responseJSON.message.value);
                         Common.irrecoverableErrorHandler("msg.error.failedToGetBoxUrl");
                     });
-
-                $.ajax({
-                    type: "GET",
-                    url: cellUrl + "__ctl/Account",
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Accept': 'application/json'
-                    }
-                }).done($.proxy(function (data, textStatus, request) {
-                    $.ajax({
-                        type: "GET",
-                        url: cellUrl + "__ctl/Account(Name='" + data.d.results[0].Name + "')/$links/_Role",
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                            'Accept': 'application/json'
-                        }
-                    }).done(function (data2, textStatus2, request2) {
-                        var appCellName = Common.getAppCellUrl().split("/")[3];
-                        var reg = new RegExp("Name=\'(.*)\',\_Box\.Name=\'" + appCellName + "\'");
-                        var supportRole = _.find(data2.d.results, $.proxy(function (d) {
-                            var matchword = d.uri.match(reg);
-                            if (matchword !== null) {
-                                return matchword[1] === "supporter" || matchword[1] === "organization";
-                            }
-                            return false
-                        }, this));
-                        if (supportRole !== undefined) {
-                            $("#supporter").show();
-                        }
-                        $("#user").show();
-                    }).fail(function () {
-                        console.log("fail");
-                    });
-                }, this))
-                .fail(function (error) {
-                    console.log("fail");
-                });
-
             });
 
             Common.updateContent();

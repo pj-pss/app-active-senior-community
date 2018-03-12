@@ -30,3 +30,42 @@ Object.freeze(REPLY);
 const APP_URL = "https://demo.personium.io/app-life-enrichers-community/";
 const APP_BOX_NAME = 'io_personium_demo_app-life-enrichers-community';
 const ORGANIZATION_CELL_URL = 'https://demo.personium.io/fst-community-organization/';
+
+function switchAppUrl() {
+    $.ajax({
+        type: "GET",
+        url: cellUrl + "__ctl/Account",
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json'
+        }
+    }).done($.proxy(function (data, textStatus, request) {
+        $.ajax({
+            type: "GET",
+            url: cellUrl + "__ctl/Account(Name='" + data.d.results[0].Name + "')/$links/_Role",
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            }
+        }).done(function (data2, textStatus2, request2) {
+            var appCellName = Common.getAppCellUrl().split("/")[3];
+            var reg = new RegExp("Name=\'(.*)\',\_Box\.Name=\'" + appCellName + "\'");
+            var supportRole = _.find(data2.d.results, $.proxy(function (d) {
+                var matchword = d.uri.match(reg);
+                if (matchword !== null) {
+                    return matchword[1] === "supporter" || matchword[1] === "organization";
+                }
+                return false;
+            }, this));
+            if (supportRole !== undefined) {
+                $("#supporter").show();
+            }
+            $("#user").show();
+        }).fail(function () {
+            console.log("fail");
+        });
+    }, this))
+        .fail(function (error) {
+            console.log("fail");
+        });
+}
