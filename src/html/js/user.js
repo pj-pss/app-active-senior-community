@@ -991,11 +991,15 @@ function getUserProfile() {
         var vital = vitalList[0];
         var preVital = vitalList[1];
 
+        var tempDiff;
+        var minDiff;
+        var maxDiff;
+        var pulseDiff;
         if(preVital != null) {
-            var tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
-            var minDiff = vital.min_pressure - preVital.min_pressure;
-            var maxDiff = vital.max_pressure - preVital.max_pressure;
-            var pulseDiff = vital.pulse - preVital.pulse;
+            tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
+            minDiff = vital.min_pressure - preVital.min_pressure;
+            maxDiff = vital.max_pressure - preVital.max_pressure;
+            pulseDiff = vital.pulse - preVital.pulse;
 
             tempDiff = tempDiff < 0 ? tempDiff : '+' + tempDiff;
             minDiff = minDiff < 0 ? minDiff : '+' + minDiff;
