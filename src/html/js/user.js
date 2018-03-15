@@ -720,10 +720,6 @@ function getExtCellToken(callback, id) {
  * @param orgReplyId
  */
 function replyEvent(reply, articleId, userReplyId, orgReplyId) {
-    if(reply == null) {
-        alert('already done it');
-        return;
-    }
     var oData = 'reply';
     var entityType = 'reply_history';
 
@@ -850,14 +846,18 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
             var consider = $('#considerNum').html();
             if(reply == REPLY.JOIN) {
                 join++;
-                consider = --consider < 0 ? 0 : consider;
+                if(userReplyId) {
+                    consider--;
+                }
             } else {
-                join = --join < 0 ? 0 : join;
                 consider++;
+                if (userReplyId) {
+                    join--;
+                }
             }
             $('#joinNum').html(join);
             $('#considerNum').html(consider);
-        })
+        });
     }, userReplyId);
 }
 
