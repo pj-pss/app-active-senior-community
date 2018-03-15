@@ -746,7 +746,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
                 },
                 data: JSON.stringify({
                     // 'update_user_id'
-                    'user_cell_url': Common.getCellUrl(), // dummy ID
+                    'user_cell_url': Common.getCellUrl(),
                     'provide_id': articleId,
                     'entry_flag': reply,
                     'anonymous': anonymous
@@ -780,7 +780,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
                 },
                 data: JSON.stringify({
                     // 'update_user_id'
-                    'user_cell_url': Common.getCellUrl(), // dummy ID
+                    'user_cell_url': Common.getCellUrl(),
                     'provide_id': articleId,
                     'entry_flag': reply,
                     'user_reply_id': id,
