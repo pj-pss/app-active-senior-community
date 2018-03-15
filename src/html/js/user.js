@@ -610,7 +610,6 @@ function getArticleDetail(id) {
 
             var venue = article.venue ? '開催場所: ' + article.venue : '';
             $('#articleDetail .term')[0].style.display = venue ? '' : 'none';
-            $('#articleDetail .entry')[0].style.display = article.type == TYPE.EVENT ? '' : 'none';
 
             var img = $('<img>').attr('src', article.previewImg).addClass('thumbnail');
 
