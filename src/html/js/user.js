@@ -594,6 +594,7 @@ function getArticleDetail(id) {
             })
         )
         .done(function (text, image, reply) {
+            // construct text
             var article = text[0].d.results;
 
             var term;
@@ -619,6 +620,7 @@ function getArticleDetail(id) {
             $('#articleDetail .date').html(term);
             $('#articleDetail .text').html(article.detail);
 
+            // show image
             var reader = new FileReader();
             reader.onloadend = $.proxy(function (event) {
                 var binary = '';
@@ -670,7 +672,7 @@ function getArticleDetail(id) {
                             "Accept": "application/json"
                         },
                         data: {
-                            "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + Common.getCellUrl() /* dummy ID */ + "'"
+                            "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + Common.getCellUrl() + "'"
                         }
                     })
                 )
@@ -698,6 +700,11 @@ function getArticleDetail(id) {
     }, id);
 }
 
+/**
+ * Get token for organization cell and callback argument function.
+ * @param {function} callback
+ * @param {string} id article/userReply/etc... (for callback function)
+ */
 function getExtCellToken(callback, id) {
     if (Common.getCellUrl() == ORGANIZATION_CELL_URL) {
         callback(Common.getToken(), id);
@@ -717,11 +724,11 @@ function getExtCellToken(callback, id) {
 }
 
 /**
- *
- * @param reply REPLY.JOIN or REPLY.CONSIDER
- * @param articleId
- * @param userReplyId if id is exist, this func's role is the update
- * @param orgReplyId
+ * Send the reply to user cell and organization cell.
+ * @param {int} reply REPLY.JOIN or REPLY.CONSIDER
+ * @param {string} articleId
+ * @param {string} userReplyId if id is exist, this func's role is the update
+ * @param {string} orgReplyId
  */
 function replyEvent(reply, articleId, userReplyId, orgReplyId) {
     var oData = 'reply';
@@ -865,7 +872,13 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
     }, userReplyId);
 }
 
-
+/**
+ * Update link for sending the reply.
+ * @param {int} reply Sended users reply type ( REPLY.JOIN or REPLY.CONSIDER )
+ * @param {string} articleId
+ * @param {string} userReplyId
+ * @param {string} orgReplyId
+ */
 function updateReplyLink(reply, articleId, userReplyId, orgReplyId){
     var argJoin = '';
     var argConsider = '';
