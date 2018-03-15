@@ -635,20 +635,22 @@ function getArticleDetail(id) {
             }, this);
             reader.readAsArrayBuffer(image[0]);
 
-            var replys = reply[0].d.results;
-            var join = 0, consider = 0;
-            for(reply of replys) {
-                switch(reply.entry_flag){
-                    case REPLY.JOIN: join++; break;
-                    case REPLY.CONSIDER: consider++; break;
-                }
-            }
-            $('#joinNum').html(join);
-            $('#considerNum').html(consider);
-            $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
-            $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id  + "');return false;");
-            // get reply information
             if(article.type == TYPE.EVENT) {
+                $('#articleDetail .entry')[0].style.display = article.type == TYPE.EVENT ? '' : 'none';
+                var replys = reply[0].d.results;
+                var join = 0, consider = 0;
+                for(reply of replys) {
+                    switch(reply.entry_flag){
+                        case REPLY.JOIN: join++; break;
+                        case REPLY.CONSIDER: consider++; break;
+                    }
+                }
+                $('#joinNum').html(join);
+                $('#considerNum').html(consider);
+                $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
+                $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id  + "');return false;");
+
+                // get reply information
                 $.when(
                     $.ajax({
                         type: 'GET',
