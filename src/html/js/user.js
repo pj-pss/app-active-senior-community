@@ -169,7 +169,7 @@ function readURL(input) {
                 $("#editPicturePreview").data("attached", true)
             }
             ut.setCropperModalOkBtnFunc(okFunc);
-            
+
             // Remove focus from input
             document.activeElement.blur()
 
@@ -349,7 +349,7 @@ function getArticleList(divId) {
             var list = [];
             var results = data.d.results;
             articleList = [];
-            for(result of results.reverse()){
+            for(let result of results.reverse()){
                 if (result.type == TYPE.EVENT && moment(result.end_date) < currentTime) continue;
 
                 var div = createArticleGrid(result.__id, result.title, result.start_date);
@@ -426,7 +426,7 @@ function getJoinInfoList(token) {
     .done(function(res) {
         // set num
         var count = {}
-        for (val of res.d.results) {
+        for (let val of res.d.results) {
             if($('#join_' + val.provide_id)[0]) {
                 if(count[val.provide_id] == null) {
                     count[val.provide_id] = {}
@@ -437,12 +437,12 @@ function getJoinInfoList(token) {
                 switch(parseInt(val.entry_flag)) {
                     case REPLY.JOIN: count[val.provide_id].join++; break;
                     case REPLY.CONSIDER: count[val.provide_id].consider++; break;
-                    default: alert('error: get reply information'); berak;
+                    default: alert('error: get reply information');
                 }
 
             }
         }
-        for (key in count) {
+        for (let key in count) {
             var joinHtml = '<i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i>: '
                 + count[key].join
                 + '<i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i>: '
@@ -596,8 +596,9 @@ function getArticleDetail(id) {
         .done(function (text, image, reply) {
             var article = text[0].d.results;
 
+            var term;
             if (article.type == TYPE.EVENT && article.start_date && article.end_date) {
-                var term = article.start_date + ' ' + article.start_time + ' ~ ' + (article.end_date == article.start_date ? '' : article.end_date) + ' ' + article.end_time;
+                term = article.start_date + ' ' + article.start_time + ' ~ ' + (article.end_date == article.start_date ? '' : article.end_date) + ' ' + article.end_time;
 
                 $('#replyContainer').css('display', '');
             } else {
@@ -892,7 +893,7 @@ function sortArticle(key, reverse, type){
     sort_key = key;
 
     var list = [];
-    for(article of aList){
+    for(let article of aList){
         if((filter != null) && article.type != filter) continue;
         var div = createArticleGrid(article.id, article.title, article.start_date);
         list.push(div);
