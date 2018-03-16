@@ -362,6 +362,7 @@ function showInfoPreview() {
     $('#modal-preview .text').html(article.text);
     $('#modal-preview .img').html(img);
 
+    $('#modal-preview').localize();
     $('#modal-preview').modal('show');
   });
 }

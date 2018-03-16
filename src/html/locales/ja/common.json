@@ -85,6 +85,7 @@
         "cancel": "キャンセル",
         "yes" : "はい",
         "no" : "いいえ",
+        "close" : "閉じる",
         "edit": "編集",
         "preview": "プレビュー",
         "save": "保存",
@@ -136,7 +137,8 @@
         "postComment" : "コメントを投稿する",
         "personalInfo" : "人物情報",
         "createInfo" : "提供情報:新規作成",
-        "editInfo" : "提供情報:編集"
+        "editInfo" : "提供情報:編集",
+        "previewInfo" : "提供情報:プレビュー"
     },
     "articleItem" : {
         "type" : "記事区分",
