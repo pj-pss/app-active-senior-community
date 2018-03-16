@@ -1068,7 +1068,7 @@ function getUserProfile() {
         if(vital) {
             vitalHtml = '<dt>' +
                 '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
-                '<dd>' + vital.temperature + ' ℃ (' + (tempDiff || '-') + ')' + '</dd>' +
+                '<dd>' + vital.temperature + ' &deg;C (' + (tempDiff || '-') + ')' + '</dd>' +
                 '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
                 '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
                 '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
