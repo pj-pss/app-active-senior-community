@@ -13,7 +13,6 @@ getNamesapces = function () {
 
 var inputImage;
 var getImage;
-var debug_token;
 
 // function ID currently displayed
 var nowViewFunction = "proviedInfoList";
