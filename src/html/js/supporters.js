@@ -404,7 +404,7 @@ function validateArticle() {
 
   // required items
   if(!(title && text)) {
-    errMsg.push('<span class="must"></span> は必須項目です');
+    errMsg.push(i18next.t('msg.requiredItem'));
   } else {
     switch (parseInt(type)) {
       case TYPE.INFO:
@@ -412,19 +412,19 @@ function validateArticle() {
 
       case TYPE.EVENT:
         if(!(startDate && endDate && startTime && endTime) || !venue){
-          errMsg.push('<span class="must"></span> は必須項目です');
+          errMsg.push(i18next.t('msg.requiredItem'));
         }
 
         // check startDate is before endDate
         var start = moment(startDate + startTime);
         var end = moment(endDate + endTime);
         if(start > end) {
-          errMsg.push('終了日時は開始日時の後に設定してください');
+          errMsg.push(i18next.t('msg.dateContext'));
         }
         break;
 
       default:
-        errMsg.push('終了日時は開始日時の後に設定してください');
+        errMsg.push(i18next.t('msg.dateContext'));
         break;
     }
   }
@@ -433,12 +433,12 @@ function validateArticle() {
   pUrl = $.url(url);
   if(url) {
     if(!(pUrl.attr('protocol').match(/^(https?|ftp)$/) && pUrl.attr('host'))) {
-      errMsg.push('正しいURLを入力してください');
+      errMsg.push(i18next.t('msg.urlFormat'));
     } else {
       var labels = pUrl.attr('host').split('.');
       for(var label of labels){
         if( !label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/) ) {
-          errMsg.push('正しいURLを入力してください');
+          errMsg.push(i18next.t('msg.urlFormat'));
           break;
         }
       }
@@ -449,7 +449,7 @@ function validateArticle() {
   if( isNaN(type + age + sex) ||
       type < 0 || age < 0 || sex < 0 ||
       Object.keys(TYPE).length < type || Object.keys(AGE).length < age || Object.keys(SEX).length < sex) {
-    errMsg.push('不正な値です');
+    errMsg.push(i18next.t('msg.illegalValue'));
   }
 
 
@@ -604,10 +604,10 @@ function saveArticle(editId) {
 
     saveText().then(saveImg)
     .fail(function() {
-      alert('記事の保存に失敗しました\n\n' + err.join('\n'));
+      alert(i18next.t('msg.failedToSaveArticle') + '\n\n' + err.join('\n'));
     })
     .done(function() {
-      alert('記事の保存が完了しました');
+      alert(i18next.t('msg.completeToSaveArticle'));
       $("#modal-infoEditor").modal('hide');
       getArticleList();
     });

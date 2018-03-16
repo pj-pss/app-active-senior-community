@@ -18,6 +18,12 @@
         "scrollToTop" : "先頭へ戻る",
         "latest" : "最新50件まで",
         "selectImageFile" : "画像ファイルを選択してください",
+        "requiredItem" : "<span class=\"must\"></span> は必須項目です",
+        "dateContext" : "終了日時は開始日時の後に設定してください",
+        "urlFormat" : "正しいURLを入力してください",
+        "illegalValue" : "不正な値です",
+        "failedToSaveArticle" : "記事の保存に失敗しました",
+        "completeToSaveArticle" : "記事の保存が完了しました",
 
         "op" : {
             "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
