@@ -101,7 +101,8 @@
         "selectFile" : "ファイル選択",
         "selectCsvFile" : "csvファイル選択",
         "clear": "クリア",
-        "upload": "アップロード"
+        "upload": "アップロード",
+        "logout": "ログアウト"
     },
     "pageTitle" : {
         "action" : "アクション",
@@ -123,6 +124,13 @@
         "bbsComment" : "みんなの掲示板: コメント",
 		"participate" : "参加する人",
 		"consider" : "検討している人"
+    },
+    "org" : {
+        "title" : "運用者ポータル",
+        "provideInfo" : "提供情報一覧",
+        "tenant" : "入居者一覧",
+        "disclosureInfo" : "緊急時情報開示先登録",
+        "opHistory" : "操作履歴"
     },
     "modalTitle" : {
         "postComment" : "コメントを投稿する",
