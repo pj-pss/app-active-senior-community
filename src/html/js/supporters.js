@@ -604,10 +604,10 @@ function saveArticle(editId) {
 
     saveText().then(saveImg)
     .fail(function() {
-      alert(i18next.t('msg.failedToSaveArticle') + '\n\n' + err.join('\n'));
+      alert(i18next.t('msg.failedSaveArticle') + '\n\n' + err.join('\n'));
     })
     .done(function() {
-      alert(i18next.t('msg.completeToSaveArticle'));
+      alert(i18next.t('msg.completeSaveArticle'));
       $("#modal-infoEditor").modal('hide');
       getArticleList();
     });
@@ -781,7 +781,7 @@ function getArticleDetail(id) {
 
     })
     .fail(function() {
-      alert('記事の取得に失敗しました\n\n' + err.join('\n'));
+      alert(i18next.t('failedGetArticle') + '\n\n' + err.join('\n'));
     });
   }, id);
 }
@@ -858,12 +858,12 @@ function deleteArticle(id) {
 
     deleteImage().then(deleteText)
     .done(function() {
-      alert('記事の削除が完了しました');
+      alert(i18next.t('completeDeleteArticle'));
       $("#modal-infoEditor").modal('hide');
       getArticleList();
     })
     .fail(function() {
-      alert('記事の削除に失敗しました\n\n' + err.join('\n'));
+      alert(i18next.t('failedDeleteArticle') + '\n\n' + err.join('\n'));
     });
   }, id);
 }

@@ -22,8 +22,11 @@
         "dateContext" : "終了日時は開始日時の後に設定してください",
         "urlFormat" : "正しいURLを入力してください",
         "illegalValue" : "不正な値です",
-        "failedToSaveArticle" : "記事の保存に失敗しました",
-        "completeToSaveArticle" : "記事の保存が完了しました",
+        "failedSaveArticle" : "記事の保存に失敗しました",
+        "completeSaveArticle" : "記事の保存が完了しました",
+        "failedGetArticle": "記事の取得に失敗しました",
+        "failedDeleteArticle": "記事の削除に失敗しました",
+        "completeGetArticle": "記事の削除が完了しました",
 
         "op" : {
             "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
