@@ -168,6 +168,7 @@ function openInfoCreate(){
 
     getImage = null;
     $('#saveArticleButton').attr('onclick', "saveArticle()");
+    $('#modal-infoEditor').localize();
     $('#modal-infoEditor').modal('show');
   });
 }
@@ -177,7 +178,8 @@ function openInfoEdit(id){
     initInfoEdit();
     getArticleDetail(id);
     var deleteButton = $('<button></button>')
-                          .text('削除').addClass('btn').addClass('btn-danger')
+                          .text(i18next.t('btn.delete'))
+                          .addClass('btn').addClass('btn-danger')
                           .attr('onclick', "showDeleteArticleConfirm('" + id + "')");
     $('#modal-infoEditor .modal-footer').append(deleteButton);
     $('#saveArticleButton').attr('onclick', "saveArticle('" + id + "')");
@@ -344,7 +346,7 @@ function showInfoPreview() {
     link = $('<a></a>').attr('href', article.url);
     link.text(article.url);
 
-    var venue = article.venue ? '開催場所: ' + article.venue : '';
+    var venue = article.venue ? i18next.t("articleItem.venue") + ': ' + article.venue : '';
     if(!venue) {
       $('#modal-preview .term')[0].style.display = 'none';
     }
