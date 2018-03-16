@@ -184,6 +184,7 @@ function openInfoEdit(id){
     $('#modal-infoEditor .modal-footer').append(deleteButton);
     $('#saveArticleButton').attr('onclick', "saveArticle('" + id + "')");
 
+    $('#modal-infoEditor').localize();
     $('#modal-infoEditor').modal('show');
   });
 }
