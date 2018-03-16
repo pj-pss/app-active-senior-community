@@ -32,6 +32,8 @@
         "nowUploading": "アップロード中...",
         "completeRegister": "登録が完了しました",
         "failedRegister": "登録が失敗しました",
+        "confirmSendReply": "回答しますか?",
+        "anonymousReply": "匿名で回答する",
 
         "op" : {
             "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
