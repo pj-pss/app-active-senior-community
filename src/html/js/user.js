@@ -609,7 +609,7 @@ function getArticleDetail(id) {
             link = $('<a></a>').attr('href', article.url);
             link.text(article.url);
 
-            var venue = article.venue ? '開催場所: ' + article.venue : '';
+            var venue = article.venue ? i18next.t('articleItem.venue') + ': ' + article.venue : '';
             $('#articleDetail .term')[0].style.display = venue ? '' : 'none';
 
             var img = $('<img>').attr('src', article.previewImg).addClass('thumbnail');
