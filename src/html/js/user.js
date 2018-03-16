@@ -703,7 +703,7 @@ function getArticleDetail(id) {
 /**
  * Get token for organization cell and callback argument function.
  * @param {function} callback
- * @param {string} id article/userReply/etc... (for callback function)
+ * @param {string} id :article/userReply/etc... (for callback function)
  */
 function getExtCellToken(callback, id) {
     if (Common.getCellUrl() == ORGANIZATION_CELL_URL) {
@@ -874,7 +874,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
 
 /**
  * Update link for sending the reply.
- * @param {int} reply Sended users reply type ( REPLY.JOIN or REPLY.CONSIDER )
+ * @param {int} reply :Sended users reply type ( REPLY.JOIN or REPLY.CONSIDER )
  * @param {string} articleId
  * @param {string} userReplyId
  * @param {string} orgReplyId
@@ -1023,27 +1023,27 @@ function getUserProfile() {
 
         var sex;
         switch(basicInfo.sex) {
-            case 'male': sex = '男性'; break;
-            case 'female': sex = '女性'; break;
-            default: sex = 'その他';
+            case 'male': sex = i18next.t('sex.male'); break;
+            case 'female': sex = i18next.t('sex.female'); break;
+            default: sex = i18next.t('sex.other');
         }
 
         var basicInfoHtml = '';
         if(basicInfo) {
             basicInfoHtml = '<dt>' +
-                '<dt>姓名:</dt>' +
+                '<dt>' + i18next.t('basicInfo.name') + ':</dt>' +
                 '<dd>' + basicInfo.name + '</dd>' +
-                '<dt>ふりがな:</dt>' +
+                '<dt>' + i18next.t('basicInfo.howToRead') + ':</dt>' +
                 '<dd>' + basicInfo.name_kana + '</dd>' +
-                '<dt>性別:</dt>' +
+                '<dt>' + i18next.t('basicInfo.sex') + ':</dt>' +
                 '<dd>' + sex + '</dd>' +
-                '<dt>生年月日:</dt>' +
-                '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + '歳)</dd>' +
-                '<dt>郵便番号:</dt>' +
+                '<dt>' + i18next.t('basicInfo.birthday') + ' (' + i18next.t('basicInfo.age') + '):</dt>' +
+                '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</dd>' +
+                '<dt>' + i18next.t('basicInfo.postalCode') + ':</dt>' +
                 '<dd>' + basicInfo.postal_code + '</dd>' +
-                '<dt>住所:</dt>' +
+                '<dt>' + i18next.t('basicInfo.address') + ':</dt>' +
                 '<dd>' + basicInfo.address + '</dd>' +
-                '<dt>コメント:</dt>' +
+                '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
                 '<dd>' + basicInfo.comment + '</dd>' +
                 '</dt>';
         }
@@ -1052,13 +1052,13 @@ function getUserProfile() {
         var healthInfoHtml = '';
         if(healthInfo) {
             healthInfoHtml = '<dt>' +
-                '<dt>身長:</dt>' +
+                '<dt>' + i18next.t('health.height') + ':</dt>' +
                 '<dd>' + healthInfo.height + ' cm</dd>' +
-                '<dt>体重:</dt>' +
+                '<dt>' + i18next.t('health.weight') + ':</dt>' +
                 '<dd>' + healthInfo.weight + ' kg</dd>' +
                 '<dt>BMI:</dt>' +
                 '<dd>' + healthInfo.bmi + '</dd>' +
-                '<dt>腹囲:</dt>' +
+                '<dt>' + i18next.t('health.girthAbdomen') + ':</dt>' +
                 '<dd>' + healthInfo.grith_abdomen + ' cm</dd>' +
                 '</dt>';
         }
@@ -1067,12 +1067,12 @@ function getUserProfile() {
         var vitalHtml = '';
         if(vital) {
             vitalHtml = '<dt>' +
-                '<dt>体温 (℃):</dt>' +
-                '<dd>' + vital.temperature + ' (' + (tempDiff || '-') + ')' + '</dd>' +
-                '<dt>血圧:</dt>' +
-                '<dd>最高: ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
-                '<dd>最低: ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
-                '<dt>脈拍:</dt>' +
+                '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
+                '<dd>' + vital.temperature + ' ℃ (' + (tempDiff || '-') + ')' + '</dd>' +
+                '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
+                '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
+                '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
+                '<dt>' + i18next.t('vital.pulse') + ':</dt>' +
                 '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>' +
                 '</dt>';
         }
