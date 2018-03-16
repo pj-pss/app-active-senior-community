@@ -5,7 +5,7 @@ getEngineEndPoint = function () {
 additionalCallback = function () {
   Common.setIdleTime();
   getArticleList();
-}
+};
 
 getNamesapces = function () {
   return ['common', 'glossary'];
@@ -102,7 +102,7 @@ function openComment(id){
 				right.children().remove();
 				var arg = arguments;
 				if(!this.multi){
-					arg = {0:arguments}
+					arg = {0:arguments};
 				}
 
 				var rcnt = lcnt = 1;
@@ -114,10 +114,10 @@ function openComment(id){
 					var fDate = formatDate(new Date(parseInt(this.rDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
 					var dName = arg[i][0].DisplayName;
 					if(this.rDatas[i].entry_flag === 0){
-						right.append('<tr><td>' + rcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>')
+						right.append('<tr><td>' + rcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>');
 						rcnt++;
 					}else{
-						left.append('<tr><td>' + lcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>')
+						left.append('<tr><td>' + lcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>');
 						lcnt++;
 					}
 				}
@@ -192,12 +192,12 @@ function initInfoEdit(){
   $('#event').val(TYPE.EVENT);
 
   var i = 1;
-  for(var key in SEX){
+  for(let key in SEX){
     $('#editorSex option:nth-child(' + i + ')').val(SEX[key]);
     i++;
   }
   i = 1;
-  for(var key in AGE) {
+  for(let key in AGE) {
     $('#editorAge option:nth-child(' + i + ')').val(AGE[key]);
     i++;
   }
@@ -256,7 +256,7 @@ function initInfoEdit(){
       var img_src = $('<img>').attr('src', reader.result).addClass('thumbnail');
       inputImage = reader.result;
       $('#infoThumbnail').html(img_src);
-    }
+    };
     reader.readAsDataURL(file);
   });
 
@@ -329,15 +329,16 @@ function showInfoPreview() {
 
     if(article.errMsg.length > 0){
       $('#articleError').html('');
-      for(i in article.errMsg) {
+      for(let i in article.errMsg) {
         $('<li></li>').append(article.errMsg[i]).appendTo('#articleError');
       }
       showinfoEditorAlert();
       return;
     }
 
+    var term = '';
     if(article.type == TYPE.EVENT && article.startDate && article.endDate) {
-      var term = article.startDate + ' ' + article.startTime + ' ~ ' + (article.endDate == article.startDate ? '' : article.endDate) + ' ' + article.endTime;
+      term = article.startDate + ' ' + article.startTime + ' ~ ' + (article.endDate == article.startDate ? '' : article.endDate) + ' ' + article.endTime;
     }
 
     link = $('<a></a>').attr('href', article.url);
@@ -385,11 +386,15 @@ function validateArticle() {
   var img = $('#inputFileImg').prop('files')[0];
   var errMsg = [];
 
+  var startDate = '';
+  var startTime = '';
+  var endDate = '';
+  var endTime = '';
   if(type == TYPE.EVENT){
-    var startDate = $('#infoStartDate').val();
-    var startTime = $('#infoStartTime').val();
-    var endDate = $('#infoEndDate').val();
-    var endTime = $('#infoEndTime').val();
+    startDate = $('#infoStartDate').val();
+    startTime = $('#infoStartTime').val();
+    endDate = $('#infoEndDate').val();
+    endTime = $('#infoEndTime').val();
   }
 
   // required items
@@ -466,9 +471,9 @@ function validateArticle() {
     if(getImage) {
       previewImg = getImage;
     } else {
-      var cvs = document.createElement('canvas');
+      let cvs = document.createElement('canvas');
       cvs.height = cvs.width = 300;
-      var ctx = cvs.getContext('2d');
+      let ctx = cvs.getContext('2d');
       jdenticon.drawIcon(ctx, title, cvs.height);
       previewImg = cvs.toDataURL('image/jpeg');
     }
@@ -490,7 +495,7 @@ function validateArticle() {
     'age' : age,
     'sex' : sex,
     'errMsg' : errMsg
-  }
+  };
 }
 
 function saveArticle(editId) {
@@ -499,7 +504,7 @@ function saveArticle(editId) {
 
     if(article.errMsg.length > 0){
       $('#articleError').html('');
-      for(i in article.errMsg) {
+      for(let i in article.errMsg) {
         $('<li></li>').append(article.errMsg[i]).appendTo('#articleError');
       }
       showinfoEditorAlert();
@@ -568,7 +573,7 @@ function saveArticle(editId) {
         data : article.img
       }).then(
         function(res) {
-          return res
+          return res;
         },
         function(XMLHttpRequest, textStatus, errorThrown) {
           err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
@@ -589,8 +594,8 @@ function saveArticle(editId) {
 
           return Promise.reject();
         }
-      )
-    }
+      );
+    };
 
     saveText().then(saveImg)
     .fail(function() {
@@ -807,7 +812,7 @@ function deleteArticle(id) {
           return Promise.reject();
         }
       );
-    }
+    };
 
     var deleteText = function() {
       return $.ajax({
@@ -838,12 +843,12 @@ function deleteArticle(id) {
           })
           .fail(function() {
             alert('rollback error');
-          })
+          });
 
           return Promise.reject();
         }
       );
-    }
+    };
 
 
     deleteImage().then(deleteText)
