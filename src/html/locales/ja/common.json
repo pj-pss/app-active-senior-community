@@ -18,6 +18,7 @@
         "scrollToTop" : "先頭へ戻る",
         "latest" : "最新50件まで",
         "selectImageFile" : "画像ファイルを選択してください",
+        "selectCsvFile": "csvファイルを選択してください",
         "requiredItem" : "<span class=\"must\"></span> は必須項目です",
         "dateContext" : "終了日時は開始日時の後に設定してください",
         "urlFormat" : "正しいURLを入力してください",
@@ -27,6 +28,10 @@
         "failedGetArticle": "記事の取得に失敗しました",
         "failedDeleteArticle": "記事の削除に失敗しました",
         "completeGetArticle": "記事の削除が完了しました",
+        "confirmRegisterCsv": "選択したcsvを登録します。よろしいですか?",
+        "nowUploading": "アップロード中...",
+        "completeRegister": "登録が完了しました",
+        "failedRegister": "登録が失敗しました",
 
         "op" : {
             "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
@@ -93,7 +98,10 @@
         "postComment" : "コメントを投稿する",
         "saveDiscInfo" : "開示情報を保存する",
         "editProfile" : "わたしの情報を変更する",
-        "selectFile" : "ファイル選択"
+        "selectFile" : "ファイル選択",
+        "selectCsvFile" : "csvファイル選択",
+        "clear": "クリア",
+        "upload": "アップロード"
     },
     "pageTitle" : {
         "action" : "アクション",
