@@ -109,7 +109,9 @@
     },
     "modalTitle" : {
         "postComment" : "コメントを投稿する",
-        "personalInfo" : "人物情報"
+        "personalInfo" : "人物情報",
+        "createInfo" : "提供情報:新規作成",
+        "editInfo" : "提供情報:編集"
     },
     "articleItem" : {
         "type" : "記事区分",

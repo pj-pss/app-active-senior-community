@@ -168,6 +168,7 @@ function openInfoCreate(){
 
     getImage = null;
     $('#saveArticleButton').attr('onclick', "saveArticle()");
+    $('#infoEditorTitle').html(i18next.t('modalTitle.createInfo'));
     $('#modal-infoEditor').localize();
     $('#modal-infoEditor').modal('show');
   });
@@ -184,6 +185,7 @@ function openInfoEdit(id){
     $('#modal-infoEditor .modal-footer').append(deleteButton);
     $('#saveArticleButton').attr('onclick', "saveArticle('" + id + "')");
 
+    $('#infoEditorTitle').html(i18next.t('modalTitle.editInfo'));
     $('#modal-infoEditor').localize();
     $('#modal-infoEditor').modal('show');
   });
