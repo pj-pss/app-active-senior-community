@@ -15,7 +15,7 @@ var actionHistory = {};
 actionHistory.post = function (messageid, arg = {}) {
 	var method;
 	var url;
-	switch(ah.post.caller.name){
+	switch(actionHistory.post.caller.name){
 		case "actionHistoryShowModal":
 		case "actionHistoryShowView":
 			method = "view";

@@ -268,7 +268,7 @@ function authorizedNfcReader() {
                     'Authorization': 'Bearer ' + res.access_token
                 },
                 data: JSON.stringify({
-                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='app-life-enrichers-community')"
+                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='" + Common.getBoxName() + "')"
                 })
             })
                 .then(
