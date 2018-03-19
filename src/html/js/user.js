@@ -354,6 +354,7 @@ function closeHelpConfirm(f) {
                 $('h1').css('background-color', '#008F00');
                 $('#during_help').addClass('hidden');
                 $('#top').actionHistoryShowView();
+
             })
             .fail(function() {
                 alert('error: delete ext cell');
@@ -1046,14 +1047,10 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
                 var consider = $('#considerNum').html();
                 if(reply == REPLY.JOIN) {
                     join++;
-                    if(userReplyId != null) {
-                        consider--;
-                    }
+                    consider = --consider < 0 ? 0 : consider;
                 } else {
+                    join = --join < 0 ? 0 : join;
                     consider++;
-                    if (userReplyId != null) {
-                        join--;
-                    }
                 }
                 $('#joinNum').html(join);
                 $('#considerNum').html(consider);
