@@ -20,6 +20,7 @@ var joinList = {};
 var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
+var operationCellUrl = '';
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -93,7 +94,7 @@ function viewProfile(){
 		}
 		$("#nickname").val(arguments[0].DisplayName);
 		$("#popupEditDisplayNameErrorMsg").html("");
-		view('profileEdit');
+		$('#profileEdit').actionHistoryShowView();
 	});
 }
 
@@ -120,7 +121,7 @@ function saveProfile(){
 			            'Authorization': 'Bearer ' + Common.getToken()
 			        }
 			    }).done(function(){
-					view('monitoring');
+					$('#monitoring').actionHistoryShowView();
 				});
 			});
 		});
@@ -185,63 +186,211 @@ var helpAuthorized = false;
 function openNfcReader() {
 	helpAuthorized = false;
     $('#modal-nfcReader').localize();
-    $('#modal-nfcReader').modal('show');
+    $('#modal-nfcReader').actionHistoryShowModal();
 }
 
 function openPersonalInfo() {
     $('#modal-personalInfo').localize();
-    $('#modal-personalInfo').modal('show');
+    $('#modal-personalInfo').actionHistoryShowModal();
 }
 
 function openPersonalInfo2() {
     $('#modal-personalInfo2').localize();
-    $('#modal-personalInfo2').modal('show');
+    $('#modal-personalInfo2').actionHistoryShowModal();
 }
 
 function openPersonalInfo3() {
     $('#modal-personalInfo3').localize();
-    $('#modal-personalInfo3').modal('show');
+    $('#modal-personalInfo3').actionHistoryShowModal();
 }
 function openClubHistory() {
     $('#modal-clubHistory').localize();
-    $('#modal-clubHistory').modal('show');
+    $('#modal-clubHistory').actionHistoryShowModal();
 }
 
 function authorizedNfcReader() {
-	helpAuthorized = true;
-	$('body').removeClass('modal-open');
-	$('.modal-backdrop').remove();
-	$('#modal-nfcReader').modal('hide');
+    // get supported user token
+    operationCellUrl = $('#nfcUrl').val();
+    $.ajax({
+        url: operationCellUrl + '__token',
+        type: 'POST',
+        data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
+    })
+    .done(function (res) {
+        let getExtCellList = function () {
+            return $.ajax({
+                type: 'GET',
+                url: operationCellUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token,
+                    'Accept': 'application/json'
+                }
+            });
+        };
+
+        let deleteExtCell = function () {
+            return $.ajax({
+                type: 'DELETE',
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                }
+            });
+        };
+
+        let createExtCell = function () {
+            return $.ajax({
+                type: 'POST',
+                url: operationCellUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                },
+                data: JSON.stringify({
+                    'Url': Common.getCellUrl()
+                })
+            })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                        return Promise.reject();
+                    }
+                );
+        };
+
+        let setRole = function () {
+            return $.ajax({
+                type: 'POST',
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')/$links/_Role",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                },
+                data: JSON.stringify({
+                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='app-life-enrichers-community')"
+                })
+            })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                    }
+                );
+        };
+
+        getExtCellList().done(function (res) {
+            let existFlg = false;
+            for (let result of res.d.results) {
+                if (result.Url == Common.getCellUrl()) {
+                    existFlg = true;
+                }
+            }
+
+            // if ext role is exist, delete and recreate
+            if (existFlg) {
+                deleteExtCell().then(createExtCell).then(setRole)
+                    .done(function () {
+                        helpAuthorized = true;
+                        $('#editPrflBtn button').prop('disabled', true);
+                        startHelpOp();
+                    })
+                    .fail(function () {
+                        alert('error: help operation');
+                    });
+            } else {
+                createExtCell().then(setRole)
+                    .done(function () {
+                        helpAuthorized = true;
+                        $('#editPrflBtn button').prop('disabled', true);
+                        startHelpOp();
+                    })
+                    .fail(function () {
+                        alert('error: help operation');
+                    });
+            }
+        });
+
+    })
+    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+    });
+
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+    $('#modal-nfcReader').modal('hide');
+    $('#top').actionHistoryShowView();;
 }
 
 
 function openHelpConfirm() {
     $('#modal-helpConfirm').localize();
-    $('#modal-helpConfirm').modal('show');
+    $('#modal-helpConfirm').actionHistoryShowModal();
 }
 
 function closeHelpConfirm(f) {
-	if(f) {
-		$(".endHelpOp").addClass('hidden');
-		$(".startHelpOp").removeClass("hidden");
-		$('header').css('background-color', '#008F00');
-		$('h1').css('background-color', '#008F00');
-		$('#during_help').addClass('hidden');
-	}
-	$('body').removeClass('modal-open');
-	$('.modal-backdrop').remove();
-	$('#modal-helpConfirm').modal('hide');
+    if(f) {
+        $.ajax({
+            url: operationCellUrl + '__token',
+            type: 'POST',
+            data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
+        }).done(function(res){
+            $.ajax({
+                type: 'DELETE',
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                }
+            })
+            .done(function() {
+                helpAuthorized = false;
+                $('#editPrflBtn button').prop('disabled', false);
+
+                $(".endHelpOp").addClass('hidden');
+                $(".startHelpOp").removeClass("hidden");
+                $('header').css('background-color', '#008F00');
+                $('h1').css('background-color', '#008F00');
+                $('#during_help').addClass('hidden');
+                $('#top').actionHistoryShowView();
+
+            })
+            .fail(function() {
+                alert('error: delete ext cell');
+            });
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+        });
+    }
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+    $('#modal-helpConfirm').modal('hide');
+}
+
+function startHelpOp() {
+    $('#modal-startHelpOp').localize();
+    $('#modal-startHelpOp').actionHistoryShowModal();
+
+    $(".startHelpOp").addClass('hidden');
+    $(".endHelpOp").removeClass("hidden");
+
+    $('header').css('background-color', '#FF0000');
+    $('h1').css('background-color', '#FF0000');
+
+    $("#during_help").removeClass("hidden");
 }
 
 function viewInfoDisclosureDetail(type){
     $("#modal-inforDisclosureHistory .title_text").attr("data-i18n", "profile." + type);
     $('#modal-inforDisclosureHistory').localize();
-    $('#modal-inforDisclosureHistory').modal('show');
+    $('#modal-inforDisclosureHistory').actionHistoryShowModal();
 }
 function openInforDisclosureHistoryPer(type) {
     $("#modal-inforDisclosureHistoryPer .title_text").html(type);
     $('#modal-inforDisclosureHistoryPer').localize();
-    $('#modal-inforDisclosureHistoryPer').modal('show');
+    $('#modal-inforDisclosureHistoryPer').actionHistoryShowModal();
 }
 
 function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
@@ -251,7 +400,14 @@ function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
     }
 
     $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
-    $('#modal-sendReply').modal('show');
+
+	var title;
+	if(reply === 1){
+		title = "msg.join";
+	}else{
+		title = "msg.consider";
+	}
+    $('#modal-sendReply').actionHistoryShowModal({detail : i18next.t(title)});
 }
 
 // load html
@@ -309,20 +465,6 @@ $(function() {
     $("#modal-clubHistory").load("modal-clubHistory.html");
     $("#modal-sendReply").load("modal-sendReply.html");
 
-	$('#modal-nfcReader').on('hidden.bs.modal', function () {
-		if(helpAuthorized) {
-            $('#modal-startHelpOp').localize();
-			$('#modal-startHelpOp').modal('show');
-
-			$(".startHelpOp").addClass('hidden');
-			$(".endHelpOp").removeClass("hidden");
-
-			$('header').css('background-color', '#FF0000');
-			$('h1').css('background-color', '#FF0000');
-
-			$("#during_help").removeClass("hidden");
-		}
-	});
     $('#dvOverlay').on('click', function() {
         $(".overlay").removeClass('overlay-on');
         $(".slide-menu").removeClass('slide-on');
@@ -491,9 +633,12 @@ function viewJoinConsiderList(entryFlag,articleId){
 					profiles = {0:arguments};
 				}
 				$("#entry-list table").children().remove();
+				var title;
 				if(arg[0] === REPLY.JOIN){
+					title = "pageTitle.participate";
 					$("#entry-list-title").attr("data-i18n", "pageTitle.participate");
 				}else{
+					title = "pageTitle.consider";
 					$("#entry-list-title").attr("data-i18n", "pageTitle.consider");
 				}
 
@@ -517,7 +662,8 @@ function viewJoinConsiderList(entryFlag,articleId){
 
 					$("#entry-list table").append(elem);
 				}
-				view('entryList');
+
+				$('#entryList').actionHistoryShowView({detail : i18next.t(title)});
 
 			},this)).fail(function() {
 				console.log('error: get profile.json');
@@ -597,7 +743,7 @@ function getArticleDetail(id) {
             // construct text
             var article = text[0].d.results;
 
-            var term;
+            var term = '';
             if (article.type == TYPE.EVENT && article.start_date && article.end_date) {
                 term = article.start_date + ' ' + article.start_time + ' ~ ' + (article.end_date == article.start_date ? '' : article.end_date) + ' ' + article.end_time;
 
@@ -636,28 +782,28 @@ function getArticleDetail(id) {
             }, this);
             reader.readAsArrayBuffer(image[0]);
 
-            if(article.type == TYPE.EVENT) {
-                $('#articleDetail .entry')[0].style.display = article.type == TYPE.EVENT ? '' : 'none';
-                var replys = reply[0].d.results;
-                var join = 0, consider = 0;
-                for(reply of replys) {
-                    switch(reply.entry_flag){
-                        case REPLY.JOIN: join++; break;
-                        case REPLY.CONSIDER: consider++; break;
-                    }
+            var replys = reply[0].d.results;
+            var join = 0, consider = 0;
+            for(reply of replys) {
+                switch(reply.entry_flag){
+                    case REPLY.JOIN: join++; break;
+                    case REPLY.CONSIDER: consider++; break;
                 }
-                $('#joinNum').html(join);
-                $('#considerNum').html(consider);
-                $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
-                $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id  + "');return false;");
-
-                // get reply information
+            }
+            $('#joinNum').html(join);
+            $('#considerNum').html(consider);
+            $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
+            $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id  + "');return false;");
+            // get reply information
+            getCurrentCellToken(function(currentToken){
+                let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
                 $.when(
                     $.ajax({
                         type: 'GET',
-                        url: Common.getBoxUrl() + "reply/reply_history",
+                        url: boxUrl + "reply/reply_history",
                         headers: {
-                            "Authorization": "Bearer " + Common.getToken(),
+                            "Authorization": "Bearer " + currentToken,
                             "Accept": "application/json"
                         },
                         data: {
@@ -672,7 +818,7 @@ function getArticleDetail(id) {
                             "Accept": "application/json"
                         },
                         data: {
-                            "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + Common.getCellUrl() + "'"
+                            "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'"
                         }
                     })
                 )
@@ -689,9 +835,9 @@ function getArticleDetail(id) {
                 .fail(function() {
                     alert('error: get reply information');
                 });
-            }
+            });
 
-            view('articleDetail');
+            $('#articleDetail').actionHistoryShowView();
 
         })
         .fail(function () {
@@ -709,17 +855,65 @@ function getExtCellToken(callback, id) {
     if (Common.getCellUrl() == ORGANIZATION_CELL_URL) {
         callback(Common.getToken(), id);
     } else {
-        $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+        if(helpAuthorized) {
+            $.when(Common.getTranscellToken(operationCellUrl), Common.getAppAuthToken(operationCellUrl))
+                .done(function (result1, result2) {
+                    let tempTCAT = result1[0].access_token; // Transcell Access Token
+                    let tempAAAT = result2[0].access_token; // App Authentication Access Token
+                    Common.getProtectedBoxAccessToken4ExtCell(operationCellUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
+                        $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+                            .done(function (result11, result12) {
+                                let tempTCAT2 = result11[0].access_token; // Transcell Access Token
+                                let tempAAAT2 = result12[0].access_token; // App Authentication Access Token
+                                Common.getProtectedBoxAccessToken4ExtCell(ORGANIZATION_CELL_URL, tempTCAT2, tempAAAT2).done(function (appCellToken2) {
+                                    callback(appCellToken2.access_token, id);
+                                }).fail(function (error) {
+                                    alert("error: get org cell token");
+                                });
+                            })
+                            .fail(function (error) {
+                                alert("error: get trance cell token");
+                            });
+                    }).fail(function (error) {
+                        alert("error: get ext cell token");
+                    });
+                })
+                .fail(function () {
+                    alert("error: get ext cell token");
+                });
+        } else {
+            $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+                .done(function (result1, result2) {
+                    let tempTCAT = result1[0].access_token; // Transcell Access Token
+                    let tempAAAT = result2[0].access_token; // App Authentication Access Token
+                    Common.perpareToCellInfo(ORGANIZATION_CELL_URL, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
+                        callback(token, id);
+                    });
+                })
+                .fail(function () {
+                    alert('failed to get token');
+                });
+        }
+    }
+}
+
+function getCurrentCellToken(callback, id) {
+    if(helpAuthorized) {
+        $.when(Common.getTranscellToken(operationCellUrl), Common.getAppAuthToken(operationCellUrl))
             .done(function (result1, result2) {
                 let tempTCAT = result1[0].access_token; // Transcell Access Token
                 let tempAAAT = result2[0].access_token; // App Authentication Access Token
-                Common.perpareToCellInfo(ORGANIZATION_CELL_URL, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
-                    callback(token, id);
+                 Common.getProtectedBoxAccessToken4ExtCell(operationCellUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
+                    callback(appCellToken.access_token, id);
+                }).fail(function (error) {
+                    alert("error: get ext cell access token");
                 });
             })
             .fail(function () {
-                alert('failed to get token');
+                alert("error: get trance cell token");
             });
+    } else {
+        callback(Common.getToken(), id);
     }
 }
 
@@ -737,137 +931,141 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
     getExtCellToken(function(token) {
         var err = [];
         var anonymous = $('[name=checkAnonymous]').prop('checked');
+        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var userCellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
 
-        var saveToUserCell = function(){
-            var method = 'POST';
-            var url = Common.getBoxUrl() + oData + '/' + entityType;
-            if(userReplyId) {
-                method = 'PUT';
-                url += "('" + userReplyId + "')";
-            }
-
-            return $.ajax({
-                type: method,
-                url: url,
-                headers: {
-                    "Authorization": "Bearer " + Common.getToken()
-                },
-                data: JSON.stringify({
-                    // 'update_user_id'
-                    'user_cell_url': Common.getCellUrl(),
-                    'provide_id': articleId,
-                    'entry_flag': reply,
-                    'anonymous': anonymous
-                })
-            })
-            .then(
-                function(res) {
-                    return userReplyId || res;
-                },
-                function (XMLHttpRequest, textStatus, errorThrown) {
-                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
-                }
-            );
-        };
-
-        var saveToOrganizationCell = function(res) {
-            var id = res.d ? res.d.results.__id : res;
-
-            var method = 'POST';
-            var url = Common.getToCellBoxUrl() + oData + '/' + entityType;
-            if (orgReplyId) {
-                method = 'PUT';
-                url += "('" + orgReplyId + "')";
-            }
-
-            return $.ajax({
-                type: method,
-                url: url,
-                headers: {
-                    "Authorization": "Bearer " +  token
-                },
-                data: JSON.stringify({
-                    // 'update_user_id'
-                    'user_cell_url': Common.getCellUrl(),
-                    'provide_id': articleId,
-                    'entry_flag': reply,
-                    'user_reply_id': id,
-                    'anonymous': anonymous
-                })
-            })
-            .then(
-                function (res) {
-                    return res;
-                },
-                function (XMLHttpRequest, textStatus, errorThrown) {
-                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
-
-                    // delete/change the reply on user cell
-                    if(!userReplyId){
-                        $.ajax({
-                            type: 'DELETE',
-                            url: Common.getBoxUrl() + oData + '/' + entityType + "('" + id + "')",
-                            headers: {
-                                'Authorization': 'Bearer ' + Common.getToken()
-                            }
-                        })
-                        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                            alert('delete failed');
-                        })
-                        .done(function() {
-                            alert('delete done');
-                        });
-                    } else {
-                        $.ajax({
-                            type: 'PUT',
-                            url: Common.getBoxUrl() + oData + '/' + entityType + "('" + id + "')",
-                            headers: {
-                                'Authorization': 'Bearer ' + Common.getToken()
-                            },
-                            data: JSON.stringify({
-                                // 'update_user_id'
-                                'provide_id': articleId,
-                                'entry_flag': reply == REPLY.JOIN ? REPLY.CONSIDER : REPLY.JOIN
-                            })
-                        })
-                            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert('change failed');
-                            })
-                            .done(function () {
-                                alert('change done');
-                            });
-                    }
-
-                    return Promise.reject();
-                }
-            );
-        };
-
-        saveToUserCell().then(saveToOrganizationCell)
-        .fail(function(){
-            alert('faild to send reply\n' + err.join('\n'));
-        })
-        .done(function(res) {
-            var userId = userReplyId || res.d.results.user_reply_id;
-            var orgId = orgReplyId || res.d.results.__id;
-            alert('done');
-            updateReplyLink(reply, articleId, userId, orgId);
-
-            var join = $('#joinNum').html();
-            var consider = $('#considerNum').html();
-            if(reply == REPLY.JOIN) {
-                join++;
+        getCurrentCellToken(function(currentToken) {
+            var saveToUserCell = function(){
+                var method = 'POST';
+                var url = boxUrl + oData + '/' + entityType;
                 if(userReplyId) {
-                    consider--;
+                    method = 'PUT';
+                    url += "('" + userReplyId + "')";
                 }
-            } else {
-                consider++;
-                if (userReplyId) {
-                    join--;
+
+                return $.ajax({
+                    type: method,
+                    url: url,
+                    headers: {
+                        "Authorization": "Bearer " + currentToken
+                    },
+                    data: JSON.stringify({
+                        // 'update_user_id'
+                        'user_cell_url': userCellUrl, // dummy ID
+                        'provide_id': articleId,
+                        'entry_flag': reply,
+                        'anonymous': anonymous
+                    })
+                })
+                .then(
+                    function(res) {
+                        return userReplyId || res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+                    }
+                );
+            };
+
+            var saveToOrganizationCell = function(res) {
+                var id = res.d ? res.d.results.__id : res;
+
+                var method = 'POST';
+                var url = Common.getToCellBoxUrl() + oData + '/' + entityType;
+                if (orgReplyId) {
+                    method = 'PUT';
+                    url += "('" + orgReplyId + "')";
                 }
-            }
-            $('#joinNum').html(join);
-            $('#considerNum').html(consider);
+
+                return $.ajax({
+                    type: method,
+                    url: url,
+                    headers: {
+                        "Authorization": "Bearer " +  token
+                    },
+                    data: JSON.stringify({
+                        // 'update_user_id'
+                        'user_cell_url': userCellUrl,
+                        'provide_id': articleId,
+                        'entry_flag': reply,
+                        'user_reply_id': id,
+                        'anonymous': anonymous
+                    })
+                })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+
+                        // delete/change the reply on user cell
+                        if(!userReplyId){
+                            $.ajax({
+                                type: 'DELETE',
+                                url: boxUrl + oData + '/' + entityType + "('" + id + "')",
+                                headers: {
+                                    'Authorization': 'Bearer ' + currentToken
+                                }
+                            })
+                            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert('delete failed');
+                            })
+                            .done(function() {
+                                alert('delete done');
+                            });
+                        } else {
+                            $.ajax({
+                                type: 'PUT',
+                                url: boxUrl + oData + '/' + entityType + "('" + id + "')",
+                                headers: {
+                                    'Authorization': 'Bearer ' + currentToken
+                                },
+                                data: JSON.stringify({
+                                    // 'update_user_id'
+                                    'provide_id': articleId,
+                                    'entry_flag': reply == REPLY.JOIN ? REPLY.CONSIDER : REPLY.JOIN
+                                })
+                            })
+                                .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                    alert('change failed');
+                                })
+                                .done(function () {
+                                    alert('change done');
+                                });
+                        }
+
+                        return Promise.reject();
+                    }
+                );
+            };
+
+            saveToUserCell().then(saveToOrganizationCell)
+            .fail(function(){
+                alert('faild to send reply\n' + err.join('\n'));
+            })
+            .done(function(res) {
+                var userId = userReplyId || res.d.results.user_reply_id;
+                var orgId = orgReplyId || res.d.results.__id;
+                alert('done');
+                updateReplyLink(reply, articleId, userId, orgId);
+
+                var join = $('#joinNum').html();
+                var consider = $('#considerNum').html();
+                if (reply == REPLY.JOIN) {
+                    join++;
+                    if (userReplyId) {
+                        consider--;
+                    }
+                } else {
+                    consider++;
+                    if (userReplyId) {
+                        join--;
+                    }
+                }
+                $('#joinNum').html(join);
+                $('#considerNum').html(consider);
+            });
         });
     }, userReplyId);
 }
@@ -970,57 +1168,58 @@ function addLinkToGrid() {
 }
 
 function getUserProfile() {
-    $.when(
-        $.ajax({
-            type: 'GET',
-            url: Common.getBoxUrl() + "user_info/user_basic_information",
-            headers: {
-                "Authorization": "Bearer " + Common.getToken(),
-                "Accept": "application/json"
+    getCurrentCellToken(function(token){
+        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        $.when(
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_basic_information",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_health_information",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_vital",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            })
+        )
+        .done(function(res1, res2, res3){
+            vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
+            vitalList.reverse();
+
+            var basicInfo = res1[0].d.results[0];
+            var healthInfo = res2[0].d.results[0];
+            var vital = vitalList[0];
+            var preVital = vitalList[1];
+
+            var tempDiff;
+            var minDiff;
+            var maxDiff;
+            var pulseDiff;
+            if(preVital != null) {
+                tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
+                minDiff = vital.min_pressure - preVital.min_pressure;
+                maxDiff = vital.max_pressure - preVital.max_pressure;
+                pulseDiff = vital.pulse - preVital.pulse;
+
+                tempDiff = tempDiff < 0 ? tempDiff : '+' + tempDiff;
+                minDiff = minDiff < 0 ? minDiff : '+' + minDiff;
+                maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
+                pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
             }
-        }),
-        $.ajax({
-            type: 'GET',
-            url: Common.getBoxUrl() + "user_info/user_health_information",
-            headers: {
-                "Authorization": "Bearer " + Common.getToken(),
-                "Accept": "application/json"
-            }
-        }),
-        $.ajax({
-            type: 'GET',
-            url: Common.getBoxUrl() + "user_info/user_vital",
-            headers: {
-                "Authorization": "Bearer " + Common.getToken(),
-                "Accept": "application/json"
-            }
-        })
-    )
-    .done(function(res1, res2, res3){
-        vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
-        vitalList.reverse();
-
-        var basicInfo = res1[0].d.results[0];
-        var healthInfo = res2[0].d.results[0];
-        var vital = vitalList[0];
-        var preVital = vitalList[1];
-
-        var tempDiff;
-        var minDiff;
-        var maxDiff;
-        var pulseDiff;
-        if(preVital != null) {
-            tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
-            minDiff = vital.min_pressure - preVital.min_pressure;
-            maxDiff = vital.max_pressure - preVital.max_pressure;
-            pulseDiff = vital.pulse - preVital.pulse;
-
-            tempDiff = tempDiff < 0 ? tempDiff : '+' + tempDiff;
-            minDiff = minDiff < 0 ? minDiff : '+' + minDiff;
-            maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
-            pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
-        }
-
         var sex;
         switch(basicInfo.sex) {
             case 'male': sex = i18next.t('sex.male'); break;
@@ -1078,9 +1277,10 @@ function getUserProfile() {
         }
         $('#vital').html(vitalHtml);
 
-    })
-    .fail(function() {
-        alert('error: get user profile');
+        })
+        .fail(function() {
+            alert('error: get user profile');
+        });
     });
 
 }
