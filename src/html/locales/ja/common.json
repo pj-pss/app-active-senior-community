@@ -17,6 +17,23 @@
         "canNotEditInfo" : "以下の情報は変更できません",
         "scrollToTop" : "先頭へ戻る",
         "latest" : "最新50件まで",
+        "selectImageFile" : "画像ファイルを選択してください",
+        "selectCsvFile": "csvファイルを選択してください",
+        "requiredItem" : "<span class=\"must\"></span> は必須項目です",
+        "dateContext" : "終了日時は開始日時の後に設定してください",
+        "urlFormat" : "正しいURLを入力してください",
+        "illegalValue" : "不正な値です",
+        "failedSaveArticle" : "記事の保存に失敗しました",
+        "completeSaveArticle" : "記事の保存が完了しました",
+        "failedGetArticle": "記事の取得に失敗しました",
+        "failedDeleteArticle": "記事の削除に失敗しました",
+        "completeGetArticle": "記事の削除が完了しました",
+        "confirmRegisterCsv": "選択したcsvを登録します。よろしいですか?",
+        "nowUploading": "アップロード中...",
+        "completeRegister": "登録が完了しました",
+        "failedRegister": "登録が失敗しました",
+        "confirmSendReply": "回答しますか?",
+        "anonymousReply": "匿名で回答する",
 
         "op" : {
             "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
@@ -70,8 +87,11 @@
         "cancel": "キャンセル",
         "yes" : "はい",
         "no" : "いいえ",
+        "close" : "閉じる",
         "edit": "編集",
+        "preview": "プレビュー",
         "save": "保存",
+        "delete" : "削除",
         "release": "解除",
         "approve": "承諾",
         "decline": "拒否",
@@ -80,7 +100,13 @@
         "saveProfile" : "プロフィールを保存する",
         "postComment" : "コメントを投稿する",
         "saveDiscInfo" : "開示情報を保存する",
-        "editProfile" : "わたしの情報を変更する"
+        "editProfile" : "わたしの情報を変更する",
+        "selectFile" : "ファイル選択",
+        "selectCsvFile" : "csvファイル選択",
+        "clear": "クリア",
+        "upload": "アップロード",
+        "logout": "ログアウト",
+        "": "新規作成"
     },
     "pageTitle" : {
         "action" : "アクション",
@@ -103,9 +129,41 @@
 		"participate" : "参加する人",
 		"consider" : "検討している人"
     },
+    "org" : {
+        "title" : "運用者ポータル",
+        "provideInfo" : "提供情報一覧",
+        "tenant" : "入居者一覧",
+        "disclosureInfo" : "緊急時情報開示先登録",
+        "opHistory" : "操作履歴"
+    },
     "modalTitle" : {
         "postComment" : "コメントを投稿する",
-        "personalInfo" : "人物情報"
+        "personalInfo" : "人物情報",
+        "createInfo" : "提供情報:新規作成",
+        "editInfo" : "提供情報:編集",
+        "previewInfo" : "提供情報:プレビュー",
+        "replyHistory" : "提供情報:状況集計"
+    },
+    "replyHistory" : {
+        "title": "タイトル",
+        "joinList" : "参加する!リスト",
+        "considerList" : "検討中リスト",
+        "date" : "日時",
+        "name" : "氏名",
+        "anonymous" : "匿名"
+    },
+    "articleItem" : {
+        "type" : "記事区分",
+        "info" : "お知らせ",
+        "event" : "イベント",
+        "date" : "開催日時",
+        "target" : "記事配信対象者",
+        "sex" : "性別",
+        "age" : "年代",
+        "venue" : "開催場所",
+        "image" : "画像",
+        "title" : "記事タイトル",
+        "detail" : "記事本文"
     },
     "profile" : {
         "prefix" : "情報開示詳細: ",
@@ -141,11 +199,42 @@
     },
     "vital" : {
         "bloodPressure" : "血圧",
-        "maxPressure" : "最高血圧",
-        "minPressure" : "最低血圧",
+        "max" : "最高",
+        "min" : "最低",
         "pulse" : "脈拍",
         "bodyTemp" : "体温",
         "prevRatio" : "前回比"
+    },
+    "health" : {
+        "height" : "身長",
+        "weight" : "体重",
+        "girthAbdomen" : "腹囲"
+    },
+    "basicInfo" : {
+        "name" : "名前",
+        "howToRead" : "ふりがな",
+        "nickname" : "ニックネーム",
+        "sex" : "性別",
+        "birthday" : "生年月日",
+        "age" : "年齢",
+        "postalCode" : "郵便番号",
+        "address" : "住所",
+        "comment" : "コメント",
+        "bloodType" : "血液型",
+        "residentType" : "居住形態"
+    },
+    "sex" : {
+        "male" : "男性",
+        "female" : "女性",
+        "other" : "その他",
+        "all" : "全て"
+    },
+    "age" : {
+        "all": "全年代",
+        "overEighty": "80代以上",
+        "seventy": "70代",
+        "sixty": "60代",
+        "underFifty": "50代以下"
     },
     "topMenu" : {
         "top" : "カレンダー",

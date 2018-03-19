@@ -5,7 +5,7 @@ getEngineEndPoint = function () {
 additionalCallback = function () {
   Common.setIdleTime();
   getArticleList();
-}
+};
 
 getNamesapces = function () {
   return ['common', 'glossary'];
@@ -13,7 +13,6 @@ getNamesapces = function () {
 
 var inputImage;
 var getImage;
-var debug_token;
 
 // function ID currently displayed
 var nowViewFunction = "proviedInfoList";
@@ -102,7 +101,7 @@ function openComment(id){
 				right.children().remove();
 				var arg = arguments;
 				if(!this.multi){
-					arg = {0:arguments}
+					arg = {0:arguments};
 				}
 
 				var rcnt = lcnt = 1;
@@ -114,13 +113,14 @@ function openComment(id){
 					var fDate = formatDate(new Date(parseInt(this.rDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
 					var dName = arg[i][0].DisplayName;
 					if(this.rDatas[i].entry_flag === 0){
-						right.append('<tr><td>' + rcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>')
+						right.append('<tr><td>' + rcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>');
 						rcnt++;
 					}else{
-						left.append('<tr><td>' + lcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>')
+						left.append('<tr><td>' + lcnt.toString() + '</td><td>' + fDate + '</td><td>' + dName + '</td><td>' + annonTd + '</td></tr>');
 						lcnt++;
 					}
 				}
+        $('#modal-situationAggregate').localize();
 				$('#modal-situationAggregate').modal('show');
 			},this)).fail(function() {
 				console.log('error');
@@ -168,6 +168,8 @@ function openInfoCreate(){
 
     getImage = null;
     $('#saveArticleButton').attr('onclick', "saveArticle()");
+    $('#infoEditorTitle').html(i18next.t('modalTitle.createInfo'));
+    $('#modal-infoEditor').localize();
     $('#modal-infoEditor').modal('show');
   });
 }
@@ -177,11 +179,14 @@ function openInfoEdit(id){
     initInfoEdit();
     getArticleDetail(id);
     var deleteButton = $('<button></button>')
-                          .text('削除').addClass('btn').addClass('btn-danger')
+                          .text(i18next.t('btn.delete'))
+                          .addClass('btn').addClass('btn-danger')
                           .attr('onclick', "showDeleteArticleConfirm('" + id + "')");
     $('#modal-infoEditor .modal-footer').append(deleteButton);
     $('#saveArticleButton').attr('onclick', "saveArticle('" + id + "')");
 
+    $('#infoEditorTitle').html(i18next.t('modalTitle.editInfo'));
+    $('#modal-infoEditor').localize();
     $('#modal-infoEditor').modal('show');
   });
 }
@@ -192,12 +197,12 @@ function initInfoEdit(){
   $('#event').val(TYPE.EVENT);
 
   var i = 1;
-  for(var key in SEX){
+  for(let key in SEX){
     $('#editorSex option:nth-child(' + i + ')').val(SEX[key]);
     i++;
   }
   i = 1;
-  for(var key in AGE) {
+  for(let key in AGE) {
     $('#editorAge option:nth-child(' + i + ')').val(AGE[key]);
     i++;
   }
@@ -256,7 +261,7 @@ function initInfoEdit(){
       var img_src = $('<img>').attr('src', reader.result).addClass('thumbnail');
       inputImage = reader.result;
       $('#infoThumbnail').html(img_src);
-    }
+    };
     reader.readAsDataURL(file);
   });
 
@@ -329,21 +334,22 @@ function showInfoPreview() {
 
     if(article.errMsg.length > 0){
       $('#articleError').html('');
-      for(i in article.errMsg) {
+      for(let i in article.errMsg) {
         $('<li></li>').append(article.errMsg[i]).appendTo('#articleError');
       }
       showinfoEditorAlert();
       return;
     }
 
+    var term = '';
     if(article.type == TYPE.EVENT && article.startDate && article.endDate) {
-      var term = article.startDate + ' ' + article.startTime + ' ~ ' + (article.endDate == article.startDate ? '' : article.endDate) + ' ' + article.endTime;
+      term = article.startDate + ' ' + article.startTime + ' ~ ' + (article.endDate == article.startDate ? '' : article.endDate) + ' ' + article.endTime;
     }
 
     link = $('<a></a>').attr('href', article.url);
     link.text(article.url);
 
-    var venue = article.venue ? '開催場所: ' + article.venue : '';
+    var venue = article.venue ? i18next.t("articleItem.venue") + ': ' + article.venue : '';
     if(!venue) {
       $('#modal-preview .term')[0].style.display = 'none';
     }
@@ -357,6 +363,7 @@ function showInfoPreview() {
     $('#modal-preview .text').html(article.text);
     $('#modal-preview .img').html(img);
 
+    $('#modal-preview').localize();
     $('#modal-preview').modal('show');
   });
 }
@@ -385,16 +392,20 @@ function validateArticle() {
   var img = $('#inputFileImg').prop('files')[0];
   var errMsg = [];
 
+  var startDate = '';
+  var startTime = '';
+  var endDate = '';
+  var endTime = '';
   if(type == TYPE.EVENT){
-    var startDate = $('#infoStartDate').val();
-    var startTime = $('#infoStartTime').val();
-    var endDate = $('#infoEndDate').val();
-    var endTime = $('#infoEndTime').val();
+    startDate = $('#infoStartDate').val();
+    startTime = $('#infoStartTime').val();
+    endDate = $('#infoEndDate').val();
+    endTime = $('#infoEndTime').val();
   }
 
   // required items
   if(!(title && text)) {
-    errMsg.push('<span class="must"></span> は必須項目です');
+    errMsg.push(i18next.t('msg.requiredItem'));
   } else {
     switch (parseInt(type)) {
       case TYPE.INFO:
@@ -402,19 +413,19 @@ function validateArticle() {
 
       case TYPE.EVENT:
         if(!(startDate && endDate && startTime && endTime) || !venue){
-          errMsg.push('<span class="must"></span> は必須項目です');
+          errMsg.push(i18next.t('msg.requiredItem'));
         }
 
         // check startDate is before endDate
         var start = moment(startDate + startTime);
         var end = moment(endDate + endTime);
         if(start > end) {
-          errMsg.push('終了日時は開始日時の後に設定してください');
+          errMsg.push(i18next.t('msg.dateContext'));
         }
         break;
 
       default:
-        errMsg.push('終了日時は開始日時の後に設定してください');
+        errMsg.push(i18next.t('msg.dateContext'));
         break;
     }
   }
@@ -423,12 +434,12 @@ function validateArticle() {
   pUrl = $.url(url);
   if(url) {
     if(!(pUrl.attr('protocol').match(/^(https?|ftp)$/) && pUrl.attr('host'))) {
-      errMsg.push('正しいURLを入力してください');
+      errMsg.push(i18next.t('msg.urlFormat'));
     } else {
       var labels = pUrl.attr('host').split('.');
       for(var label of labels){
         if( !label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/) ) {
-          errMsg.push('正しいURLを入力してください');
+          errMsg.push(i18next.t('msg.urlFormat'));
           break;
         }
       }
@@ -439,7 +450,7 @@ function validateArticle() {
   if( isNaN(type + age + sex) ||
       type < 0 || age < 0 || sex < 0 ||
       Object.keys(TYPE).length < type || Object.keys(AGE).length < age || Object.keys(SEX).length < sex) {
-    errMsg.push('不正な値です');
+    errMsg.push(i18next.t('msg.illegalValue'));
   }
 
 
@@ -466,9 +477,9 @@ function validateArticle() {
     if(getImage) {
       previewImg = getImage;
     } else {
-      var cvs = document.createElement('canvas');
+      let cvs = document.createElement('canvas');
       cvs.height = cvs.width = 300;
-      var ctx = cvs.getContext('2d');
+      let ctx = cvs.getContext('2d');
       jdenticon.drawIcon(ctx, title, cvs.height);
       previewImg = cvs.toDataURL('image/jpeg');
     }
@@ -490,7 +501,7 @@ function validateArticle() {
     'age' : age,
     'sex' : sex,
     'errMsg' : errMsg
-  }
+  };
 }
 
 function saveArticle(editId) {
@@ -499,7 +510,7 @@ function saveArticle(editId) {
 
     if(article.errMsg.length > 0){
       $('#articleError').html('');
-      for(i in article.errMsg) {
+      for(let i in article.errMsg) {
         $('<li></li>').append(article.errMsg[i]).appendTo('#articleError');
       }
       showinfoEditorAlert();
@@ -568,7 +579,7 @@ function saveArticle(editId) {
         data : article.img
       }).then(
         function(res) {
-          return res
+          return res;
         },
         function(XMLHttpRequest, textStatus, errorThrown) {
           err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
@@ -589,15 +600,15 @@ function saveArticle(editId) {
 
           return Promise.reject();
         }
-      )
-    }
+      );
+    };
 
     saveText().then(saveImg)
     .fail(function() {
-      alert('記事の保存に失敗しました\n\n' + err.join('\n'));
+      alert(i18next.t('msg.failedSaveArticle') + '\n\n' + err.join('\n'));
     })
     .done(function() {
-      alert('記事の保存が完了しました');
+      alert(i18next.t('msg.completeSaveArticle'));
       $("#modal-infoEditor").modal('hide');
       getArticleList();
     });
@@ -771,7 +782,7 @@ function getArticleDetail(id) {
 
     })
     .fail(function() {
-      alert('記事の取得に失敗しました\n\n' + err.join('\n'));
+      alert(i18next.t('failedGetArticle') + '\n\n' + err.join('\n'));
     });
   }, id);
 }
@@ -807,7 +818,7 @@ function deleteArticle(id) {
           return Promise.reject();
         }
       );
-    }
+    };
 
     var deleteText = function() {
       return $.ajax({
@@ -838,22 +849,22 @@ function deleteArticle(id) {
           })
           .fail(function() {
             alert('rollback error');
-          })
+          });
 
           return Promise.reject();
         }
       );
-    }
+    };
 
 
     deleteImage().then(deleteText)
     .done(function() {
-      alert('記事の削除が完了しました');
+      alert(i18next.t('completeDeleteArticle'));
       $("#modal-infoEditor").modal('hide');
       getArticleList();
     })
     .fail(function() {
-      alert('記事の削除に失敗しました\n\n' + err.join('\n'));
+      alert(i18next.t('failedDeleteArticle') + '\n\n' + err.join('\n'));
     });
   }, id);
 }

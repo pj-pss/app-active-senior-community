@@ -1,23 +1,21 @@
 <div id="modal-infoEditor">
     <div class="modal-dialog wideModal">
         <div class="modal-content">
-            <div class="modal-header">
-                提供情報：新規作成
-            </div>
+            <div class="modal-header" id="infoEditorTitle"></div>
             <div class="modal-body">
 
 
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="must">■記事区分</div>
+                        <div class="must">■<span data-i18n="articleItem.type"></span></div>
                         <div class="radio">
-                            <label><input type="radio" name="articleType" id="info" checked="checked"> お知らせ</label>
-                            <label><input type="radio" name="articleType" id="event"> イベント</label>
+                            <label><input type="radio" name="articleType" id="info" checked="checked"><span data-i18n="articleItem.info"></span></label>
+                            <label><input type="radio" name="articleType" id="event"><span data-i18n="articleItem.event"></span></label>
                         </div>
                     </div>
                     <div class="selectDate">
                         <div class="col-md-8">
-                            <div class="editorItem">■開催日時</div>
+                            <div class="editorItem">■<span data-i18n="articleItem.date"></span></div>
                             <div id="datepicker">
                                 <span class="calendar">
                                     <i class="fa fa-calendar calendarIcon"></i>
@@ -35,63 +33,63 @@
                     </div>
 
                     <div class="col-md-12">
-                        <div class="editorItem">■記事配信対象者</div>
+                        <div class="editorItem">■<span data-i18n="articleItem.target"></span></div>
                     </div>
                     <div class="col-md-1">
-                        性別<br>
+                        <span data-i18n="articleItem.sex"></span><br>
                         <select id="editorSex">
-                            <option>全て</option>
-                            <option>男性</option>
-                            <option>女性</option>
+                            <option data-i18n="sex.all"></option>
+                            <option data-i18n="sex.male"></option>
+                            <option data-i18n="sex.female"></option>
                         </select>
                     </div>
                     <div class="col-md-1">
-                        年代<br>
+                        <span data-i18n="articleItem.age"></span><br>
                         <select id="editorAge">
-                            <option>全年代</option>
-                            <option>80代以上</option>
-                            <option>70代</option>
-                            <option>60代</option>
-                            <option>50代以下</option>
+                            <option data-i18n="age.all"></option>
+                            <option data-i18n="age.overEighty"></option>
+                            <option data-i18n="age.seventy"></option>
+                            <option data-i18n="age.sixty"></option>
+                            <option data-i18n="age.underFifty"></option>
                         </select>
                     </div>
                     <div class="col-md-8 col-md-offset-2">
                         <div class="venue">
-                            <div class="editorItem">■開催場所</div>
+                            <div class="editorItem">■<span data-i18n="articleItem.venue"></span></div>
                             <input type="text" class="fullWidth" id="editorVenue"/>
                         </div>
                     </div>
 
                     <div class="col-md-4">
-                        <div class="editorItem">■画像</div>
+                        <div class="editorItem">■<span data-i18n="articleItem.image"></span></div>
                         <div class="inputFileForm">
                             <label>
                                 <span class="btn btn-default btn-sm">
-                                   ファイル選択
+                                   <span data-i18n="btn.selectFile"></span>
                                     <input id="inputFileImg" type="file" style="display:none" accept="image/*">
                                 </span>
                             </label>
                             <span id="fileNameImg"></span>
-                            <div id="errorMessageImg" style="display:none"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i><p>画像ファイルを選択してください</p></div>
+                            <div id="errorMessageImg" style="display:none"><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i><p data-i18n="msg.selectImageFile"></p></div>
                             <div id="infoThumbnail"></div>
-                            <button id="clearImgButton" class="btn btn-success" onclick="clearInputImg()" style="display:none;">削除</button>
+                            <button id="clearImgButton" class="btn btn-success" onclick="clearInputImg()" style="display:none;" data-i18n="btn.delete"></button>
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="editorItem">■URL</div>
                         <input type="text" class="fullWidth" id="editorUrl"/>
-                        <div class="editorItem must">■記事タイトル</div>
+                        <div class="editorItem must">■<span data-i18n="articleItem.title"></span></div>
                         <input type="text" class="fullWidth" id="editorTitle"/>
-                        <div class="editorItem must">■記事本文</div>
+                        <div class="editorItem must">■<span data-i18n="articleItem.detail"></span></div>
                         <textarea id="editor" />
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" onclick="showInfoPreview()">プレビュー</button>
-                <button class="btn btn-primary" id="saveArticleButton">保存</button>
-                <button class="btn" data-dismiss="modal">キャンセル</button>
+                <button class="btn btn-default" onclick="showInfoPreview()" data-i18n="btn.preview"></button>
+                <button class="btn btn-primary" id="saveArticleButton" data-i18n="btn.save"></button>
+                <button class="btn" data-dismiss="modal" data-i18n="btn.cancel"></button>
             </div>
         </div>
     </div>

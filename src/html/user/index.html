@@ -46,13 +46,13 @@
   </header>
   <div class="btn-group btn-group-lg btn-group-justified top_menu">
       <div class="btn-group">
-          <button class="btn btn-warning" onclick="$('#top').AHShowView();"><i class="fa fa-fw fa-info-circle" aria-hidden="true"></i><span data-i18n="topMenu.top"></span></button>
+          <button class="btn btn-warning" onclick="$('#top').actionHistoryShowView();"><i class="fa fa-fw fa-info-circle" aria-hidden="true"></i><span data-i18n="topMenu.top"></span></button>
       </div>
       <div class="btn-group">
-          <button class="btn btn-warning" onclick="$('#myhealth').AHShowView();"><i class="fa fa-fw fa-medkit" aria-hidden="true"></i><span data-i18n="topMenu.myHealth"></span></button>
+          <button class="btn btn-warning" onclick="$('#myhealth').actionHistoryShowView();"><i class="fa fa-fw fa-medkit" aria-hidden="true"></i><span data-i18n="topMenu.myHealth"></span></button>
       </div>
       <div class="btn-group">
-          <button class="btn btn-warning" onclick="$('#monitoring').AHShowView();"><i class="fa fa-fw fa-eye" aria-hidden="true"></i><span data-i18n="topMenu.monitoring"></span></button>
+          <button class="btn btn-warning" onclick="$('#monitoring').actionHistoryShowView();"><i class="fa fa-fw fa-eye" aria-hidden="true"></i><span data-i18n="topMenu.monitoring"></span></button>
       </div>
   </div>
   <div id="dispMsg" style="display:none;">
@@ -84,14 +84,14 @@
   <nav class="slide-menu menu-title">
     <h1 data-i18n="pageTitle.action"></h1>
     <ul>
-      <li><a onclick="cs.closeSlide();$('#opHistory').AHShowView();" data-i18n="pageTitle.opHistory"></a></li>
-      <li><a onclick="cs.closeSlide();$('#helperOpHistory').AHShowView();" data-i18n="pageTitle.helperOpHistory"></a></li>
-      <li><a onclick="cs.closeSlide();$('#consentHistory').AHShowView();" data-i18n="pageTitle.consentHistory"></a></li>
+      <li><a onclick="cs.closeSlide();$('#opHistory').actionHistoryShowView();" data-i18n="pageTitle.opHistory"></a></li>
+      <li><a onclick="cs.closeSlide();$('#helperOpHistory').actionHistoryShowView();" data-i18n="pageTitle.helperOpHistory"></a></li>
+      <li><a onclick="cs.closeSlide();$('#consentHistory').actionHistoryShowView();" data-i18n="pageTitle.consentHistory"></a></li>
       <li class="startHelpOp"><a onclick="cs.closeSlide();openNfcReader();" data-i18n="pageTitle.startHelpOp"></a></li>
       <li class="endHelpOp hidden"><a onclick="cs.closeSlide();openHelpConfirm();" data-i18n="pageTitle.endHelpOp"></a></li>
-      <li><a onclick="cs.closeSlide();$('#viewHistory').AHShowView();" data-i18n="pageTitle.viewHistory"></a></li>
-      <li><a onclick="cs.closeSlide();$('#viewInforDisclosureHistory1').AHShowView();" data-i18n="pageTitle.viewInforDisclosureHistory"></a></li>
-      <li><a onclick="cs.closeSlide();$('#viewDataPortability').AHShowView();" data-i18n="pageTitle.viewDataPortability"></a></li>
+      <li><a onclick="cs.closeSlide();$('#viewHistory').actionHistoryShowView();" data-i18n="pageTitle.viewHistory"></a></li>
+      <li><a onclick="cs.closeSlide();$('#viewInforDisclosureHistory1').actionHistoryShowView();" data-i18n="pageTitle.viewInforDisclosureHistory"></a></li>
+      <li><a onclick="cs.closeSlide();$('#viewDataPortability').actionHistoryShowView();" data-i18n="pageTitle.viewDataPortability"></a></li>
     </ul>
   </nav>
   <div class="overlay" id="dvOverlay">
