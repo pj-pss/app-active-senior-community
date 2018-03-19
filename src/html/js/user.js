@@ -295,6 +295,8 @@ function authorizedNfcReader() {
                     .done(function () {
                         helpAuthorized = true;
                         $('#editPrflBtn button').prop('disabled', true);
+                        getArticleList();
+                        getUserProfile();
                         startHelpOp();
                     })
                     .fail(function () {
@@ -305,6 +307,8 @@ function authorizedNfcReader() {
                     .done(function () {
                         helpAuthorized = true;
                         $('#editPrflBtn button').prop('disabled', true);
+                        getArticleList();
+                        getUserProfile();
                         startHelpOp();
                     })
                     .fail(function () {
