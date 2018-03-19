@@ -105,7 +105,8 @@
         "selectCsvFile" : "csvファイル選択",
         "clear": "クリア",
         "upload": "アップロード",
-        "logout": "ログアウト"
+        "logout": "ログアウト",
+        "": "新規作成"
     },
     "pageTitle" : {
         "action" : "アクション",
@@ -140,7 +141,16 @@
         "personalInfo" : "人物情報",
         "createInfo" : "提供情報:新規作成",
         "editInfo" : "提供情報:編集",
-        "previewInfo" : "提供情報:プレビュー"
+        "previewInfo" : "提供情報:プレビュー",
+        "replyHistory" : "提供情報:状況集計"
+    },
+    "replyHistory" : {
+        "title": "タイトル",
+        "joinList" : "参加する!リスト",
+        "considerList" : "検討中リスト",
+        "date" : "日時",
+        "name" : "氏名",
+        "anonymous" : "匿名"
     },
     "articleItem" : {
         "type" : "記事区分",
@@ -203,12 +213,15 @@
     "basicInfo" : {
         "name" : "名前",
         "howToRead" : "ふりがな",
+        "nickname" : "ニックネーム",
         "sex" : "性別",
         "birthday" : "生年月日",
         "age" : "年齢",
         "postalCode" : "郵便番号",
         "address" : "住所",
-        "comment" : "コメント"
+        "comment" : "コメント",
+        "bloodType" : "血液型",
+        "residentType" : "居住形態"
     },
     "sex" : {
         "male" : "男性",

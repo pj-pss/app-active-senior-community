@@ -120,6 +120,7 @@ function openComment(id){
 						lcnt++;
 					}
 				}
+        $('#modal-situationAggregate').localize();
 				$('#modal-situationAggregate').modal('show');
 			},this)).fail(function() {
 				console.log('error');
