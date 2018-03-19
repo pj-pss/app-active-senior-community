@@ -1,7 +1,7 @@
 <div class="main_box">
     <h2><i class="fa fa-fw fa-eye icon" aria-hidden="true"></i><span data-i18n="pageTitle.location"></span></h2>
     <div class="cls_center">
-        <div class="nowLocation"><span data-i18n="locationState.outdoor"></span><a href="javascript:viewInfoDisclosureDetail('location')" class="watching"><span class="badge">3</span></a></div>
+        <div class="nowLocation"><span data-i18n="locationState.outdoor"></span></div>
     </div>
     <div><img class="img-thumbnail" src="../img/parts_ico_gentleman.png"></div>
     <dl>
@@ -11,18 +11,7 @@
     <div id="editPrflBtn">
         <button class="btn btn-primary" onclick="viewProfile();" data-i18n="btn.editProfile"></button>
     </div>
-    <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-heading profile-parent" data-toggle="collapse" data-target="#profileBasic">
-                <a href="#profileBasic" class="collapsed header-text" data-toggle="collapse" data-i18n="profile.basicInfo"></a>
-            </div>
-            <div id="profileBasic" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <dl id="basicInfo">
-                    </dl>
-                </div>
-            </div>
-        </div>
-    </div>
+    <h3 data-i18n="profile.basicInfo"></h3>
+    <dl id="basicInfo"></dl>
     <p class="scrollToTop"><a href="#top" data-i18n="msg.scrollToTop"></a></p>
 </div>

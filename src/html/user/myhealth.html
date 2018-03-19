@@ -1,30 +1,8 @@
 <h2><i class="fa fa-fw fa-medkit icon" aria-hidden="true"></i><span data-i18n="pageTitle.vital"></span></h2>
 <div class="main_box">
-	<div class="panel-group">
-		<div class="panel panel-default">
-			<div class="panel-heading profile-parent" data-toggle="collapse" data-target="#profileHealth">
-				<a href="#profileHealth" class="collapsed header-text" data-toggle="collapse" data-i18n="profile.healthInfo"></a>
-			</div>
-			<div id="profileHealth" class="panel-collapse collapse">
-				<div class="panel-body">
-					<dl id="healthInfo"></dl>
-
-					<div class="panel-group">
-						<div class="panel panel-default">
-							<div class="list-group-item" data-toggle="collapse" data-target="#profileVital">
-								<span class="header-text" data-i18n="profile.vital"></span>
-								<span onclick="viewInfoDisclosureDetail('vital')" class="watching badge">10</span>
-							</div>
-							<div id="profileVital" class="panel-collapse collapse">
-								<div class="panel-body">
-									<dl id="vital"></dl>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<h3 data-i18n="profile.healthInfo"></h3>
+	<dl id="healthInfo"></dl>
+	<h3 data-i18n="profile.vital"></h3>
+	<dl id="vital"></dl>
 	<p class="scrollToTop"><a href="#top" data-i18n="msg.scrollToTop"></a></p>
 </div>
