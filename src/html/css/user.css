@@ -1014,6 +1014,11 @@ div.profile-parent > a {
   color: #f5f5f5
 }
 
+#myhealth h3,
+#monitoring h3 {
+  font-size: 22px;
+}
+
 #myhealth dl dt {
   padding: 0 1em 0 1em;
   font-size: 18px;
