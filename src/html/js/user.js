@@ -94,7 +94,7 @@ function viewProfile(){
 		}
 		$("#nickname").val(arguments[0].DisplayName);
 		$("#popupEditDisplayNameErrorMsg").html("");
-		view('profileEdit');
+		$('#profileEdit').actionHistoryShowView();
 	});
 }
 
@@ -121,7 +121,7 @@ function saveProfile(){
 			            'Authorization': 'Bearer ' + Common.getToken()
 			        }
 			    }).done(function(){
-					view('monitoring');
+					$('#monitoring').actionHistoryShowView();
 				});
 			});
 		});
@@ -186,26 +186,26 @@ var helpAuthorized = false;
 function openNfcReader() {
 	helpAuthorized = false;
     $('#modal-nfcReader').localize();
-    $('#modal-nfcReader').modal('show');
+    $('#modal-nfcReader').actionHistoryShowModal();
 }
 
 function openPersonalInfo() {
     $('#modal-personalInfo').localize();
-    $('#modal-personalInfo').modal('show');
+    $('#modal-personalInfo').actionHistoryShowModal();
 }
 
 function openPersonalInfo2() {
     $('#modal-personalInfo2').localize();
-    $('#modal-personalInfo2').modal('show');
+    $('#modal-personalInfo2').actionHistoryShowModal();
 }
 
 function openPersonalInfo3() {
     $('#modal-personalInfo3').localize();
-    $('#modal-personalInfo3').modal('show');
+    $('#modal-personalInfo3').actionHistoryShowModal();
 }
 function openClubHistory() {
     $('#modal-clubHistory').localize();
-    $('#modal-clubHistory').modal('show');
+    $('#modal-clubHistory').actionHistoryShowModal();
 }
 
 function authorizedNfcReader() {
@@ -321,13 +321,13 @@ function authorizedNfcReader() {
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
     $('#modal-nfcReader').modal('hide');
-    view('top');
+    $('#top').actionHistoryShowView();;
 }
 
 
 function openHelpConfirm() {
     $('#modal-helpConfirm').localize();
-    $('#modal-helpConfirm').modal('show');
+    $('#modal-helpConfirm').actionHistoryShowModal();
 }
 
 function closeHelpConfirm(f) {
@@ -353,7 +353,8 @@ function closeHelpConfirm(f) {
                 $('header').css('background-color', '#008F00');
                 $('h1').css('background-color', '#008F00');
                 $('#during_help').addClass('hidden');
-                view('top');
+                $('#top').actionHistoryShowView();
+
             })
             .fail(function() {
                 alert('error: delete ext cell');
@@ -370,7 +371,7 @@ function closeHelpConfirm(f) {
 
 function startHelpOp() {
     $('#modal-startHelpOp').localize();
-    $('#modal-startHelpOp').modal('show');
+    $('#modal-startHelpOp').actionHistoryShowModal();
 
     $(".startHelpOp").addClass('hidden');
     $(".endHelpOp").removeClass("hidden");
@@ -384,12 +385,12 @@ function startHelpOp() {
 function viewInfoDisclosureDetail(type){
     $("#modal-inforDisclosureHistory .title_text").attr("data-i18n", "profile." + type);
     $('#modal-inforDisclosureHistory').localize();
-    $('#modal-inforDisclosureHistory').modal('show');
+    $('#modal-inforDisclosureHistory').actionHistoryShowModal();
 }
 function openInforDisclosureHistoryPer(type) {
     $("#modal-inforDisclosureHistoryPer .title_text").html(type);
     $('#modal-inforDisclosureHistoryPer').localize();
-    $('#modal-inforDisclosureHistoryPer').modal('show');
+    $('#modal-inforDisclosureHistoryPer').actionHistoryShowModal();
 }
 
 function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
@@ -399,7 +400,14 @@ function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
     }
 
     $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
-    $('#modal-sendReply').modal('show');
+
+	var title;
+	if(reply === 1){
+		title = "msg.join";
+	}else{
+		title = "msg.consider";
+	}
+    $('#modal-sendReply').actionHistoryShowModal({detail : i18next.t(title)});
 }
 
 // load html
@@ -576,7 +584,7 @@ function getJoinInfoList(token) {
 
             }
         }
-        for (key in count) {
+        for (let key in count) {
             var joinHtml = '<i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i>: '
                 + count[key].join
                 + '<i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i>: '
@@ -625,9 +633,12 @@ function viewJoinConsiderList(entryFlag,articleId){
 					profiles = {0:arguments};
 				}
 				$("#entry-list table").children().remove();
+				var title;
 				if(arg[0] === REPLY.JOIN){
+					title = "pageTitle.participate";
 					$("#entry-list-title").attr("data-i18n", "pageTitle.participate");
 				}else{
+					title = "pageTitle.consider";
 					$("#entry-list-title").attr("data-i18n", "pageTitle.consider");
 				}
 
@@ -651,7 +662,8 @@ function viewJoinConsiderList(entryFlag,articleId){
 
 					$("#entry-list table").append(elem);
 				}
-				view('entryList');
+
+				$('#entryList').actionHistoryShowView({detail : i18next.t(title)});
 
 			},this)).fail(function() {
 				console.log('error: get profile.json');
@@ -730,8 +742,9 @@ function getArticleDetail(id) {
         .done(function (text, image, reply) {
             var article = text[0].d.results;
 
+            var term = '';
             if (article.type == TYPE.EVENT && article.start_date && article.end_date) {
-                var term = article.start_date + ' ' + article.start_time + ' ~ ' + (article.end_date == article.start_date ? '' : article.end_date) + ' ' + article.end_time;
+                term = article.start_date + ' ' + article.start_time + ' ~ ' + (article.end_date == article.start_date ? '' : article.end_date) + ' ' + article.end_time;
 
                 $('#replyContainer').css('display', '');
             } else {
@@ -822,7 +835,7 @@ function getArticleDetail(id) {
                 });
             });
 
-            view('articleDetail');
+            $('#articleDetail').actionHistoryShowView();
 
         })
         .fail(function () {
@@ -905,10 +918,6 @@ function getCurrentCellToken(callback, id) {
  * @param orgReplyId
  */
 function replyEvent(reply, articleId, userReplyId, orgReplyId) {
-    if(reply == null) {
-        alert('already done it');
-        return;
-    }
     var oData = 'reply';
     var entityType = 'reply_history';
 
@@ -1076,7 +1085,7 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId){
 }
 
 function sortArticle(key, reverse, type){
-    aList = _.sortBy(articleList, function(item){return item[key]});
+    aList = _.sortBy(articleList, function(item){return item[key];});
     if(reverse) aList = aList.reverse();
     if(type != null) filter = type;
     sort_key = key;
@@ -1179,11 +1188,15 @@ function getUserProfile() {
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
+            var tempDiff;
+            var minDiff;
+            var maxDiff;
+            var pulseDiff;
             if(preVital != null) {
-                var tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
-                var minDiff = vital.min_pressure - preVital.min_pressure;
-                var maxDiff = vital.max_pressure - preVital.max_pressure;
-                var pulseDiff = vital.pulse - preVital.pulse;
+                tempDiff = Math.round((vital.temperature - preVital.temperature) * 10)/10;
+                minDiff = vital.min_pressure - preVital.min_pressure;
+                maxDiff = vital.max_pressure - preVital.max_pressure;
+                pulseDiff = vital.pulse - preVital.pulse;
 
                 tempDiff = tempDiff < 0 ? tempDiff : '+' + tempDiff;
                 minDiff = minDiff < 0 ? minDiff : '+' + minDiff;
