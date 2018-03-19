@@ -446,15 +446,6 @@ $(function() {
     });
     $("#profileEdit").load("profileEdit.html");
     $("#opHistory").load("opHistory.html");
-    $("#helperOpHistory").load("helperOpHistory.html");
-    $("#consentHistory").load("consentHistory.html");
-    $("#viewHistory").load("viewHistory.html");
-    $("#viewInforDisclosureHistory1").load("viewInforDisclosureHistory1.html", function(){
-        $("#modal-inforDisclosureHistoryPer").load("modal-inforDisclosureHistoryPer.html");
-    });
-    $("#viewInforDisclosureHistory2").load("viewInforDisclosureHistory2.html", function(){
-        $("#modal-inforDisclosureHistory").load("modal-inforDisclosureHistory.html");
-    });
     $("#viewDataPortability").load("viewDataPortability.html");
     $("#viewDataExport").load("viewDataExport.html");
     $("#viewQRCode").load("viewQRCode.html");
@@ -466,7 +457,6 @@ $(function() {
     $("#modal-personalInfo2").load("modal-personalInfo2.html");
     $("#modal-personalInfo3").load("modal-personalInfo3.html");
     $("#modal-startHelpOp").load("modal-startHelpOp.html");
-    $("#modal-clubHistory").load("modal-clubHistory.html");
     $("#modal-sendReply").load("modal-sendReply.html");
 
     $('#dvOverlay').on('click', function() {
