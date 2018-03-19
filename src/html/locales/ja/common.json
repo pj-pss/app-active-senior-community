@@ -175,6 +175,24 @@
             }
         }
     },
+    "log": {
+		"top" : "{{name}} さんがトップ画面を表示しました。",
+		"myhealth" : "{{name}} さんが私の健康画面を表示しました。",
+		"monitoring" : "{{name}} さんが見守り画面を表示しました。",
+        "profileEdit" : "{{name}} さんがプロフィール変更画面を表示しました。",
+		"opHistory" : "{{name}} さんが私の操作履歴画面を表示しました。",
+		"helperOpHistory" : "{{name}} さんが支援者の操作履歴画面を表示しました。",
+		"consentHistory" : "{{name}} さんが私の同意履歴画面を表示しました。",
+		"modal-nfcReader" : "{{name}} さんが操作支援ダイアログを表示しました。",
+		"viewHistory" : "{{name}} さんが私の情報参照履歴画面を表示しました。",
+		"viewInforDisclosureHistory1" : "{{name}} さんが私の情報開示状況画面を表示しました。",
+		"viewDataPortability" : "{{name}} さんがデータポータビリティ画面を表示しました。",
+		"articleDetail" : "{{name}} さんがみんなの掲示板画面を表示しました。",
+		"modal-inforDisclosureHistory" : "{{name}} さんが情報開示詳細画面を表示しました。",
+		"entryList" : "{{name}} さんが{{detail}}画面を表示しました。",
+		"modal-sendReply" : "{{name}} さんが{{detail}}確認画面を表示しました。",
+		"editReplyHistory" : "{{name}} さんが回答履歴情報を更新しました。"
+	},
 	"pleaseEnterName": "名前を入力して下さい。",
 	"errorValidateNameLength": "名前は128文字以下で入力して下さい。",
 	"Cancel": "キャンセル"
