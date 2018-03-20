@@ -182,11 +182,29 @@ function readURL(input) {
 }
 
 var helpAuthorized = false;
+var scanner;
 
 function openNfcReader() {
 	helpAuthorized = false;
     $('#modal-nfcReader').localize();
+
+    var videoComponent = $("#camera-preview");
+    var options = {};
+    options = initVideoObjectOptions("camera-preview");
+    var cameraId = 0;
+    initScanner(options);
+    initCamera(cameraId);
+    scanStart(function (content){
+        authorizedNfcReader(content);
+    });
+
     $('#modal-nfcReader').actionHistoryShowModal();
+	$('#modal-nfcReader').on('hidden.bs.modal', function () {
+	    try{
+			scanner.stop();
+		}catch(e){}
+		$('#modal-nfcReader').off('hidden.bs.modal');
+	});
 }
 
 function openPersonalInfo() {
@@ -208,13 +226,16 @@ function openClubHistory() {
     $('#modal-clubHistory').actionHistoryShowModal();
 }
 
-function authorizedNfcReader() {
-    // get supported user token
-    operationCellUrl = $('#nfcUrl').val();
+var qrJson;
+
+function authorizedNfcReader(qrJsonStr) {
+    qrJson = JSON.parse(qrJsonStr);
+	
+	operationCellUrl = qrJson.url;
     $.ajax({
         url: operationCellUrl + '__token',
         type: 'POST',
-        data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
+        data: 'grant_type=password&username=' + qrJson.userId + '&password=' + qrJson.password
     })
     .done(function (res) {
         let getExtCellList = function () {
@@ -339,7 +360,7 @@ function closeHelpConfirm(f) {
         $.ajax({
             url: operationCellUrl + '__token',
             type: 'POST',
-            data: 'grant_type=password&username=' + $('#nfcUsername').val() + '&password=' + $('#nfcPassword').val()
+            data: 'grant_type=password&username=' + qrJson.userId + '&password=' + qrJson.password
         }).done(function(res){
             $.ajax({
                 type: 'DELETE',
@@ -350,6 +371,7 @@ function closeHelpConfirm(f) {
             })
             .done(function() {
                 helpAuthorized = false;
+				qrJson = null;
                 $('#editPrflBtn button').prop('disabled', false);
 
                 $(".endHelpOp").addClass('hidden');
