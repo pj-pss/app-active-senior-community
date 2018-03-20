@@ -41,20 +41,6 @@
             "join" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］に参加する!と表明しました",
             "access" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］より外部サイトにアクセスしました"
         },
-        "helperOp" : {
-            "endOp" : "$t(userImg.002) がメニューより操作支援終了を選択しました",
-            "join" : "$t(userImg.002)が、$t(pageTitle.bbs)[$t(article.002)]に参加する!と表明しました",
-            "access" : "$t(userImg.002)が、$t(pageTitle.bbs)[$t(article.002)]より、外部サイトにアクセスしました。",
-            "openArticle" : "$t(userImg.002)が、お知らせ画面より$t(pageTitle.bbs)[$t(article.002)]を開きました。"
-        },
-        "concern" : {
-            "001" : "$t(userImg.001)が$t(userImg.002)に、操作支援を同意しました。",
-            "002" : "$t(userImg.001)が$t(userImg.003)に、操作支援を同意しました。"
-        },
-        "history" : {
-            "vital" : "$t(userImg.004)が、$t(profile.vital)を参照しました。",
-            "medicine" : "$t(userImg.005)が、$t(profile.medicine)を参照しました。"
-        },
 
         "dataExport" : {
             "title" : "データエクスポート",
@@ -113,11 +99,8 @@
         "top" : "カレンダー",
         "monitoring" : "見守り",
         "opHistory" : "私の操作履歴",
-        "helperOpHistory" : "支援者の操作履歴",
-        "consentHistory" : "私の同意履歴",
         "startHelpOp" : "操作支援",
         "endHelpOp" : "操作支援終了",
-        "viewHistory" : "私の情報参照履歴",
         "viewInforDisclosureHistory" : "私の情報開示状況",
         "viewDataPortability" : "データポータビリティ",
         "dataExport" : "データエクスポート",
@@ -137,7 +120,6 @@
         "opHistory" : "操作履歴"
     },
     "modalTitle" : {
-        "postComment" : "コメントを投稿する",
         "personalInfo" : "人物情報",
         "createInfo" : "提供情報:新規作成",
         "editInfo" : "提供情報:編集",
@@ -246,11 +228,6 @@
         "event" : "イベント",
         "info" : "お知らせ",
         "eventHistory" : "活動履歴"
-    },
-    "comment" : {
-        "nickname" : "ニックネームで投稿",
-        "realname" : "実名で投稿",
-        "anonymous" : "匿名で投稿"
     },
     "locationState" : {
         "indoor" : "在宅",
