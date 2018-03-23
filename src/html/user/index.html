@@ -78,7 +78,7 @@
   <nav class="slide-menu menu-title">
     <h1 data-i18n="pageTitle.action"></h1>
     <ul>
-      <li><a onclick="cs.closeSlide();$('#opHistory').actionHistoryShowView();" data-i18n="pageTitle.opHistory"></a></li>
+      <li><a onclick="cs.closeSlide();openHistory();" data-i18n="pageTitle.opHistory"></a></li>
       <li class="startHelpOp"><a onclick="cs.closeSlide();openNfcReader();" data-i18n="pageTitle.startHelpOp"></a></li>
       <li class="endHelpOp hidden"><a onclick="cs.closeSlide();openHelpConfirm();" data-i18n="pageTitle.endHelpOp"></a></li>
       <li><a onclick="cs.closeSlide();$('#viewDataPortability').actionHistoryShowView();" data-i18n="pageTitle.viewDataPortability"></a></li>
@@ -89,9 +89,6 @@
 
   <div id="modal-nfcReader" class="modal fade" role="dialog"></div>
   <div id="modal-helpConfirm" class="modal fade" role="dialog"></div>
-  <div id="modal-personalInfo" class="modal fade" role="dialog"></div>
-  <div id="modal-personalInfo2" class="modal fade" role="dialog"></div>
-  <div id="modal-personalInfo3" class="modal fade" role="dialog"></div>
   <div id="modal-startHelpOp" class="modal fade" role="dialog"></div>
   <div id="modal-sendReply" class="modal fade" role="dialog"></div>
 

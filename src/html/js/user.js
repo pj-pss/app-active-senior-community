@@ -36,6 +36,7 @@ additionalCallback = function () {
     .done(function(res) {
         currentTime = moment(res.st * 1000);
         getArticleList('topEvent');
+		actionHistory.logWrite('top');
         getUserProfile();
     });
 };
@@ -207,20 +208,81 @@ function openNfcReader() {
 	});
 }
 
-function openPersonalInfo() {
-    $('#modal-personalInfo').localize();
-    $('#modal-personalInfo').actionHistoryShowModal();
+function openHistory(){
+	$("#op-history-list").children().remove();
+
+	var displayHistoryFunc = function(){
+		var results = arguments[0].d.results;
+		if(results.length === 0){
+			return;
+		}
+		var cells = _.without(_.union(_.pluck(results, 'action_user_cell_url'),_.pluck(results, 'user_cell_url')),null);
+		var isSingle = cells.length === 1 ? true : false;
+		var list = [];
+		_.each(cells, $.proxy(function(cell){
+		    list.push($.ajax({
+		        type: "GET",
+				dataType: 'json',
+		        url : cell + '__/profile.json',
+		        headers: {
+		            "Accept" : "application/json"
+		        }
+	    	}));
+		},this));
+
+		$.when.apply($, list).done($.proxy(function () {
+			var arg = arguments;
+			if(isSingle){
+				arg = {0:arguments};
+			}
+			var images = {};
+			for(var i = 0; i < cells.length; i++){
+				images[cells[i]] = arg[i][0].Image !== "" ? arg[i][0].Image : "../img/user-circle.png";
+			}
+			_.each(results,function(result){
+				var img;
+				if(result['action_user_cell_url'] !== null){
+					img = images[result['action_user_cell_url']];
+				}else{
+					img = images[result['user_cell_url']];
+				}
+				var updated = moment(new Date(parseInt(result.__updated.match(/\/Date\((.*)\)\//i)[1],10)));
+				$("#op-history-list").append('<div class="col-xs-12 col-md-6 simple_block">' + updated.format("YYYY/MM/DD HH:mm:ss") + '<br><span><img style="border-radius: 50%;" src="' + img + '">' + result.action_detail + '</span></div>');
+			});
+			$('#opHistory').actionHistoryShowView();
+		},this)).fail(function() {
+			console.log('error');
+		});
+	}
+
+	var query = '?\$top=50&\$orderby=__updated desc';
+	if(helpAuthorized){
+		getExtCellToken(function(){
+			getCurrentCellToken(function(ctoken){
+				$.ajax({
+			        type: "GET",
+			        url: operationCellUrl + Common.getBoxName() + '/action/action_history' + query,
+		            headers: {
+						"Accept" : "application/json",
+		                "Authorization": "Bearer " + ctoken
+		            }
+				}).done(displayHistoryFunc);
+			},"");
+		},"");
+	}else{
+	    Common.refreshToken(function(){
+			$.ajax({
+		        type: "GET",
+		        url: Common.getBoxUrl() + 'action/action_history' + query,
+	            headers: {
+					"Accept" : "application/json",
+	                "Authorization": "Bearer " + Common.getToken()
+	            }
+			}).done(displayHistoryFunc);
+		});
+	}
 }
 
-function openPersonalInfo2() {
-    $('#modal-personalInfo2').localize();
-    $('#modal-personalInfo2').actionHistoryShowModal();
-}
-
-function openPersonalInfo3() {
-    $('#modal-personalInfo3').localize();
-    $('#modal-personalInfo3').actionHistoryShowModal();
-}
 function openClubHistory() {
     $('#modal-clubHistory').localize();
     $('#modal-clubHistory').actionHistoryShowModal();
@@ -475,9 +537,7 @@ $(function() {
     $("#entryList").load("entryList.html");
     $("#modal-nfcReader").load("modal-nfcReader.html");
     $("#modal-helpConfirm").load("modal-helpConfirm.html");
-    $("#modal-personalInfo").load("modal-personalInfo.html");
-    $("#modal-personalInfo2").load("modal-personalInfo2.html");
-    $("#modal-personalInfo3").load("modal-personalInfo3.html");
+
     $("#modal-startHelpOp").load("modal-startHelpOp.html");
     $("#modal-sendReply").load("modal-sendReply.html");
 
