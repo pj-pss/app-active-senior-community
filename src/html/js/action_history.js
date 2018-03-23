@@ -12,12 +12,17 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 
 var actionHistory = {};
 
+actionHistory.logWrite = function logWrite(id, arg = {}){
+	actionHistory.post("log." + id, arg);
+}
+
 actionHistory.post = function (messageid, arg = {}) {
 	var method;
 	var url;
 	switch(actionHistory.post.caller.name){
 		case "actionHistoryShowModal":
 		case "actionHistoryShowView":
+		case "logWrite":
 			method = "view";
 			break;
 		default:
