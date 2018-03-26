@@ -1,7 +1,5 @@
 {
     "msg": {
-        "welcome" : "ようこそ",
-        "userName" : "$t(user.001) さん",
         "backToTop" : "$t(pageTitle.top)に戻る",
         "backToArticle" : "記事本文に戻る",
         "backToBbs" : "$t(pageTitle.bbs)に戻る",
@@ -40,16 +38,6 @@
             "comment" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］にコメントしました",
             "join" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］に参加する!と表明しました",
             "access" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］より外部サイトにアクセスしました"
-        },
-
-        "dataExport" : {
-            "title" : "データエクスポート",
-            "start" : "$t(msg.dataExport.title)を実施する",
-            "notice" : "※情報量によって、$t(msg.dataExport.title)の完了までの時間が変動します",
-            "doing" : "※現在、$t(msg.dataExport.title)中です",
-            "wait" : "完了まで暫くお待ち下さい",
-            "complete" : "$t(msg.dataExport.title)が完了しました",
-            "QRcode" : "QRコードからダウンロードを行って下さい"
         }
     },
     "user": {
@@ -88,7 +76,6 @@
         "saveDiscInfo" : "開示情報を保存する",
         "editProfile" : "わたしの情報を変更する",
         "selectFile" : "ファイル選択",
-        "selectCsvFile" : "csvファイル選択",
         "clear": "クリア",
         "upload": "アップロード",
         "logout": "ログアウト",
@@ -102,8 +89,6 @@
         "startHelpOp" : "操作支援",
         "endHelpOp" : "操作支援終了",
         "viewInforDisclosureHistory" : "私の情報開示状況",
-        "viewDataPortability" : "データポータビリティ",
-        "dataExport" : "データエクスポート",
         "profileEdit" : "プロフィール変更",
         "vital" : "バイタル情報",
         "location" : "在宅状況",
