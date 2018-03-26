@@ -292,7 +292,7 @@ var qrJson;
 
 function authorizedNfcReader(qrJsonStr) {
     qrJson = JSON.parse(qrJsonStr);
-	
+
 	operationCellUrl = qrJson.url;
     $.ajax({
         url: operationCellUrl + '__token',
@@ -530,9 +530,6 @@ $(function() {
     });
     $("#profileEdit").load("profileEdit.html");
     $("#opHistory").load("opHistory.html");
-    $("#viewDataPortability").load("viewDataPortability.html");
-    $("#viewDataExport").load("viewDataExport.html");
-    $("#viewQRCode").load("viewQRCode.html");
     $("#articleDetail").load("articleDetail.html");
     $("#entryList").load("entryList.html");
     $("#modal-nfcReader").load("modal-nfcReader.html");
