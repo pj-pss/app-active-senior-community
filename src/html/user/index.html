@@ -36,13 +36,7 @@
 <body>
   <header>
     <h1>
-      <span data-i18n="msg.welcome"></span><br>
-      <span data-i18n="msg.userName"></span><br>
-      <span id="during_help" data-i18n="msg.duringOpHelp" class="hidden"></span>
     </h1>
-    <a id="updateGenki" href="#" onclick="">
-      <i class="fa fa-refresh fa-2x fa-fw fnt_icon"></i>
-    </a>
     <a href="javascript:void(0)" onclick="cs.openSlide();">
       <i class="fa fa-bars fa-2x fa-fw fnt_icon"></i>
     </a>
@@ -81,7 +75,6 @@
       <li><a onclick="cs.closeSlide();openHistory();" data-i18n="pageTitle.opHistory"></a></li>
       <li class="startHelpOp"><a onclick="cs.closeSlide();openNfcReader();" data-i18n="pageTitle.startHelpOp"></a></li>
       <li class="endHelpOp hidden"><a onclick="cs.closeSlide();openHelpConfirm();" data-i18n="pageTitle.endHelpOp"></a></li>
-      <li><a onclick="cs.closeSlide();$('#viewDataPortability').actionHistoryShowView();" data-i18n="pageTitle.viewDataPortability"></a></li>
     </ul>
   </nav>
   <div class="overlay" id="dvOverlay">

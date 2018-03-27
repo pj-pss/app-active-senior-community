@@ -1,29 +1,9 @@
 html, body, .contents, main { height:100%; }
 
-button#logout {
-  margin: 0 16px 0 0;
-}
-
 .functionArea {
   border: 1px solid #f2f2f2;
   width: 100%;
   height: 100%;
-}
-
-.searchIcon {
-  float: left;
-  position: relative;
-  padding-left: 7px;
-  margin-right: -40px;
-  margin-top: 5px;
-  font-size: 24px;
-}
-
-.refleshIcon {
-  float: right;
-  position: relative;
-  margin-top: 4px;
-  font-size: 30px;
 }
 
 #createInfo {
@@ -124,14 +104,6 @@ button#logout {
   border: 0px;
 }
 
-
-#searchKeywordBox {
-  background-size: contain;
-  padding-left: 32px;
-  margin: 2px;
-  border-radius: 10px;
-}
-
 #infoDatepicker {
   vertical-align: middle;
 }
@@ -150,15 +122,9 @@ button#logout {
   font-weight: bolder;
 }
 
-#errorMessageCsv i,
 #errorMessageImg i {
   color: red;
   margin-bottom: 15px;
-}
-
-.loadingIcon {
-  text-align: center;
-  font-size: 30px;
 }
 
 .confirmMessage {
@@ -166,35 +132,6 @@ button#logout {
   font-size: 20px;
   padding-top: 50px;
   padding-bottom: 50px;
-}
-
-.successMessage {
-  text-align: center;
-  font-size: 24px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  color: blue;
-}
-
-.faildMessage {
-  text-align: center;
-  font-size: 24px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  color: red;
-}
-
-.stealthTable {
-  width: 100%;
-  margin: 2px;
-  border: 0px;
-}
-.stealthTable th,
-.stealthTable td {
-  text-align: center;
-  vertical-align: middle;
-  border: 0px;
-  padding: 0px 0px 10px 0px;
 }
 
 #editor {
