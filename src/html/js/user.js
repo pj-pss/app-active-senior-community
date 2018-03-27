@@ -1133,18 +1133,18 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                 var join = $('#joinNum').html();
                 var consider = $('#considerNum').html();
                 if (reply == REPLY.JOIN) {
-                    if (userReplyId && !sameReply) {
+                    if (!userReplyId) {
+                        join++;
+                    } else if (!sameReply) {
                         join++;
                         consider--;
-                    } else if (!userReplyId) {
-                        join++;
                     }
                 } else {
-                    if (userReplyId && !sameReply) {
+                    if (!userReplyId) {
+                        consider++;
+                    } else if (!sameReply) {
                         consider++;
                         join--;
-                    } else if (!userReplyId) {
-                        consider++;
                     }
                 }
                 $('#joinNum').html(join);
