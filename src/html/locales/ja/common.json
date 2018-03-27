@@ -1,7 +1,5 @@
 {
     "msg": {
-        "welcome" : "ようこそ",
-        "userName" : "$t(user.001) さん",
         "backToTop" : "$t(pageTitle.top)に戻る",
         "backToArticle" : "記事本文に戻る",
         "backToBbs" : "$t(pageTitle.bbs)に戻る",
@@ -28,46 +26,11 @@
         "failedGetArticle": "記事の取得に失敗しました",
         "failedDeleteArticle": "記事の削除に失敗しました",
         "completeGetArticle": "記事の削除が完了しました",
-        "confirmRegisterCsv": "選択したcsvを登録します。よろしいですか?",
-        "nowUploading": "アップロード中...",
-        "completeRegister": "登録が完了しました",
-        "failedRegister": "登録が失敗しました",
         "confirmSendReply": "回答しますか?",
-        "anonymousReply": "匿名で回答する",
+        "anonymousReply": "匿名で回答する"
+    },
+    "entry": {"anonymous" : "匿名"},
 
-        "op" : {
-            "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
-            "comment" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］にコメントしました",
-            "join" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］に参加する!と表明しました",
-            "access" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］より外部サイトにアクセスしました"
-        },
-
-        "dataExport" : {
-            "title" : "データエクスポート",
-            "start" : "$t(msg.dataExport.title)を実施する",
-            "notice" : "※情報量によって、$t(msg.dataExport.title)の完了までの時間が変動します",
-            "doing" : "※現在、$t(msg.dataExport.title)中です",
-            "wait" : "完了まで暫くお待ち下さい",
-            "complete" : "$t(msg.dataExport.title)が完了しました",
-            "QRcode" : "QRコードからダウンロードを行って下さい"
-        }
-    },
-    "user": {
-        "001" : "富士通 太郎",
-        "002" : "富士通 桜子"
-    },
-	"entry": {"anonymous" : "匿名"},
-    "userImg" : {
-        "001" : "<img src=\"../img/parts_ico_gentleman.png\">",
-        "002" : "<img src=\"../img/parts_ico_operator.png\" onClick=\"openPersonalInfo();\">",
-        "003" : "<img src=\"../img/parts_ico_detective.png\" onClick=\"openPersonalInfo2();\">",
-        "004" : "<img src=\"../img/parts_ico_doctor.png\" onClick=\"openPersonalInfo3();\">",
-        "005" : "<img src=\"../img/parts_ico_doctor2.png\" onClick=\"openPersonalInfo3();\">"
-    },
-    "article" : {
-        "001" : "【配信協力】留学生×市民 みんなで楽しもう！INTERNATIONAL CURRY PARTY",
-        "002" : "柏の葉 街まるごとオープンキャンパス2017のお知らせ"
-    },
     "btn": {
         "ok" : "OK",
         "cancel": "キャンセル",
@@ -88,11 +51,7 @@
         "saveDiscInfo" : "開示情報を保存する",
         "editProfile" : "わたしの情報を変更する",
         "selectFile" : "ファイル選択",
-        "selectCsvFile" : "csvファイル選択",
-        "clear": "クリア",
-        "upload": "アップロード",
-        "logout": "ログアウト",
-        "": "新規作成"
+        "clear": "クリア"
     },
     "pageTitle" : {
         "action" : "アクション",
@@ -102,22 +61,16 @@
         "startHelpOp" : "操作支援",
         "endHelpOp" : "操作支援終了",
         "viewInforDisclosureHistory" : "私の情報開示状況",
-        "viewDataPortability" : "データポータビリティ",
-        "dataExport" : "データエクスポート",
         "profileEdit" : "プロフィール変更",
         "vital" : "バイタル情報",
         "location" : "在宅状況",
         "bbs" : "みんなの掲示板",
-        "bbsComment" : "みんなの掲示板: コメント",
 		"participate" : "参加する人",
 		"consider" : "検討している人"
     },
     "org" : {
         "title" : "運用者ポータル",
-        "provideInfo" : "提供情報一覧",
-        "tenant" : "入居者一覧",
-        "disclosureInfo" : "緊急時情報開示先登録",
-        "opHistory" : "操作履歴"
+        "provideInfo" : "提供情報一覧"
     },
     "modalTitle" : {
         "personalInfo" : "人物情報",
