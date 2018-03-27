@@ -27,31 +27,10 @@
         "failedDeleteArticle": "記事の削除に失敗しました",
         "completeGetArticle": "記事の削除が完了しました",
         "confirmSendReply": "回答しますか?",
-        "anonymousReply": "匿名で回答する",
+        "anonymousReply": "匿名で回答する"
+    },
+    "entry": {"anonymous" : "匿名"},
 
-        "op" : {
-            "select" : "$t(userImg.001) が、メニューより［$t(pageTitle.opHistory)］を選択しました",
-            "comment" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］にコメントしました",
-            "join" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］に参加する!と表明しました",
-            "access" : "$t(userImg.001) が、$t(pageTitle.bbs)［$t(pageTitle.opHistory)］より外部サイトにアクセスしました"
-        }
-    },
-    "user": {
-        "001" : "富士通 太郎",
-        "002" : "富士通 桜子"
-    },
-	"entry": {"anonymous" : "匿名"},
-    "userImg" : {
-        "001" : "<img src=\"../img/parts_ico_gentleman.png\">",
-        "002" : "<img src=\"../img/parts_ico_operator.png\" onClick=\"openPersonalInfo();\">",
-        "003" : "<img src=\"../img/parts_ico_detective.png\" onClick=\"openPersonalInfo2();\">",
-        "004" : "<img src=\"../img/parts_ico_doctor.png\" onClick=\"openPersonalInfo3();\">",
-        "005" : "<img src=\"../img/parts_ico_doctor2.png\" onClick=\"openPersonalInfo3();\">"
-    },
-    "article" : {
-        "001" : "【配信協力】留学生×市民 みんなで楽しもう！INTERNATIONAL CURRY PARTY",
-        "002" : "柏の葉 街まるごとオープンキャンパス2017のお知らせ"
-    },
     "btn": {
         "ok" : "OK",
         "cancel": "キャンセル",
