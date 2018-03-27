@@ -94,7 +94,7 @@ function viewProfile(){
 			$("#editPicturePreview").attr("src", arguments[0].Image);
 		}
 		$("#nickname").val(arguments[0].DisplayName);
-		$("#popupEditDisplayNameErrorMsg").html("");
+		$("#popupEditDisplayNameErrorMsg").html("<br>");
 		$('#profileEdit').actionHistoryShowView();
 	});
 }
@@ -144,7 +144,7 @@ function validateDisplayName(displayName, displayNameSpan) {
 	}
 
 	var MAXLENGTH = 128;
-        $("#" + displayNameSpan).html("");
+        $("#" + displayNameSpan).html("<br>");
         if (lenDisplayName > MAXLENGTH) {
             $("#" + displayNameSpan).html(i18next.t("errorValidateNameLength"));
             return false;
