@@ -1,3 +1,8 @@
 {
+    "sessionExpiredDialog": {
+        "title": "セッション期限切れ",
+        "action": "アプリを終了します。",
+        "btnOk": "OK"
+    },
     "title": "user-app"
 }
