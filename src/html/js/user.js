@@ -1270,14 +1270,23 @@ function getUserProfile() {
                     "Authorization": "Bearer " + token,
                     "Accept": "application/json"
                 }
+            }),
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_household",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
             })
         )
-        .done(function(res1, res2, res3){
+        .done(function(res1, res2, res3, res4){
             vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
             vitalList.reverse();
 
             var basicInfo = res1[0].d.results[0];
             var healthInfo = res2[0].d.results[0];
+            var household = res4[0].d.results[0];
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
@@ -1357,9 +1366,9 @@ function getUserProfile() {
             '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
             '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</td></tr>' +
             '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
-            '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
+            // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
             '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
-            '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + basicInfo.residentType + '</td></tr>';
+            '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + household.resident_type + '</td></tr>';
         $('#userProfile').html(profile);
 
         })
