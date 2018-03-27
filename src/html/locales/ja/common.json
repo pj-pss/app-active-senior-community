@@ -26,10 +26,6 @@
         "failedGetArticle": "記事の取得に失敗しました",
         "failedDeleteArticle": "記事の削除に失敗しました",
         "completeGetArticle": "記事の削除が完了しました",
-        "confirmRegisterCsv": "選択したcsvを登録します。よろしいですか?",
-        "nowUploading": "アップロード中...",
-        "completeRegister": "登録が完了しました",
-        "failedRegister": "登録が失敗しました",
         "confirmSendReply": "回答しますか?",
         "anonymousReply": "匿名で回答する",
 
@@ -76,10 +72,7 @@
         "saveDiscInfo" : "開示情報を保存する",
         "editProfile" : "わたしの情報を変更する",
         "selectFile" : "ファイル選択",
-        "clear": "クリア",
-        "upload": "アップロード",
-        "logout": "ログアウト",
-        "": "新規作成"
+        "clear": "クリア"
     },
     "pageTitle" : {
         "action" : "アクション",
@@ -93,16 +86,12 @@
         "vital" : "バイタル情報",
         "location" : "在宅状況",
         "bbs" : "みんなの掲示板",
-        "bbsComment" : "みんなの掲示板: コメント",
 		"participate" : "参加する人",
 		"consider" : "検討している人"
     },
     "org" : {
         "title" : "運用者ポータル",
-        "provideInfo" : "提供情報一覧",
-        "tenant" : "入居者一覧",
-        "disclosureInfo" : "緊急時情報開示先登録",
-        "opHistory" : "操作履歴"
+        "provideInfo" : "提供情報一覧"
     },
     "modalTitle" : {
         "personalInfo" : "人物情報",
