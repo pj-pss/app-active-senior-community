@@ -292,7 +292,7 @@ var qrJson;
 
 function authorizedNfcReader(qrJsonStr) {
     qrJson = JSON.parse(qrJsonStr);
-	
+
 	operationCellUrl = qrJson.url;
     $.ajax({
         url: operationCellUrl + '__token',
@@ -433,7 +433,9 @@ function closeHelpConfirm(f) {
             })
             .done(function() {
                 helpAuthorized = false;
-				qrJson = null;
+                qrJson = null;
+                getArticleList();
+                getUserProfile();
                 $('#editPrflBtn button').prop('disabled', false);
 
                 $(".endHelpOp").addClass('hidden');
