@@ -185,9 +185,9 @@ function readURL(input) {
 var helpAuthorized = false;
 var scanner;
 
-function openNfcReader() {
+function openQrReader() {
 	helpAuthorized = false;
-    $('#modal-nfcReader').localize();
+    $('#modal-qrReader').localize();
 
     var videoComponent = $("#camera-preview");
     var options = {};
@@ -196,15 +196,15 @@ function openNfcReader() {
     initScanner(options);
     initCamera(cameraId);
     scanStart(function (content){
-        authorizedNfcReader(content);
+        authorizedQrReader(decryptQR(content));
     });
 
-    $('#modal-nfcReader').actionHistoryShowModal();
-	$('#modal-nfcReader').on('hidden.bs.modal', function () {
+    $('#modal-qrReader').actionHistoryShowModal();
+	$('#modal-qrReader').on('hidden.bs.modal', function () {
 	    try{
 			scanner.stop();
 		}catch(e){}
-		$('#modal-nfcReader').off('hidden.bs.modal');
+		$('#modal-qrReader').off('hidden.bs.modal');
 	});
 }
 
@@ -290,8 +290,15 @@ function openClubHistory() {
 
 var qrJson;
 
-function authorizedNfcReader(qrJsonStr) {
-    qrJson = JSON.parse(qrJsonStr);
+function authorizedQrReader(qrJsonStr) {
+    try {
+        qrJson = JSON.parse(qrJsonStr);
+    } catch(e) {
+        alert('error: json parse error');
+        return;
+    }
+
+    if (!validateQRInfo(qrJson)) return;
 
 	operationCellUrl = qrJson.url;
     $.ajax({
@@ -407,7 +414,7 @@ function authorizedNfcReader(qrJsonStr) {
 
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
-    $('#modal-nfcReader').modal('hide');
+    $('#modal-qrReader').modal('hide');
     $('#top').actionHistoryShowView();;
 }
 
@@ -535,7 +542,7 @@ $(function() {
     $("#opHistory").load("opHistory.html");
     $("#articleDetail").load("articleDetail.html");
     $("#entryList").load("entryList.html");
-    $("#modal-nfcReader").load("modal-nfcReader.html");
+    $("#modal-qrReader").load("modal-qrReader.html");
     $("#modal-helpConfirm").load("modal-helpConfirm.html");
 
     $("#modal-startHelpOp").load("modal-startHelpOp.html");
@@ -1295,9 +1302,17 @@ function getUserProfile() {
                 headers: {
                     "Accept": "application/json"
                 }
+            }),
+            $.ajax({
+                type: "GET",
+                url: boxUrl + 'user_info/user_evacuation',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
             })
         )
-        .done(function(res1, res2, res3, res4, res5){
+        .done(function(res1, res2, res3, res4, res5, res6){
             vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
             vitalList.reverse();
 
@@ -1305,6 +1320,7 @@ function getUserProfile() {
             var healthInfo = res2[0].d.results[0];
             var household = res4[0].d.results[0];
             var profileJson = res5[0];
+            var evacuation = res6[0].d.results[0];
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
@@ -1399,10 +1415,78 @@ function getUserProfile() {
 
             $('#monitoring .nickname').html(profileJson.DisplayName);
 
+            let location = evacuation.not_at_home ? i18next.t('locationState.outdoor') : i18next.t('locationState.indoor');
+            $('#monitoring .nowLocation').html(location);
+
+            $('#modal-helpConfirm .userName').html(basicInfo.name);
+            $('#modal-startHelpOp .userName').html(basicInfo.name);
+
         })
         .fail(function() {
             alert('error: get user profile');
         });
     });
 
+}
+
+/**
+ * decrypt read from QRcode to ID,pass,cellUrl
+ * @param {String} content :encrypted information
+ */
+function decryptQR(content) {
+    var array_rawData = content.split(',');
+
+    var salt = CryptoJS.enc.Hex.parse(array_rawData[0]);  // passwordSalt
+    var iv = CryptoJS.enc.Hex.parse(array_rawData[1]);    // initialization vector
+    var encrypted_data = CryptoJS.enc.Base64.parse(array_rawData[2]);
+
+    // password (define key)
+    var secret_passphrase = CryptoJS.enc.Utf8.parse(Common.getBoxName());
+    var key128Bits500Iterations =
+        CryptoJS.PBKDF2(secret_passphrase, salt, { keySize: 128 / 8, iterations: 500 });
+
+    // decrypt option (same of encrypt)
+    var options = { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 };
+
+    // decrypt
+    var decrypted = CryptoJS.AES.decrypt({ "ciphertext": encrypted_data }, key128Bits500Iterations, options);
+    // convert to UTF8
+    return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+function validateQRInfo(qrJson) {
+    if ('userId' in qrJson && 'password' in qrJson && 'url' in qrJson) {
+        let id = qrJson.userId;
+
+        let pass = qrJson.password;
+        if (MIN_PASS_LENGTH >= pass.length || pass.length >= MAX_PASS_LENGTH ||
+            !pass.match(/^([a-zA-Z0-9\-\_])+$/)) {
+                alert('error: invalid password');
+            return false;
+        }
+
+        let pUrl = $.url(qrJson.url);
+        if (!(pUrl.attr('protocol').match(/^(https)$/) && pUrl.attr('host'))) {
+            alert('error: invalid url');
+            return false;
+        } else {
+            let labels = pUrl.attr('host').split('.');
+            for (let label of labels) {
+                if (!label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/)) {
+                    alert('error: invalid url');
+                    return false;
+                }
+            }
+
+            if (pUrl.attr('source') == Common.getCellUrl()) {
+                alert('error: own user cell');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    alert('error: invalid QRcode data');
+    return false;
 }
