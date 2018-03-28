@@ -1477,6 +1477,11 @@ function validateQRInfo(qrJson) {
                     return false;
                 }
             }
+
+            if (pUrl.attr('source') == Common.getCellUrl()) {
+                alert('error: own user cell');
+                return false;
+            }
         }
 
         return true;
