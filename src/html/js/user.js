@@ -551,7 +551,7 @@ function getArticleList(divId) {
         var oData = 'article';
         var entityType = 'provide_information';
 
-		var now = String(new Date().getTime());
+        var now = String(new Date().getTime());
 
         $.ajax({
             type: "GET",
@@ -1168,7 +1168,7 @@ function setArticle(articleList, token){
 
     $('#topEvent').children().remove();
     for(let article of articleList){
-		getArticleListImage(article.__id, token);
+        getArticleListImage(article.__id, token);
         $('#topEvent').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
     }
 
@@ -1204,14 +1204,14 @@ function clearFilter(){
 
 function createArticleGrid(id, title, date, type){
     date = date || "";
+    var dispDate;
+    if(date){
+        var startDate = new Date(Math.floor(date));
+        dispDate = moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")";
+    }else{
+        dispDate = "";
+    }
 
-	if(date){
-		var startDate = new Date(Math.floor(date));
-		dispDate = moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")";
-	}else{
-		dispDate = "";
-	}
-dispDate = date;
     var div = '<div class=\'display' + String(type) + '\' data-href="javascript:getArticleDetail(\'' + id + '\')">';
     div += '<div class="col-xs-4 col-md-2 block_img">'
         + '<span id="' + id + '" class="cover"></span>'
