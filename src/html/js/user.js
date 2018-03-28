@@ -298,10 +298,7 @@ function authorizedNfcReader(qrJsonStr) {
         return;
     }
 
-    if (!validateQRInfo(qrJson)) {
-        // alert('error: invalid QRcode data');
-        return;
-    }
+    if (!validateQRInfo(qrJson)) return;
 
 	operationCellUrl = qrJson.url;
     $.ajax({
