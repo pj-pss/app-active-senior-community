@@ -291,7 +291,17 @@ function openClubHistory() {
 var qrJson;
 
 function authorizedNfcReader(qrJsonStr) {
-    qrJson = JSON.parse(qrJsonStr);
+    try {
+        qrJson = JSON.parse(qrJsonStr);
+    } catch(e) {
+        alert('error: json parse');
+        return;
+    }
+
+    if (!validateQRInfo(qrJson)) {
+        alert('error: invalid QRcode data');
+        return;
+    }
 
 	operationCellUrl = qrJson.url;
     $.ajax({
@@ -1442,4 +1452,32 @@ function decryptQR(content) {
     var decrypted = CryptoJS.AES.decrypt({ "ciphertext": encrypted_data }, key128Bits500Iterations, options);
     // convert to UTF8
     return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+function validateQRInfo(qrJson) {
+    if ('userId' in qrJson && 'password' in qrJson && 'url' in qrJson) {
+        let id = qrJson.userId;
+
+        let pass = qrJson.password;
+        if (MIN_PASS_LENGTH >= pass.length && pass.length >= MAX_PASS_LENGTH ||
+            !pass.match(/^([a-zA-Z0-9\-\_])+$/)) {
+            return false;
+        }
+
+        let pUrl = $.url(qrJson.url);
+        if (!(pUrl.attr('protocol').match(/^(https)$/) && pUrl.attr('host'))) {
+            return false;
+        } else {
+            let labels = pUrl.attr('host').split('.');
+            for (let label of labels) {
+                if (!label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    return false;
 }
