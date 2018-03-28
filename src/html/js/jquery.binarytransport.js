@@ -42,7 +42,11 @@
                         callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
                     });
 
-                    xhr.open(type, url, async, username, password);
+					if(username !== null && password !== null){
+                    	xhr.open(type, url, async, username, password);
+					}else{
+						xhr.open(type, url, async);
+					}
 
                     // setup custom headers
                     for (var i in headers) {

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var articleList = [];
 var imageList = {};
 var joinList = {};
 var sort_key = 'updated';
@@ -501,8 +500,8 @@ function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
 // load html
 $(function() {
     $("#top").load("top.html", function() {
-        $('#filterInfo').attr('onclick',"sortArticle('" + sort_key + "', false, " + TYPE.INFO + ')');
-        $('#filterEvent').attr('onclick', "sortArticle('" + sort_key + "', false, " + TYPE.EVENT + ')');
+        $('#filterInfo').attr('onclick','setFilter(' + TYPE.INFO + ')');
+        $('#filterEvent').attr('onclick', 'setFilter(' + TYPE.EVENT + ')');
     });
     $("#monitoring").load("monitoring.html", function () {
         $("#myhealth").load("myhealth.html", function() {
@@ -552,37 +551,17 @@ function getArticleList(divId) {
         var oData = 'article';
         var entityType = 'provide_information';
 
+		var now = String(new Date().getTime());
+
         $.ajax({
             type: "GET",
-            url: Common.getToCellBoxUrl() + oData + '/' + entityType,
+            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + '&\$orderby=__updated desc',
             headers: {
                 "Authorization": "Bearer " + token,
                 "Accept" : "application/json"
             }
         }).done(function(data) {
-            $('#' + divId).empty();
-            var list = [];
-            var results = data.d.results;
-            articleList = [];
-            for(let result of results.reverse()){
-                if (result.type == TYPE.EVENT && moment(result.end_date) < currentTime) continue;
-
-                var div = createArticleGrid(result.__id, result.title, result.start_date);
-                list.push(div);
-                getArticleListImage(result.__id, token);
-
-                articleList.push({
-                    id: result.__id,
-                    type: result.type,
-                    title: result.title,
-                    updated: result.__updated,
-                    start_date: result.start_date
-                });
-            }
-            $('#' + divId).html(list.join(''));
-
-            clearSort();
-
+			setArticle(data.d.results, token);
             getJoinInfoList(token);
         })
         .fail(function() {
@@ -818,8 +797,16 @@ function getArticleDetail(id) {
 
             var term = '';
             if (article.type == TYPE.EVENT && article.start_date && article.end_date) {
-                term = article.start_date + ' ' + article.start_time + ' ~ ' + (article.end_date == article.start_date ? '' : article.end_date) + ' ' + article.end_time;
+                var startTime = new Date(Math.floor(article.start_date));
+                var endTime = new Date(Math.floor(article.end_date));
+                var startDisplayDate = moment(startTime).format("YYYY/MM/DD");
+                var endDisplayDate = moment(endTime).format("YYYY/MM/DD");
+                var startDisplayDayOfTheWeek = i18next.t("dayOfTheWeek." + moment(startTime).format("ddd"));
+                var endDisplayDayOfTheWeek = i18next.t("dayOfTheWeek." + moment(endTime).format("ddd"));
+                var startDisplayTime = moment(startTime).format("HH:mm");
+                var endDisplayTime = moment(endTime).format("HH:mm");
 
+                term = startDisplayDate + " (" + startDisplayDayOfTheWeek + ") " + startDisplayTime + ' ~ ' + (endDisplayDate == startDisplayDate ? '' : endDisplayDate + " (" + endDisplayDayOfTheWeek + ")") + ' ' + endDisplayTime;
                 $('#replyContainer').css('display', '');
             } else {
                 $('#replyContainer').css('display', 'none');
@@ -1177,20 +1164,13 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId){
     $('#considerEvent').attr('href', "javascript:openSendReplyModal(" + argConsider + ")");
 }
 
-function sortArticle(key, reverse, type){
-    aList = _.sortBy(articleList, function(item){return item[key];});
-    if(reverse) aList = aList.reverse();
-    if(type != null) filter = type;
-    sort_key = key;
+function setArticle(articleList, token){
 
-    var list = [];
-    for(let article of aList){
-        if((filter != null) && article.type != filter) continue;
-        var div = createArticleGrid(article.id, article.title, article.start_date);
-        list.push(div);
+    $('#topEvent').children().remove();
+    for(let article of articleList){
+		getArticleListImage(article.__id, token);
+        $('#topEvent').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
     }
-    $('#topEvent').empty();
-    $('#topEvent').html(list.join(''));
 
     $.each(imageList, function(key, value) {
         $('#' + key).css('background-image', "url('" + value + "')");
@@ -1205,20 +1185,40 @@ function sortArticle(key, reverse, type){
     addLinkToGrid();
 }
 
-function clearSort() {
-    filter = null;
-    sortArticle('updated', true);
+function sortArticle(){
+	alert("Function to be deleted.");
 }
 
-function createArticleGrid(id, title, date){
+function setFilter(key){
+	$(".display" + String(key)).show();
+	if(key === TYPE.INFO){
+		$(".display" + String(TYPE.EVENT)).hide();
+	}else{
+		$(".display" + String(TYPE.INFO)).hide();
+	}
+}
+
+function clearFilter(){
+	$('#topEvent').children().show();
+}
+
+function createArticleGrid(id, title, date, type){
     date = date || "";
-    var div = '<div data-href="javascript:getArticleDetail(\'' + id + '\')">';
+
+	if(date){
+		var startDate = new Date(Math.floor(date));
+		dispDate = moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")";
+	}else{
+		dispDate = "";
+	}
+dispDate = date;
+    var div = '<div class=\'display' + String(type) + '\' data-href="javascript:getArticleDetail(\'' + id + '\')">';
     div += '<div class="col-xs-4 col-md-2 block_img">'
         + '<span id="' + id + '" class="cover"></span>'
         + '</div>';
     div += '<div class="col-xs-8 col-md-4 block_description">'
         + '<table class="stealth_table">'
-        + '<tr class="date"><td>' + date + '</td></tr>'
+        + '<tr class="date"><td>' + dispDate + '</td></tr>'
         + '<tr class="title"><td>' + title + '</td></tr>';
 
     // article type is event
