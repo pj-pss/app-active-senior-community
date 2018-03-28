@@ -294,12 +294,12 @@ function authorizedNfcReader(qrJsonStr) {
     try {
         qrJson = JSON.parse(qrJsonStr);
     } catch(e) {
-        alert('error: json parse');
+        alert('error: json parse error');
         return;
     }
 
     if (!validateQRInfo(qrJson)) {
-        alert('error: invalid QRcode data');
+        // alert('error: invalid QRcode data');
         return;
     }
 
@@ -1459,18 +1459,21 @@ function validateQRInfo(qrJson) {
         let id = qrJson.userId;
 
         let pass = qrJson.password;
-        if (MIN_PASS_LENGTH >= pass.length && pass.length >= MAX_PASS_LENGTH ||
+        if (MIN_PASS_LENGTH >= pass.length || pass.length >= MAX_PASS_LENGTH ||
             !pass.match(/^([a-zA-Z0-9\-\_])+$/)) {
+                alert('error: invalid password');
             return false;
         }
 
         let pUrl = $.url(qrJson.url);
         if (!(pUrl.attr('protocol').match(/^(https)$/) && pUrl.attr('host'))) {
+            alert('error: invalid url');
             return false;
         } else {
             let labels = pUrl.attr('host').split('.');
             for (let label of labels) {
                 if (!label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/)) {
+                    alert('error: invalid url');
                     return false;
                 }
             }
@@ -1479,5 +1482,6 @@ function validateQRInfo(qrJson) {
         return true;
     }
 
+    alert('error: invalid QRcode data');
     return false;
 }
