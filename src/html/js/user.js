@@ -94,7 +94,7 @@ function viewProfile(){
 			$("#editPicturePreview").attr("src", arguments[0].Image);
 		}
 		$("#nickname").val(arguments[0].DisplayName);
-		$("#popupEditDisplayNameErrorMsg").html("");
+		$("#popupEditDisplayNameErrorMsg").html("<br>");
 		$('#profileEdit').actionHistoryShowView();
 	});
 }
@@ -144,7 +144,7 @@ function validateDisplayName(displayName, displayNameSpan) {
 	}
 
 	var MAXLENGTH = 128;
-        $("#" + displayNameSpan).html("");
+        $("#" + displayNameSpan).html("<br>");
         if (lenDisplayName > MAXLENGTH) {
             $("#" + displayNameSpan).html(i18next.t("errorValidateNameLength"));
             return false;
@@ -1246,6 +1246,7 @@ function addLinkToGrid() {
 function getUserProfile() {
     getCurrentCellToken(function(token){
         let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
         $.when(
             $.ajax({
                 type: 'GET',
@@ -1270,14 +1271,32 @@ function getUserProfile() {
                     "Authorization": "Bearer " + token,
                     "Accept": "application/json"
                 }
+            }),
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_household",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: cellUrl + '__/profile.json',
+                headers: {
+                    "Accept": "application/json"
+                }
             })
         )
-        .done(function(res1, res2, res3){
+        .done(function(res1, res2, res3, res4, res5){
             vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
             vitalList.reverse();
 
             var basicInfo = res1[0].d.results[0];
             var healthInfo = res2[0].d.results[0];
+            var household = res4[0].d.results[0];
+            var profileJson = res5[0];
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
@@ -1296,62 +1315,81 @@ function getUserProfile() {
                 maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
                 pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
             }
-        var sex;
-        switch(basicInfo.sex) {
-            case 'male': sex = i18next.t('sex.male'); break;
-            case 'female': sex = i18next.t('sex.female'); break;
-            default: sex = i18next.t('sex.other');
-        }
 
-        var basicInfoHtml = '';
-        if(basicInfo) {
-            basicInfoHtml = '<dt>' +
-                '<dt>' + i18next.t('basicInfo.name') + ':</dt>' +
-                '<dd>' + basicInfo.name + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.howToRead') + ':</dt>' +
-                '<dd>' + basicInfo.name_kana + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.sex') + ':</dt>' +
-                '<dd>' + sex + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.birthday') + ' (' + i18next.t('basicInfo.age') + '):</dt>' +
-                '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</dd>' +
-                '<dt>' + i18next.t('basicInfo.postalCode') + ':</dt>' +
-                '<dd>' + basicInfo.postal_code + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.address') + ':</dt>' +
-                '<dd>' + basicInfo.address + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
-                '<dd>' + basicInfo.comment + '</dd>' +
-                '</dt>';
-        }
-        $('#basicInfo').html(basicInfoHtml);
+            var sex;
+            switch(basicInfo.sex) {
+                case 'male': sex = i18next.t('sex.male'); break;
+                case 'female': sex = i18next.t('sex.female'); break;
+                default: sex = i18next.t('sex.other');
+            }
 
-        var healthInfoHtml = '';
-        if(healthInfo) {
-            healthInfoHtml = '<dt>' +
-                '<dt>' + i18next.t('health.height') + ':</dt>' +
-                '<dd>' + healthInfo.height + ' cm</dd>' +
-                '<dt>' + i18next.t('health.weight') + ':</dt>' +
-                '<dd>' + healthInfo.weight + ' kg</dd>' +
-                '<dt>BMI:</dt>' +
-                '<dd>' + healthInfo.bmi + '</dd>' +
-                '<dt>' + i18next.t('health.girthAbdomen') + ':</dt>' +
-                '<dd>' + healthInfo.grith_abdomen + ' cm</dd>' +
-                '</dt>';
-        }
-        $('#healthInfo').html(healthInfoHtml);
+            var basicInfoHtml = '';
+            if(basicInfo) {
+                basicInfoHtml = '<dt>' +
+                    '<dt>' + i18next.t('basicInfo.name') + ':</dt>' +
+                    '<dd>' + basicInfo.name + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.howToRead') + ':</dt>' +
+                    '<dd>' + basicInfo.name_kana + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.sex') + ':</dt>' +
+                    '<dd>' + sex + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.birthday') + ' (' + i18next.t('basicInfo.age') + '):</dt>' +
+                    '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</dd>' +
+                    '<dt>' + i18next.t('basicInfo.postalCode') + ':</dt>' +
+                    '<dd>' + basicInfo.postal_code + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.address') + ':</dt>' +
+                    '<dd>' + basicInfo.address + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
+                    '<dd>' + basicInfo.comment + '</dd>' +
+                    '</dt>';
+            }
+            $('#basicInfo').html(basicInfoHtml);
 
-        var vitalHtml = '';
-        if(vital) {
-            vitalHtml = '<dt>' +
-                '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
-                '<dd>' + vital.temperature + ' &deg;C (' + (tempDiff || '-') + ')' + '</dd>' +
-                '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
-                '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
-                '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
-                '<dt>' + i18next.t('vital.pulse') + ':</dt>' +
-                '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>' +
-                '</dt>';
-        }
-        $('#vital').html(vitalHtml);
+            var healthInfoHtml = '';
+            if(healthInfo) {
+                healthInfoHtml = '<dt>' +
+                    '<dt>' + i18next.t('health.height') + ':</dt>' +
+                    '<dd>' + healthInfo.height + ' cm</dd>' +
+                    '<dt>' + i18next.t('health.weight') + ':</dt>' +
+                    '<dd>' + healthInfo.weight + ' kg</dd>' +
+                    '<dt>BMI:</dt>' +
+                    '<dd>' + healthInfo.bmi + '</dd>' +
+                    '<dt>' + i18next.t('health.girthAbdomen') + ':</dt>' +
+                    '<dd>' + healthInfo.grith_abdomen + ' cm</dd>' +
+                    '</dt>';
+            }
+            $('#healthInfo').html(healthInfoHtml);
+
+            var vitalHtml = '';
+            if(vital) {
+                vitalHtml = '<dt>' +
+                    '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
+                    '<dd>' + vital.temperature + ' &deg;C (' + (tempDiff || '-') + ')' + '</dd>' +
+                    '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
+                    '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
+                    '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
+                    '<dt>' + i18next.t('vital.pulse') + ':</dt>' +
+                    '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>' +
+                    '</dt>';
+            }
+            $('#vital').html(vitalHtml);
+
+            var profile =
+                '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
+                // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + household.resident_type + '</td></tr>';
+            $('#userProfile').html(profile);
+
+            if(profileJson.Image.length == 0) {
+                var cellImgDef = ut.getJdenticon(Common.getCellUrl());
+                $("#monitoring .profileImg").attr("src", cellImgDef);
+            } else {
+                $("#monitoring .profileImg").attr("src", profileJson.Image);
+            }
+
+            $('#monitoring .nickname').html(profileJson.DisplayName);
 
         })
         .fail(function() {
