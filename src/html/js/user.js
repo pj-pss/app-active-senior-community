@@ -433,7 +433,9 @@ function closeHelpConfirm(f) {
             })
             .done(function() {
                 helpAuthorized = false;
-				qrJson = null;
+                qrJson = null;
+                getArticleList();
+                getUserProfile();
                 $('#editPrflBtn button').prop('disabled', false);
 
                 $(".endHelpOp").addClass('hidden');
@@ -481,16 +483,17 @@ function openInforDisclosureHistoryPer(type) {
     $('#modal-inforDisclosureHistoryPer').actionHistoryShowModal();
 }
 
-function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
+function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
     var arg = reply + ",'" + articleId + "'";
     if(userReplyId && orgReplyId) {
         arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
     }
+    arg += "," + sameReply;
 
     $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
 
 	var title;
-	if(reply === 1){
+	if(reply === REPLY.JOIN){
 		title = "msg.join";
 	}else{
 		title = "msg.consider";
@@ -995,12 +998,13 @@ function getCurrentCellToken(callback, id) {
 
 /**
  * Send the reply to user cell and organization cell.
- * @param {int} reply REPLY.JOIN or REPLY.CONSIDER
+ * @param {int} reply :REPLY.JOIN or REPLY.CONSIDER
  * @param {string} articleId
- * @param {string} userReplyId if id is exist, this func's role is the update
+ * @param {string} userReplyId :if id is exist, this func's role is the update
  * @param {string} orgReplyId
+ * @param {bool} sameReply :same entry flag already sanded
  */
-function replyEvent(reply, articleId, userReplyId, orgReplyId) {
+function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
     var oData = 'reply';
     var entityType = 'reply_history';
 
@@ -1129,13 +1133,17 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
                 var join = $('#joinNum').html();
                 var consider = $('#considerNum').html();
                 if (reply == REPLY.JOIN) {
-                    join++;
-                    if (userReplyId) {
+                    if (!userReplyId) {
+                        join++;
+                    } else if (!sameReply) {
+                        join++;
                         consider--;
                     }
                 } else {
-                    consider++;
-                    if (userReplyId) {
+                    if (!userReplyId) {
+                        consider++;
+                    } else if (!sameReply) {
+                        consider++;
                         join--;
                     }
                 }
@@ -1158,13 +1166,13 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId){
     var argConsider = '';
     switch (reply) {
         case REPLY.JOIN:
-            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
-            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
+            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
+            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
             break;
 
         case REPLY.CONSIDER:
-            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
-            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
+            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
+            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
             break;
 
         default:
