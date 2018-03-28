@@ -343,7 +343,16 @@ function showInfoPreview() {
 
     var term = '';
     if(article.type == TYPE.EVENT && article.startDate && article.endDate) {
-      term = article.startDate + ' ' + article.startTime + ' ~ ' + (article.endDate == article.startDate ? '' : article.endDate) + ' ' + article.endTime;
+      var startTime = new Date(article.startDate.split(' (')[0] + " " + article.startTime + ":00");
+      var endTime = new Date(article.endDate.split(' (')[0] + " " + article.endTime + ":00");
+      var startDisplayDate = moment(startTime).format("YYYY/MM/DD");
+      var endDisplayDate = moment(endTime).format("YYYY/MM/DD");
+      var startDisplayDayOfTheWeek = i18next.t("dayOfTheWeek." + moment(startTime).format("ddd"));
+      var endDisplayDayOfTheWeek = i18next.t("dayOfTheWeek." + moment(endTime).format("ddd"));
+      var startDisplayTime = moment(startTime).format("HH:mm");
+      var endDisplayTime = moment(endTime).format("HH:mm");
+
+      term = startDisplayDate + " (" + startDisplayDayOfTheWeek + ") " + startDisplayTime + ' ~ ' + (endDisplayDate == startDisplayDate ? '' : endDisplayDate + " (" + endDisplayDayOfTheWeek + ")") + ' ' + endDisplayTime;
     }
 
     link = $('<a></a>').attr('href', article.url);
@@ -522,6 +531,13 @@ function saveArticle(editId) {
 
     var err = [];
 
+	var startDate = "";
+	var endDate = "";
+    if(parseInt(article.type, 10) === TYPE.EVENT) {
+		startDate = String(new Date(article.startDate.split(' (')[0] + " " + article.startTime + ":00").getTime());
+		endDate = String(new Date(article.endDate.split(' (')[0] + " " + article.endTime + ":00").getTime());
+	}
+
     // save text
     var saveText = function(){
       var method = 'POST';
@@ -540,10 +556,8 @@ function saveArticle(editId) {
         data : JSON.stringify({
           'type' : article.type,
           'title' : article.title,
-          'start_date' : article.startDate,
-          'start_time' : article.startTime,
-          'end_date' : article.endDate,
-          'end_time' : article.endTime,
+          'start_date' : startDate,
+          'end_date' : endDate,
           'url' : article.url,
           'venue' : article.venue,
           'detail' : article.text,
@@ -747,10 +761,13 @@ function getArticleDetail(id) {
       var article = text[0].d.results;
       $('#modal-infoEditor input[name="articleType"]').val([article.type]);
       $('#editorTitle').val(article.title);
-      $('#infoStartDate').val(article.start_date);
-      $('#infoStartTime').val(article.start_time);
-      $('#infoEndDate').val(article.end_date);
-      $('#infoEndTime').val(article.end_time);
+
+      var startDate = new Date(Math.floor(article.start_date));
+      var endDate = new Date(Math.floor(article.end_date));
+      $('#infoStartDate').val(moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")");
+      $('#infoStartTime').val(moment(startDate).format("HH:mm"));
+      $('#infoEndDate').val(moment(endDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(endDate).format("ddd")) + ")");
+      $('#infoEndTime').val(moment(endDate).format("HH:mm"));
       $('#editorUrl').val(article.url);
       $('#editorVenue').val(article.venue);
       $('#editor').val(article.detail);
