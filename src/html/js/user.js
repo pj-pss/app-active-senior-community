@@ -1418,6 +1418,9 @@ function getUserProfile() {
             let location = evacuation.not_at_home ? i18next.t('locationState.outdoor') : i18next.t('locationState.indoor');
             $('#monitoring .nowLocation').html(location);
 
+            $('#modal-helpConfirm .userName').html(basicInfo.name);
+            $('#modal-startHelpOp .userName').html(basicInfo.name);
+
         })
         .fail(function() {
             alert('error: get user profile');
