@@ -1296,7 +1296,7 @@ function getUserProfile() {
             var basicInfo = res1[0].d.results[0];
             var healthInfo = res2[0].d.results[0];
             var household = res4[0].d.results[0];
-            var image = res5[0].Image;
+            var profileJson = res5[0];
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
@@ -1382,12 +1382,14 @@ function getUserProfile() {
                 '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + household.resident_type + '</td></tr>';
             $('#userProfile').html(profile);
 
-            if(image.length == 0) {
+            if(profileJson.Image.length == 0) {
                 var cellImgDef = ut.getJdenticon(Common.getCellUrl());
                 $("#monitoring .profileImg").attr("src", cellImgDef);
             } else {
-                $("#monitoring .profileImg").attr("src", image);
+                $("#monitoring .profileImg").attr("src", profileJson.Image);
             }
+
+            $('#monitoring .nickname').html(profileJson.DisplayName);
 
         })
         .fail(function() {
