@@ -1287,9 +1287,17 @@ function getUserProfile() {
                 headers: {
                     "Accept": "application/json"
                 }
+            }),
+            $.ajax({
+                type: "GET",
+                url: boxUrl + 'user_info/user_evacuation',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
             })
         )
-        .done(function(res1, res2, res3, res4, res5){
+        .done(function(res1, res2, res3, res4, res5, res6){
             vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
             vitalList.reverse();
 
@@ -1297,6 +1305,7 @@ function getUserProfile() {
             var healthInfo = res2[0].d.results[0];
             var household = res4[0].d.results[0];
             var profileJson = res5[0];
+            var evacuation = res6[0].d.results[0];
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
@@ -1390,6 +1399,9 @@ function getUserProfile() {
             }
 
             $('#monitoring .nickname').html(profileJson.DisplayName);
+
+            let location = evacuation.not_at_home ? i18next.t('locationState.outdoor') : i18next.t('locationState.indoor');
+            $('#monitoring .nowLocation').html(location);
 
         })
         .fail(function() {
