@@ -1384,9 +1384,9 @@ function getUserProfile() {
 
             if(image.length == 0) {
                 var cellImgDef = ut.getJdenticon(Common.getCellUrl());
-                $("#profileImg").attr("src", cellImgDef);
+                $("#monitoring .profileImg").attr("src", cellImgDef);
             } else {
-                $("#profileImg").attr("src", image);
+                $("#monitoring .profileImg").attr("src", image);
             }
 
         })
