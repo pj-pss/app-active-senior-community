@@ -1315,78 +1315,79 @@ function getUserProfile() {
                 maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
                 pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
             }
-        var sex;
-        switch(basicInfo.sex) {
-            case 'male': sex = i18next.t('sex.male'); break;
-            case 'female': sex = i18next.t('sex.female'); break;
-            default: sex = i18next.t('sex.other');
-        }
 
-        var basicInfoHtml = '';
-        if(basicInfo) {
-            basicInfoHtml = '<dt>' +
-                '<dt>' + i18next.t('basicInfo.name') + ':</dt>' +
-                '<dd>' + basicInfo.name + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.howToRead') + ':</dt>' +
-                '<dd>' + basicInfo.name_kana + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.sex') + ':</dt>' +
-                '<dd>' + sex + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.birthday') + ' (' + i18next.t('basicInfo.age') + '):</dt>' +
-                '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</dd>' +
-                '<dt>' + i18next.t('basicInfo.postalCode') + ':</dt>' +
-                '<dd>' + basicInfo.postal_code + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.address') + ':</dt>' +
-                '<dd>' + basicInfo.address + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
-                '<dd>' + basicInfo.comment + '</dd>' +
-                '</dt>';
-        }
-        $('#basicInfo').html(basicInfoHtml);
+            var sex;
+            switch(basicInfo.sex) {
+                case 'male': sex = i18next.t('sex.male'); break;
+                case 'female': sex = i18next.t('sex.female'); break;
+                default: sex = i18next.t('sex.other');
+            }
 
-        var healthInfoHtml = '';
-        if(healthInfo) {
-            healthInfoHtml = '<dt>' +
-                '<dt>' + i18next.t('health.height') + ':</dt>' +
-                '<dd>' + healthInfo.height + ' cm</dd>' +
-                '<dt>' + i18next.t('health.weight') + ':</dt>' +
-                '<dd>' + healthInfo.weight + ' kg</dd>' +
-                '<dt>BMI:</dt>' +
-                '<dd>' + healthInfo.bmi + '</dd>' +
-                '<dt>' + i18next.t('health.girthAbdomen') + ':</dt>' +
-                '<dd>' + healthInfo.grith_abdomen + ' cm</dd>' +
-                '</dt>';
-        }
-        $('#healthInfo').html(healthInfoHtml);
+            var basicInfoHtml = '';
+            if(basicInfo) {
+                basicInfoHtml = '<dt>' +
+                    '<dt>' + i18next.t('basicInfo.name') + ':</dt>' +
+                    '<dd>' + basicInfo.name + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.howToRead') + ':</dt>' +
+                    '<dd>' + basicInfo.name_kana + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.sex') + ':</dt>' +
+                    '<dd>' + sex + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.birthday') + ' (' + i18next.t('basicInfo.age') + '):</dt>' +
+                    '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</dd>' +
+                    '<dt>' + i18next.t('basicInfo.postalCode') + ':</dt>' +
+                    '<dd>' + basicInfo.postal_code + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.address') + ':</dt>' +
+                    '<dd>' + basicInfo.address + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
+                    '<dd>' + basicInfo.comment + '</dd>' +
+                    '</dt>';
+            }
+            $('#basicInfo').html(basicInfoHtml);
 
-        var vitalHtml = '';
-        if(vital) {
-            vitalHtml = '<dt>' +
-                '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
-                '<dd>' + vital.temperature + ' &deg;C (' + (tempDiff || '-') + ')' + '</dd>' +
-                '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
-                '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
-                '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
-                '<dt>' + i18next.t('vital.pulse') + ':</dt>' +
-                '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>' +
-                '</dt>';
-        }
-        $('#vital').html(vitalHtml);
+            var healthInfoHtml = '';
+            if(healthInfo) {
+                healthInfoHtml = '<dt>' +
+                    '<dt>' + i18next.t('health.height') + ':</dt>' +
+                    '<dd>' + healthInfo.height + ' cm</dd>' +
+                    '<dt>' + i18next.t('health.weight') + ':</dt>' +
+                    '<dd>' + healthInfo.weight + ' kg</dd>' +
+                    '<dt>BMI:</dt>' +
+                    '<dd>' + healthInfo.bmi + '</dd>' +
+                    '<dt>' + i18next.t('health.girthAbdomen') + ':</dt>' +
+                    '<dd>' + healthInfo.grith_abdomen + ' cm</dd>' +
+                    '</dt>';
+            }
+            $('#healthInfo').html(healthInfoHtml);
 
-        var profile =
-            '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
-            '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</td></tr>' +
-            '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
-            // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
-            '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
-            '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + household.resident_type + '</td></tr>';
-        $('#userProfile').html(profile);
+            var vitalHtml = '';
+            if(vital) {
+                vitalHtml = '<dt>' +
+                    '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
+                    '<dd>' + vital.temperature + ' &deg;C (' + (tempDiff || '-') + ')' + '</dd>' +
+                    '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
+                    '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
+                    '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
+                    '<dt>' + i18next.t('vital.pulse') + ':</dt>' +
+                    '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>' +
+                    '</dt>';
+            }
+            $('#vital').html(vitalHtml);
 
-        if(image.length == 0) {
-            var cellImgDef = ut.getJdenticon(Common.getCellUrl());
-            $("#profileImg").attr("src", cellImgDef);
-        } else {
-            $("#profileImg").attr("src", image);
-        }
+            var profile =
+                '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
+                // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + household.resident_type + '</td></tr>';
+            $('#userProfile').html(profile);
+
+            if(image.length == 0) {
+                var cellImgDef = ut.getJdenticon(Common.getCellUrl());
+                $("#profileImg").attr("src", cellImgDef);
+            } else {
+                $("#profileImg").attr("src", image);
+            }
 
         })
         .fail(function() {
