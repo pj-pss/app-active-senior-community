@@ -196,7 +196,7 @@ function openNfcReader() {
     initScanner(options);
     initCamera(cameraId);
     scanStart(function (content){
-        authorizedNfcReader(content);
+        authorizedNfcReader(decryptQR(content));
     });
 
     $('#modal-nfcReader').actionHistoryShowModal();
@@ -1409,4 +1409,29 @@ function getUserProfile() {
         });
     });
 
+}
+
+/**
+ * decrypt read from QRcode to ID,pass,cellUrl
+ * @param {String} content :encrypted information
+ */
+function decryptQR(content) {
+    var array_rawData = content.split(',');
+
+    var salt = CryptoJS.enc.Hex.parse(array_rawData[0]);  // passwordSalt
+    var iv = CryptoJS.enc.Hex.parse(array_rawData[1]);    // initialization vector
+    var encrypted_data = CryptoJS.enc.Base64.parse(array_rawData[2]);
+
+    // password (define key)
+    var secret_passphrase = CryptoJS.enc.Utf8.parse(Common.getBoxName());
+    var key128Bits500Iterations =
+        CryptoJS.PBKDF2(secret_passphrase, salt, { keySize: 128 / 8, iterations: 500 });
+
+    // decrypt option (same of encrypt)
+    var options = { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 };
+
+    // decrypt
+    var decrypted = CryptoJS.AES.decrypt({ "ciphertext": encrypted_data }, key128Bits500Iterations, options);
+    // convert to UTF8
+    return decrypted.toString(CryptoJS.enc.Utf8);
 }
