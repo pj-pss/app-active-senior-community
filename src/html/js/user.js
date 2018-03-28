@@ -1246,6 +1246,7 @@ function addLinkToGrid() {
 function getUserProfile() {
     getCurrentCellToken(function(token){
         let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
         $.when(
             $.ajax({
                 type: 'GET',
@@ -1278,15 +1279,24 @@ function getUserProfile() {
                     "Authorization": "Bearer " + token,
                     "Accept": "application/json"
                 }
+            }),
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: cellUrl + '__/profile.json',
+                headers: {
+                    "Accept": "application/json"
+                }
             })
         )
-        .done(function(res1, res2, res3, res4){
+        .done(function(res1, res2, res3, res4, res5){
             vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
             vitalList.reverse();
 
             var basicInfo = res1[0].d.results[0];
             var healthInfo = res2[0].d.results[0];
             var household = res4[0].d.results[0];
+            var image = res5[0].Image;
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
@@ -1370,6 +1380,13 @@ function getUserProfile() {
             '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
             '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + household.resident_type + '</td></tr>';
         $('#userProfile').html(profile);
+
+        if(image.length == 0) {
+            var cellImgDef = ut.getJdenticon(Common.getCellUrl());
+            $("#profileImg").attr("src", cellImgDef);
+        } else {
+            $("#profileImg").attr("src", image);
+        }
 
         })
         .fail(function() {
