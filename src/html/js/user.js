@@ -185,9 +185,9 @@ function readURL(input) {
 var helpAuthorized = false;
 var scanner;
 
-function openNfcReader() {
+function openQrReader() {
 	helpAuthorized = false;
-    $('#modal-nfcReader').localize();
+    $('#modal-qrReader').localize();
 
     var videoComponent = $("#camera-preview");
     var options = {};
@@ -196,15 +196,15 @@ function openNfcReader() {
     initScanner(options);
     initCamera(cameraId);
     scanStart(function (content){
-        authorizedNfcReader(decryptQR(content));
+        authorizedQrReader(decryptQR(content));
     });
 
-    $('#modal-nfcReader').actionHistoryShowModal();
-	$('#modal-nfcReader').on('hidden.bs.modal', function () {
+    $('#modal-qrReader').actionHistoryShowModal();
+	$('#modal-qrReader').on('hidden.bs.modal', function () {
 	    try{
 			scanner.stop();
 		}catch(e){}
-		$('#modal-nfcReader').off('hidden.bs.modal');
+		$('#modal-qrReader').off('hidden.bs.modal');
 	});
 }
 
@@ -290,7 +290,7 @@ function openClubHistory() {
 
 var qrJson;
 
-function authorizedNfcReader(qrJsonStr) {
+function authorizedQrReader(qrJsonStr) {
     try {
         qrJson = JSON.parse(qrJsonStr);
     } catch(e) {
@@ -414,7 +414,7 @@ function authorizedNfcReader(qrJsonStr) {
 
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
-    $('#modal-nfcReader').modal('hide');
+    $('#modal-qrReader').modal('hide');
     $('#top').actionHistoryShowView();;
 }
 
@@ -542,7 +542,7 @@ $(function() {
     $("#opHistory").load("opHistory.html");
     $("#articleDetail").load("articleDetail.html");
     $("#entryList").load("entryList.html");
-    $("#modal-nfcReader").load("modal-nfcReader.html");
+    $("#modal-qrReader").load("modal-qrReader.html");
     $("#modal-helpConfirm").load("modal-helpConfirm.html");
 
     $("#modal-startHelpOp").load("modal-startHelpOp.html");
