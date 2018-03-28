@@ -13,7 +13,7 @@
         "join" : "参加します",
         "consider" : "検討中",
         "comment" : "コメント",
-        "scanQR" : "支援する入居者のQRコードを読み込ませてください",
+        "scanQR" : "支援する入居者のQRコードをかざしてください",
         "startOpHelp" : " さん の操作支援を開始します",
         "duringOpHelp" : "支援者：$t(user.002)が操作しています",
         "endOpHelp" : " さん の操作支援を終了しますか?",
