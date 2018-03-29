@@ -68,7 +68,7 @@ function openComment(id){
 	    	}),
 			$.ajax({
 		        type: "GET",
-		        url : Common.getToCellBoxUrl() + collection2 + '/' + entity2 + '?\$select=user_cell_url,entry_flag,anonymous&\$filter=provide_id eq \'' + id + '\'&\$orderby=__updated desc',
+		        url : Common.getToCellBoxUrl() + collection2 + '/' + entity2 + '?\$select=user_cell_url,entry_flag,anonymous&\$filter=provide_id eq \'' + id + '\'&\$orderby=__updated desc&\$top=1000',
 		        headers: {
 		            "Authorization": "Bearer " + token,
 		            "Accept" : "application/json"
@@ -654,7 +654,7 @@ function getArticleList() {
 	var displayData = [
 	    $.ajax({
 	        type: "GET",
-	        url : Common.getToCellBoxUrl() + collection1 + '/' + entity1 + '?\$orderby=__updated desc',
+	        url : Common.getToCellBoxUrl() + collection1 + '/' + entity1 + '?\$orderby=__updated desc&\$top=50',
 	        headers: {
 	            "Authorization": "Bearer " + token,
 	            "Accept" : "application/json"
@@ -662,7 +662,7 @@ function getArticleList() {
     	}),
 		$.ajax({
 	        type: "GET",
-	        url : Common.getToCellBoxUrl() + collection2 + '/' + entity2,
+	        url : Common.getToCellBoxUrl() + collection2 + '/' + entity2 + '?\$top=10000',
 	        headers: {
 	            "Authorization": "Bearer " + token,
 	            "Accept" : "application/json"
