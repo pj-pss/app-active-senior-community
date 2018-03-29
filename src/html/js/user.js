@@ -577,7 +577,7 @@ function getArticleList() {
                 "Accept" : "application/json"
             },
             data: {
-                '\$top': GET_NUM
+                '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
 			setArticle(data.d.results, token);
@@ -636,7 +636,7 @@ function getJoinInfoList(token) {
             "Accept": "application/json"
         },
         data: {
-            '\$top': GET_NUM
+            '\$top': REPLY_COUNT
         }
     })
     .done(function(res) {
@@ -685,7 +685,7 @@ function viewJoinConsiderList(entryFlag,articleId){
 	            "Accept": "application/json"
             },
             data: {
-                '\$top': GET_NUM
+                '\$top': REPLY_LIST_NUM
             }
 	    })
 	    .done(function(res) {
@@ -807,7 +807,7 @@ function getArticleDetail(id) {
                 },
                 data: {
                     "\$filter": "provide_id eq '" + id + "'",
-                    '\$top': GET_NUM
+                    '\$top': REPLY_LIST_NUM
                 },
                 success: function (res) {
                     return res;
@@ -896,7 +896,7 @@ function getArticleDetail(id) {
                             },
                             data: {
                                 "\$filter": "provide_id eq '" + article.__id + "'",
-                                '\$top': GET_NUM
+                                '\$top': REPLY_LIST_NUM
                             }
                         }),
                         $.ajax({
@@ -907,8 +907,7 @@ function getArticleDetail(id) {
                                 "Accept": "application/json"
                             },
                             data: {
-                                "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'",
-                                '\$top': GET_NUM
+                                "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'"
                             }
                         })
                     )
