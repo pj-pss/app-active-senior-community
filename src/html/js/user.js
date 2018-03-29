@@ -20,6 +20,7 @@ var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
 var operationCellUrl = '';
+var userInfo = {};
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -34,9 +35,8 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        getArticleList('topEvent');
+        $.when(getUserProfile()).done(getArticleList());
 		actionHistory.logWrite('top');
-        getUserProfile();
     });
 };
 
@@ -556,19 +556,28 @@ $(function() {
 
 });
 
-function getArticleList(divId) {
+function getArticleList() {
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
 
         var now = String(new Date().getTime());
 
+        var filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
+        if (userInfo.sex == SEX.ALL) {
+            filter += 'true';
+        } else {
+            filter += '(target_sex eq ' + SEX.ALL + ' or target_sex eq ' + userInfo.sex + ')';
+        }
         $.ajax({
             type: "GET",
-            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + '&\$orderby=__updated desc',
+            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=(end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + ') and ' + filter + '&\$orderby=__updated desc',
             headers: {
                 "Authorization": "Bearer " + token,
                 "Accept" : "application/json"
+            },
+            data: {
+                '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
 			setArticle(data.d.results, token);
@@ -577,7 +586,7 @@ function getArticleList(divId) {
         .fail(function() {
             alert('failed to get article list');
         });
-    }, divId);
+    });
 }
 
 function getArticleListImage(id, token) {
@@ -625,6 +634,9 @@ function getJoinInfoList(token) {
         headers: {
             "Authorization": "Bearer " + token,
             "Accept": "application/json"
+        },
+        data: {
+            '\$top': REPLY_COUNT
         }
     })
     .done(function(res) {
@@ -671,7 +683,10 @@ function viewJoinConsiderList(entryFlag,articleId){
 	        headers: {
 	            "Authorization": "Bearer " + token,
 	            "Accept": "application/json"
-	        }
+            },
+            data: {
+                '\$top': REPLY_LIST_NUM
+            }
 	    })
 	    .done(function(res) {
 			var list = [];
@@ -791,7 +806,8 @@ function getArticleDetail(id) {
                     'Accept': 'application/json'
                 },
                 data: {
-                    "\$filter": "provide_id eq '" + id + "'"
+                    "\$filter": "provide_id eq '" + id + "'",
+                    '\$top': REPLY_LIST_NUM
                 },
                 success: function (res) {
                     return res;
@@ -879,7 +895,8 @@ function getArticleDetail(id) {
                                 "Accept": "application/json"
                             },
                             data: {
-                                "\$filter": "provide_id eq '" + article.__id + "'"
+                                "\$filter": "provide_id eq '" + article.__id + "'",
+                                '\$top': REPLY_LIST_NUM
                             }
                         }),
                         $.ajax({
@@ -1342,9 +1359,19 @@ function getUserProfile() {
 
             var sex;
             switch(basicInfo.sex) {
-                case 'male': sex = i18next.t('sex.male'); break;
-                case 'female': sex = i18next.t('sex.female'); break;
-                default: sex = i18next.t('sex.other');
+                case 'male':
+                sex = i18next.t('sex.male');
+                userInfo.sex = SEX.MALE;
+                break;
+
+                case 'female':
+                sex = i18next.t('sex.female');
+                userInfo.sex = SEX.FEMALE;
+                break;
+
+                default:
+                sex = i18next.t('sex.other');
+                userInfo.sex = SEX.ALL;
             }
 
             var basicInfoHtml = '';
@@ -1397,9 +1424,19 @@ function getUserProfile() {
             }
             $('#vital').html(vitalHtml);
 
+            var age = currentTime.diff(moment(basicInfo.birthday), 'years');
+            if (age < 60) {
+                userInfo.age = AGE.UNDER_FIFTY;
+            } else if (age < 70) {
+                userInfo.age = AGE.SIXTY;
+            } else if (age < 80) {
+                userInfo.age = AGE.SEVENTY;
+            } else {
+                userInfo.age = AGE.OVER_EIGHTY;
+            }
             var profile =
                 '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
-                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + age + ')</td></tr>' +
                 '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
                 // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
                 '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
