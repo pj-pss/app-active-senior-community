@@ -761,13 +761,19 @@ function getArticleDetail(id) {
       var article = text[0].d.results;
       $('#modal-infoEditor input[name="articleType"]').val([article.type]);
       $('#editorTitle').val(article.title);
-
-      var startDate = new Date(Math.floor(article.start_date));
-      var endDate = new Date(Math.floor(article.end_date));
-      $('#infoStartDate').val(moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")");
-      $('#infoStartTime').val(moment(startDate).format("HH:mm"));
-      $('#infoEndDate').val(moment(endDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(endDate).format("ddd")) + ")");
-      $('#infoEndTime').val(moment(endDate).format("HH:mm"));
+      if(article.start_date === "" && article.end_date === ""){
+            $('#infoStartDate').val("");
+            $('#infoStartTime').val("");
+            $('#infoEndDate').val("");
+            $('#infoEndTime').val("");
+      }else{
+            var startDate = new Date(Math.floor(article.start_date));
+            var endDate = new Date(Math.floor(article.end_date));
+            $('#infoStartDate').val(moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")");
+            $('#infoStartTime').val(moment(startDate).format("HH:mm"));
+            $('#infoEndDate').val(moment(endDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(endDate).format("ddd")) + ")");
+            $('#infoEndTime').val(moment(endDate).format("HH:mm"));
+      }
       $('#editorUrl').val(article.url);
       $('#editorVenue').val(article.venue);
       $('#editor').val(article.detail);
