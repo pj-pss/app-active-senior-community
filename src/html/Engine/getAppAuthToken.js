@@ -1,7 +1,7 @@
 // Login
 function(request){
     var rootUrl = "https://demo.personium.io";
-    var appCellName = "app-fst-community-user";
+    var appCellName = "app-life-enrichers-community";
     var appCellUrl = [ rootUrl, appCellName ].join("/");
 
     var refererUrl = request["headers"]["referer"];
