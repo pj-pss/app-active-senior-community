@@ -34,7 +34,7 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        getArticleList('topEvent');
+        getArticleList();
 		actionHistory.logWrite('top');
         getUserProfile();
     });
@@ -556,7 +556,7 @@ $(function() {
 
 });
 
-function getArticleList(divId) {
+function getArticleList() {
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
@@ -569,6 +569,9 @@ function getArticleList(divId) {
             headers: {
                 "Authorization": "Bearer " + token,
                 "Accept" : "application/json"
+            },
+            data: {
+                '\$top': GET_NUM
             }
         }).done(function(data) {
 			setArticle(data.d.results, token);
@@ -577,7 +580,7 @@ function getArticleList(divId) {
         .fail(function() {
             alert('failed to get article list');
         });
-    }, divId);
+    });
 }
 
 function getArticleListImage(id, token) {
@@ -625,6 +628,9 @@ function getJoinInfoList(token) {
         headers: {
             "Authorization": "Bearer " + token,
             "Accept": "application/json"
+        },
+        data: {
+            '\$top': GET_NUM
         }
     })
     .done(function(res) {
@@ -671,7 +677,10 @@ function viewJoinConsiderList(entryFlag,articleId){
 	        headers: {
 	            "Authorization": "Bearer " + token,
 	            "Accept": "application/json"
-	        }
+            },
+            data: {
+                '\$top': GET_NUM
+            }
 	    })
 	    .done(function(res) {
 			var list = [];
@@ -791,7 +800,8 @@ function getArticleDetail(id) {
                     'Accept': 'application/json'
                 },
                 data: {
-                    "\$filter": "provide_id eq '" + id + "'"
+                    "\$filter": "provide_id eq '" + id + "'",
+                    '\$top': GET_NUM
                 },
                 success: function (res) {
                     return res;
@@ -879,7 +889,8 @@ function getArticleDetail(id) {
                                 "Accept": "application/json"
                             },
                             data: {
-                                "\$filter": "provide_id eq '" + article.__id + "'"
+                                "\$filter": "provide_id eq '" + article.__id + "'",
+                                '\$top': GET_NUM
                             }
                         }),
                         $.ajax({
@@ -890,7 +901,8 @@ function getArticleDetail(id) {
                                 "Accept": "application/json"
                             },
                             data: {
-                                "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'"
+                                "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'",
+                                '\$top': GET_NUM
                             }
                         })
                     )

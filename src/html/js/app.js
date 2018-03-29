@@ -30,6 +30,8 @@ Object.freeze(REPLY);
 const MIN_PASS_LENGTH = 8;
 const MAX_PASS_LENGTH = 32;
 
+const GET_NUM = 10000;
+
 const APP_URL = "https://demo.personium.io/app-life-enrichers-community/";
 const APP_BOX_NAME = 'io_personium_demo_app-life-enrichers-community';
 const ORGANIZATION_CELL_URL = 'https://demo.personium.io/fst-community-organization/';
