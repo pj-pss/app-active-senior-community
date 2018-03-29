@@ -1437,7 +1437,7 @@ function getUserProfile() {
             }
             var profile =
                 '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
-                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + userInfo.age + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + age + ')</td></tr>' +
                 '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
                 // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
                 '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
