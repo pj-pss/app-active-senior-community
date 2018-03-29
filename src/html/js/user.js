@@ -20,6 +20,7 @@ var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
 var operationCellUrl = '';
+var userInfo = {};
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -34,9 +35,8 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        getArticleList();
+        $.when(getUserProfile()).done(getArticleList());
 		actionHistory.logWrite('top');
-        getUserProfile();
     });
 };
 
@@ -563,9 +563,15 @@ function getArticleList() {
 
         var now = String(new Date().getTime());
 
+        var filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
+        if (userInfo.sex == SEX.ALL) {
+            filter += 'true';
+        } else {
+            filter += '(target_sex eq ' + SEX.ALL + ' or target_sex eq ' + userInfo.sex + ')';
+        }
         $.ajax({
             type: "GET",
-            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + '&\$orderby=__updated desc',
+            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=(end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + ') and ' + filter + '&\$orderby=__updated desc',
             headers: {
                 "Authorization": "Bearer " + token,
                 "Accept" : "application/json"
@@ -1354,9 +1360,19 @@ function getUserProfile() {
 
             var sex;
             switch(basicInfo.sex) {
-                case 'male': sex = i18next.t('sex.male'); break;
-                case 'female': sex = i18next.t('sex.female'); break;
-                default: sex = i18next.t('sex.other');
+                case 'male':
+                sex = i18next.t('sex.male');
+                userInfo.sex = SEX.MALE;
+                break;
+
+                case 'female':
+                sex = i18next.t('sex.female');
+                userInfo.sex = SEX.FEMALE;
+                break;
+
+                default:
+                sex = i18next.t('sex.other');
+                userInfo.sex = SEX.ALL;
             }
 
             var basicInfoHtml = '';
@@ -1409,9 +1425,19 @@ function getUserProfile() {
             }
             $('#vital').html(vitalHtml);
 
+            var age = currentTime.diff(moment(basicInfo.birthday), 'years');
+            if (age < 60) {
+                userInfo.age = AGE.UNDER_FIFTY;
+            } else if (age < 70) {
+                userInfo.age = AGE.SIXTY;
+            } else if (age < 80) {
+                userInfo.age = AGE.SEVENTY;
+            } else {
+                userInfo.age = AGE.OVER_EIGHTY;
+            }
             var profile =
                 '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
-                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + userInfo.age + ')</td></tr>' +
                 '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
                 // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
                 '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
