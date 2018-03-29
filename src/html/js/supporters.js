@@ -212,8 +212,7 @@ function initInfoEdit(){
       language: 'ja',
       format: "yyyy/mm/dd (D)",
       autoclose: true,
-      todayHighlight: true,
-      startDate: Date()
+      todayHighlight: true
   });
 
   // click radio button
@@ -769,11 +768,12 @@ function getArticleDetail(id) {
       }else{
             var startDate = new Date(Math.floor(article.start_date));
             var endDate = new Date(Math.floor(article.end_date));
-            $('#infoStartDate').val(moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")");
+            $('#infoStartDate').datepicker("setDate", moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")");
             $('#infoStartTime').val(moment(startDate).format("HH:mm"));
-            $('#infoEndDate').val(moment(endDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(endDate).format("ddd")) + ")");
+            $('#infoEndDate').datepicker("setDate", moment(endDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(endDate).format("ddd")) + ")");
             $('#infoEndTime').val(moment(endDate).format("HH:mm"));
       }
+
       $('#editorUrl').val(article.url);
       $('#editorVenue').val(article.venue);
       $('#editor').val(article.detail);
