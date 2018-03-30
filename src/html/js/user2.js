@@ -69,8 +69,11 @@ function getArticleList() {
                 '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
-            setArticle(data.d.results, token);
-            getJoinInfoList(token);
+            $.when(setArticle(data.d.results, token))
+            .done(
+                $.when(getJoinInfoList(token))
+                .done(getPersonalJoinInfo())
+            );
         })
         .fail(function() {
             alert('failed to get article list');
@@ -162,6 +165,39 @@ function getJoinInfoList(token) {
     })
     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
         alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+    });
+}
+
+function getPersonalJoinInfo() {
+    getCurrentCellToken(function (token) {
+        // get reply list
+        var oData = 'reply';
+        var entityType = 'reply_history';
+
+        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        $.ajax({
+            type: "GET",
+            url: boxUrl + oData + '/' + entityType,
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json"
+            },
+            data: {
+                '\$top': REPLY_LIST_NUM
+            }
+        })
+        .done(function (res) {
+            // set num
+            var count = {};
+            for (let val of res.d.results) {
+                if ($('#join_' + val.provide_id)[0]) {
+                    $('#join_' + val.provide_id).parent().parent().parent().addClass('entry' + val.entry_flag);
+                }
+            }
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+        });
     });
 }
 
@@ -366,6 +402,15 @@ function setFilter(key) {
         $(".display" + String(TYPE.EVENT)).hide();
     } else {
         $(".display" + String(TYPE.INFO)).hide();
+    }
+}
+
+function setPersonalFilter(key) {
+    $("#topInfoList>ul>li").hide();
+    if (key === REPLY.JOIN) {
+        $(".entry" + String(REPLY.JOIN)).show();
+    } else {
+        $(".entry" + String(REPLY.CONSIDER)).show();
     }
 }
 
