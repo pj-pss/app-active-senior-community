@@ -152,9 +152,9 @@ function getJoinInfoList(token) {
             }
         }
         for (let key in count) {
-            var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i>: '+
+            var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i>'+
             count[key].join +
-            '<i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i>: ' +
+            ' <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i>' +
             count[key].consider;
             joinList[key] = joinHtml;
             $('#join_' + key).html(joinHtml);
@@ -329,6 +329,8 @@ function setArticle(articleList, token){
                         formatDate(article.start_date) +
                     '</div>' +
                     '<div class="evaluation" id="join_' + article.__id + '">' +
+                        '<i class="fa fa-star fa-2x icon"></i>0' +
+                        ' <i class="fas fa-calendar-check fa-2x icon"></i>0' +
                     '</div>' +
                 '</div>' +
                 '<div class="title-area">' +
@@ -342,15 +344,15 @@ function setArticle(articleList, token){
         first = false;
     }
 
-    $.each(imageList, function(key, value) {
-        $('#' + key).css('background-image', "url('" + value + "')");
-    });
+    // $.each(imageList, function(key, value) {
+    //     $('#' + key).css('background-image', "url('" + value + "')");
+    // });
 
-    $.each(joinList, function(key, value) {
-        if ($('#join_' + key)[0]){
-            $('#join_' + key).html(value);
-        }
-    });
+    // $.each(joinList, function(key, value) {
+    //     if ($('#join_' + key)[0]){
+    //         $('#join_' + key).html(value);
+    //     }
+    // });
 
     // addLinkToGrid();
 }
