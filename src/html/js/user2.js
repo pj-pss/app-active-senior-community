@@ -316,9 +316,26 @@ function getCurrentCellToken(callback, id) {
 function setArticle(articleList, token){
 
     $('#topInfoList>ul').children().remove();
+    let first = true;
     for(let article of articleList){
+        if (first) {
+            let topContent =
+                '<div class="etc_area">' +
+                    '<div class="date">' +
+                        (article.start_date || '') +
+                    '</div>' +
+                    '<div class="evaluation" id="join_' + article.__id + '">' +
+                    '</div>' +
+                '</div>' +
+                '<div class="title-area">' +
+                    article.title +
+                '</div>';
+            $('.top-content').html(topContent);
+            first = false;
+        } else {
+            $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
+        }
         getArticleListImage(article.__id, token);
-        $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
     }
 
     $.each(imageList, function(key, value) {
