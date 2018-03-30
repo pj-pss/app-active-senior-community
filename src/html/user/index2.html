@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/personium.css">
+  <link rel="stylesheet" href="../css/hoosiers.css">
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+  <script src="../js/personium.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/3.1.4/cropper.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jdenticon@1.8.0"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/3.1.4/cropper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/purl/2.3.1/purl.js"></script>
+  <script src="../js/adapter.min.js"></script>
+  <script src="../js/instascan.js"></script>
+  <script src="../js/QrCodeScanner.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/common_personium.js"></script>
+  <script src="../js/Utils.js"></script>
+  <script src="../js/action_history.js"></script>
+  <script src="../js/jquery.binarytransport.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'>
+    <script src="../js/user2.js"></script>
+
+  <title>Personium</title>
+</head>
+
+<body>
+  <div id="drawer">
+    <div id="menu-background">
+      <div id="drawer_menu">
+        <ul>
+          <li class="menu-list">
+            <a href="#">プロフィール編集</a>
+          </li>
+          <li class="menu-list">
+            <a href="#">パスワード変更</a>
+          </li>
+          <li class="menu-list">
+            <a href="#">アカウント</a>
+          </li>
+          <li class="menu-list">
+            <a href="#">アプリ管理</a>
+          </li>
+          <li class="menu-list">
+            <a href="#">言語</a>
+          </li>
+          <li class="menu-list">
+            <a href="#">ログアウト</a>
+          </li>
+          <li class="menu-list">
+            <a href="#"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <header class="top">
+    <button id="drawer_btn">
+      <i class="fas fa-bars fa-2x icon"></i>
+      <div class="icon-text">メニュー</div>
+    </button>
+    <div class="header-title">
+      <div class="title">Hoosiers</div>
+      <div class="subtitle">地域のイベント情報コミュニティー</div>
+    </div>
+    <button id="sort_btn">
+      <i class="fas fa-sort-amount-down fa-2x icon"></i>
+      <div class="icon-text">並び替え</div>
+    </button>
+  </header>
+
+  <main>
+    <div class="top-content new">
+      <div class="etc_area">
+        <div class="date">
+          【みんなの掲示板】 2018/3/31
+        </div>
+        <div class="evaluation">
+          <i class="fa fa-star fa-2x icon"></i>20
+          <i class="fas fa-calendar-check fa-2x icon"></i>123
+        </div>
+      </div>
+      <div class="title-area">
+        共有フロアの清掃を実施します。みなさんお誘い合わせの上、奮ってご参加ください！
+      </div>
+    </div>
+    <div class="list" id="topInfoList">
+      <ul></ul>
+    </div>
+  </main>
+
+  <footer>
+    <button class="current">
+      <i class="fas fa-home fa-2x icon"></i>
+      <div class="icon-text">ホーム</div>
+    </button>
+    <button>
+      <i class="fa fa-star fa-2x icon"></i>
+      <div class="icon-text">検討中</div>
+    </button>
+    <button>
+      <i class="fas fa-calendar-check fa-2x icon"></i>
+      <div class="icon-text">参加予定</div>
+    </button>
+    <button>
+      <i class="fas fa-address-card fa-2x icon"></i>
+      <div class="icon-text">私の情報</div>
+    </button>
+  </footer>
+</body>
+
+</html>
