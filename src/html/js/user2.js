@@ -102,7 +102,7 @@ function getArticleListImage(id, token) {
             }
             window.btoa(binary);
             image =  "data:image/jpg;base64," + btoa(binary);
-            $('#' + id).css('background-image', "url('" + image + "')");
+            $('#img_' + id).attr('src', image);
             imageList[id] = image;
         }, this);
         reader.readAsArrayBuffer(res);
@@ -360,7 +360,7 @@ function createArticleGrid(id, title, date, type){
     var li =
         '<li data-href="javascript:getArticleDetail(\'' + id + '\')" class=\'display' + String(type) + '\'>' +
             '<div class="list-image new">' +
-                '<img src="../img/poster.png" class="list-thumbnail">' +
+                '<img class="list-thumbnail" id ="img_' + id + '">' +
             '</div>' +
             '<div class="list-text">' +
                 '<div class="title">' +
