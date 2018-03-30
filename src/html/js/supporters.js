@@ -172,6 +172,12 @@ function openInfoCreate(){
     $('#saveArticleButton').attr('onclick', "saveArticle()");
     $('#infoEditorTitle').html(i18next.t('modalTitle.createInfo'));
     $('#modal-infoEditor').localize();
+
+    $(".readOnly").remove();
+    $('#modal-infoEditor input[name="articleType"]').parent().show();
+    $("#modal-infoEditor #editorSex").show();
+    $("#modal-infoEditor #editorAge").show();
+
     $('#modal-infoEditor').modal('show');
   });
 }
@@ -810,6 +816,21 @@ function getArticleDetail(id) {
       }, this);
       reader.readAsArrayBuffer(image[0]);
       $('#clearImgButton')[0].style.display = '';
+
+      $(".readOnly").remove();
+
+      $('#modal-infoEditor input[name="articleType"]').parent().hide();
+      var articleType = $("input[name='articleType']:checked").parent().text();
+      $('#modal-infoEditor input[name="articleType"]').parent().parent().append("<div class='readOnly'>" + articleType + "</div>");
+
+      var editorSex = $("#modal-infoEditor #editorSex option:selected").text();
+      $("#modal-infoEditor #editorSex").hide();
+      $("#modal-infoEditor #editorSex").parent().append("<div class='readOnly' style='position: absolute;'>" + editorSex + "</div>");
+
+      var editorAge = $("#modal-infoEditor #editorAge option:selected").text();
+      $("#modal-infoEditor #editorAge").hide();
+      $("#modal-infoEditor #editorAge").parent().append("<div class='readOnly' style='position: absolute;'>" + editorAge + "</div>");
+
       $('#modal-infoEditor').modal('show');
     })
     .fail(function() {
