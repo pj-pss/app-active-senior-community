@@ -103,7 +103,7 @@ function getArticleListImage(id, token, topContent) {
             window.btoa(binary);
             image =  "data:image/jpg;base64," + btoa(binary);
             if (topContent) {
-                $('.top-content').css('background', "url('" + image + "')");
+                $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + image + "')");
             } else {
                 $('#img_' + id).attr('src', image);
             }
