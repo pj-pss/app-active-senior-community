@@ -323,14 +323,17 @@ function setArticle(articleList, token){
     let first = true;
     for(let article of articleList){
         if (first) {
+            let entry =
+                '<i class="fa fa-star fa-2x icon"></i>0' +
+                ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
+            let dispDate = formatDate(article.start_date);
             let topContent =
                 '<div class="etc_area">' +
                     '<div class="date">' +
-                        formatDate(article.start_date) +
+                        dispDate +
                     '</div>' +
                     '<div class="evaluation" id="join_' + article.__id + '">' +
-                        '<i class="fa fa-star fa-2x icon"></i>0' +
-                        ' <i class="fas fa-calendar-check fa-2x icon"></i>0' +
+                        (dispDate ? entry : '') +
                     '</div>' +
                 '</div>' +
                 '<div class="title-area">' +
@@ -383,6 +386,10 @@ function formatDate(date) {
 }
 
 function createArticleGrid(id, title, date, type){
+    let dispDate = formatDate(date);
+    let entry =
+        '<i class="fa fa-star fa-2x icon"></i>0' +
+        ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
     var li =
         '<li data-href="javascript:getArticleDetail(\'' + id + '\')" class=\'display' + String(type) + '\'>' +
             '<div class="list-image new">' +
@@ -394,9 +401,10 @@ function createArticleGrid(id, title, date, type){
                 '</div>' +
                 '<div class="etc_area">' +
                     '<div class="date">' +
-                        formatDate(date) +
+                        dispDate +
                     '</div>' +
                     '<div class="evaluation" id="join_' + id + '">' +
+                        (dispDate ? entry : '') +
                     '</div>' +
                 '</div>' +
             '</div>' +
