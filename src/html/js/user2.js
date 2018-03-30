@@ -190,7 +190,7 @@ function getPersonalJoinInfo() {
             var count = {};
             for (let val of res.d.results) {
                 if ($('#join_' + val.provide_id)[0]) {
-                    $('#join_' + val.provide_id).parent().parent().parent().addClass('entry' + val.entry_flag);
+                    $('#join_' + val.provide_id).parents('li').addClass('entry' + val.entry_flag);
                 }
             }
         })
