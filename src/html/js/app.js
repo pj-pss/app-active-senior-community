@@ -75,6 +75,7 @@ function switchAppUrl() {
                 $("#supporter").show();
             }
             $("#user").show();
+            $("#user2").show();
         }).fail(function () {
             console.log("fail");
         });

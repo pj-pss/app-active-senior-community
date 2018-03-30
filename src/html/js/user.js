@@ -282,11 +282,6 @@ function openHistory(){
 	}
 }
 
-function openClubHistory() {
-    $('#modal-clubHistory').localize();
-    $('#modal-clubHistory').actionHistoryShowModal();
-}
-
 var qrJson;
 
 function authorizedQrReader(qrJsonStr) {
@@ -478,17 +473,6 @@ function startHelpOp() {
     $("#during_help").removeClass("hidden");
 }
 
-function viewInfoDisclosureDetail(type){
-    $("#modal-inforDisclosureHistory .title_text").attr("data-i18n", "profile." + type);
-    $('#modal-inforDisclosureHistory').localize();
-    $('#modal-inforDisclosureHistory').actionHistoryShowModal();
-}
-function openInforDisclosureHistoryPer(type) {
-    $("#modal-inforDisclosureHistoryPer .title_text").html(type);
-    $('#modal-inforDisclosureHistoryPer').localize();
-    $('#modal-inforDisclosureHistoryPer').actionHistoryShowModal();
-}
-
 function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
     var arg = reply + ",'" + articleId + "'";
     if(userReplyId && orgReplyId) {
@@ -551,8 +535,6 @@ $(function() {
         $(".overlay").removeClass('overlay-on');
         $(".slide-menu").removeClass('slide-on');
     });
-
-    $("#profileBasic").collapse('hide');
 
 });
 
