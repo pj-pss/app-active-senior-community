@@ -326,7 +326,7 @@ function setArticle(articleList, token){
             let topContent =
                 '<div class="etc_area">' +
                     '<div class="date">' +
-                        (article.start_date || '') +
+                        formatDate(article.start_date) +
                     '</div>' +
                     '<div class="evaluation" id="join_' + article.__id + '">' +
                     '</div>' +
@@ -368,16 +368,19 @@ function clearFilter() {
     $('#topInfoList>ul').children().show();
 }
 
-function createArticleGrid(id, title, date, type){
+function formatDate(date) {
     date = date || "";
     var dispDate;
-    if(date){
+    if (date) {
         var startDate = new Date(Math.floor(date));
         dispDate = moment(startDate).format("YYYY/MM/DD") + " (" + i18next.t("dayOfTheWeek." + moment(startDate).format("ddd")) + ")";
-    }else{
+    } else {
         dispDate = "";
     }
+    return dispDate;
+}
 
+function createArticleGrid(id, title, date, type){
     var li =
         '<li data-href="javascript:getArticleDetail(\'' + id + '\')" class=\'display' + String(type) + '\'>' +
             '<div class="list-image new">' +
@@ -389,7 +392,7 @@ function createArticleGrid(id, title, date, type){
                 '</div>' +
                 '<div class="etc_area">' +
                     '<div class="date">' +
-                        dispDate +
+                        formatDate(date) +
                     '</div>' +
                     '<div class="evaluation" id="join_' + id + '">' +
                     '</div>' +
