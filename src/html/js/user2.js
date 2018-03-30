@@ -78,7 +78,7 @@ function getArticleList() {
     });
 }
 
-function getArticleListImage(id, token) {
+function getArticleListImage(id, token, topContent) {
     var DAV = 'article_image';
 
     $.ajax({
@@ -102,7 +102,11 @@ function getArticleListImage(id, token) {
             }
             window.btoa(binary);
             image =  "data:image/jpg;base64," + btoa(binary);
-            $('#img_' + id).attr('src', image);
+            if (topContent) {
+                $('.top-content').css('background', "url('" + image + "')");
+            } else {
+                $('#img_' + id).attr('src', image);
+            }
             imageList[id] = image;
         }, this);
         reader.readAsArrayBuffer(res);
@@ -331,11 +335,11 @@ function setArticle(articleList, token){
                     article.title +
                 '</div>';
             $('.top-content').html(topContent);
-            first = false;
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
         }
-        getArticleListImage(article.__id, token);
+        getArticleListImage(article.__id, token, first);
+        first = false;
     }
 
     $.each(imageList, function(key, value) {
