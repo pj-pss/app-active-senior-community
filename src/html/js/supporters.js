@@ -51,7 +51,9 @@ function openComment(id){
     $('#modal-confirm-delete').on('hidden.bs.modal', function () {
       $('body').addClass('modal-open');
     });
-
+    $('#modal-message').on('hidden.bs.modal', function () {
+      $('body').addClass('modal-open');
+    });
 	callArticleFunction($.proxy(function(token) {
 		var collection1 = 'article';
 	    var entity1 = 'provide_information';
@@ -187,7 +189,6 @@ function openInfoEdit(id){
 
     $('#infoEditorTitle').html(i18next.t('modalTitle.editInfo'));
     $('#modal-infoEditor').localize();
-    $('#modal-infoEditor').modal('show');
   });
 }
 
@@ -269,6 +270,9 @@ function initInfoEdit(){
     $('body').addClass('modal-open');
   });
   $('#modal-confirm-delete').on('hidden.bs.modal', function () {
+    $('body').addClass('modal-open');
+  });
+  $('#modal-message').on('hidden.bs.modal', function () {
     $('body').addClass('modal-open');
   });
 }
@@ -618,10 +622,14 @@ function saveArticle(editId) {
 
     saveText().then(saveImg)
     .fail(function() {
-      alert(i18next.t('msg.failedSaveArticle') + '\n\n' + err.join('\n'));
+      $("#modal-message .message").text(i18next.t('msg.failedSaveArticle'));
+      $("#modal-message").modal('show');
+      $("#modal-infoEditor").modal('hide');
+      getArticleList();
     })
     .done(function() {
-      alert(i18next.t('msg.completeSaveArticle'));
+      $("#modal-message .message").text(i18next.t('msg.completeSaveArticle'));
+      $("#modal-message").modal('show');
       $("#modal-infoEditor").modal('hide');
       getArticleList();
     });
@@ -802,10 +810,12 @@ function getArticleDetail(id) {
       }, this);
       reader.readAsArrayBuffer(image[0]);
       $('#clearImgButton')[0].style.display = '';
-
+      $('#modal-infoEditor').modal('show');
     })
     .fail(function() {
-      alert(i18next.t('failedGetArticle') + '\n\n' + err.join('\n'));
+      $("#modal-message .message").text(i18next.t('msg.failedGetArticle'));
+      $("#modal-message").modal('show');
+      getArticleList();
     });
   }, id);
 }
@@ -882,7 +892,8 @@ function deleteArticle(id) {
 
     deleteImage().then(deleteText)
     .done(function() {
-      alert(i18next.t('completeDeleteArticle'));
+      $("#modal-message .message").text(i18next.t('msg.completeGetArticle'));
+      $("#modal-message").modal('show');
       $("#modal-infoEditor").modal('hide');
       getArticleList();
     })
