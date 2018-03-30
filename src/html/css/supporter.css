@@ -48,13 +48,11 @@ html, body, .contents, main { height:100%; }
 
 .leftFloatBox {
   float: left;
-  margin-left: 5%;
   margin-bottom: 20px;
 }
 
 .rightFloatBox {
   float: right;
-  margin-right: 5%;
   margin-bottom: 20px;
 }
 
@@ -70,7 +68,7 @@ html, body, .contents, main { height:100%; }
 
 #modal-situationAggregate .leftFloatBox .borderTable .head th:nth-of-type(3),
 #modal-situationAggregate .rightFloatBox .borderTable .head th:nth-of-type(3){
-  width: 84px;
+  width: 120px;
 }
 
 #modal-situationAggregate .leftFloatBox .borderTable .head th:nth-of-type(4),
@@ -245,3 +243,16 @@ pre.text {
   padding-top: 0;
 }
 
+#proviedInfoList .borderTable th:nth-child(1) {
+  width : 20%;
+}
+
+#proviedInfoList .borderTable th:nth-child(2) {
+  width : 14%;
+}
+
+#proviedInfoList .borderTable th:nth-child(3),
+#proviedInfoList .borderTable th:nth-child(5),
+#proviedInfoList .borderTable th:nth-child(6) {
+  width : 10%;
+}

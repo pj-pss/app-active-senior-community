@@ -715,6 +715,7 @@ function getArticleList() {
 			          ('0' + dateTime.getSeconds()).slice(-2);
 			var row = '<tr><td>' + date + ' ' + time +
 			        '</td><td>' + pData.post_place +
+			        '</td><td>' + (pData.type === TYPE.EVENT ? i18next.t("articleItem.event") : i18next.t("articleItem.info")) +
 			        '</td><td class="flushleft">' +
 			        '<a href="javascript:openInfoEdit(\'' + pData.__id + '\')">' + pData.title +
 			        '</a></td>' + parti + underCons + '</tr>';
