@@ -156,9 +156,9 @@ function getJoinInfoList(token) {
         }
         for (let key in count) {
             var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i>'+
-            count[key].join +
+            count[key].consider +
             ' <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i>' +
-            count[key].consider;
+            count[key].join;
             joinList[key] = joinHtml;
             $('#join_' + key).html(joinHtml);
         }
