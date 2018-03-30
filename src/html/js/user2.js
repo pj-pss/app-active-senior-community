@@ -36,7 +36,8 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        $.when(getUserProfile()).done(getArticleList());
+        getUserProfile();
+        getArticleList();
 		actionHistory.logWrite('top');
     });
 };
@@ -69,11 +70,9 @@ function getArticleList() {
                 '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
-            $.when(setArticle(data.d.results, token))
-            .done(
-                $.when(getJoinInfoList(token))
-                .done(getPersonalJoinInfo())
-            );
+            setArticle(data.d.results, token);
+            getJoinInfoList(token);
+            getPersonalJoinInfo();
         })
         .fail(function() {
             alert('failed to get article list');
