@@ -27,6 +27,13 @@ Object.freeze(SEX);
 Object.freeze(AGE);
 Object.freeze(REPLY);
 
+const MIN_PASS_LENGTH = 8;
+const MAX_PASS_LENGTH = 32;
+
+const REPLY_COUNT = 10000;
+const REPLY_LIST_NUM = 1000;
+const ARTICLE_NUM = 50;
+
 const APP_URL = "https://demo.personium.io/app-life-enrichers-community/";
 const APP_BOX_NAME = 'io_personium_demo_app-life-enrichers-community';
 const ORGANIZATION_CELL_URL = 'https://demo.personium.io/fst-community-organization/';
@@ -60,7 +67,7 @@ function switchAppUrl() {
             var supportRole = _.find(data2.d.results, $.proxy(function (d) {
                 var matchword = d.uri.match(reg);
                 if (matchword !== null) {
-                    return matchword[1] === "supporter" || matchword[1] === "organization";
+                    return matchword[1] === "organization";
                 }
                 return false;
             }, this));
@@ -68,6 +75,7 @@ function switchAppUrl() {
                 $("#supporter").show();
             }
             $("#user").show();
+            $("#user2").show();
         }).fail(function () {
             console.log("fail");
         });

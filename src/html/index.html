@@ -1,6 +1,7 @@
 <div id="hoge">
   <a id="supporter" style="display:none" href="javascript:supporter()">supporter</a>
   <a id="user" style="display:none" href="javascript:user()">user</a>
+  <a id="user2" style="display:none" href="javascript:user2()">user(design)</a>
 </div>
 <script>
 	getNamesapces = function () {
@@ -28,5 +29,9 @@ function supporter() {
 
 function user() {
   location.href = './user/index.html' + location.hash;
+}
+
+function user2() {
+  location.href = './user/index2.html' + location.hash;
 }
 </script>

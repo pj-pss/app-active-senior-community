@@ -20,6 +20,7 @@ var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
 var operationCellUrl = '';
+var userInfo = {};
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -34,9 +35,8 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        getArticleList('topEvent');
+        $.when(getUserProfile()).done(getArticleList());
 		actionHistory.logWrite('top');
-        getUserProfile();
     });
 };
 
@@ -93,7 +93,7 @@ function viewProfile(){
 			$("#editPicturePreview").attr("src", arguments[0].Image);
 		}
 		$("#nickname").val(arguments[0].DisplayName);
-		$("#popupEditDisplayNameErrorMsg").html("");
+		$("#popupEditDisplayNameErrorMsg").html("<br>");
 		$('#profileEdit').actionHistoryShowView();
 	});
 }
@@ -143,7 +143,7 @@ function validateDisplayName(displayName, displayNameSpan) {
 	}
 
 	var MAXLENGTH = 128;
-        $("#" + displayNameSpan).html("");
+        $("#" + displayNameSpan).html("<br>");
         if (lenDisplayName > MAXLENGTH) {
             $("#" + displayNameSpan).html(i18next.t("errorValidateNameLength"));
             return false;
@@ -184,9 +184,9 @@ function readURL(input) {
 var helpAuthorized = false;
 var scanner;
 
-function openNfcReader() {
+function openQrReader() {
 	helpAuthorized = false;
-    $('#modal-nfcReader').localize();
+    $('#modal-qrReader').localize();
 
     var videoComponent = $("#camera-preview");
     var options = {};
@@ -195,15 +195,15 @@ function openNfcReader() {
     initScanner(options);
     initCamera(cameraId);
     scanStart(function (content){
-        authorizedNfcReader(content);
+        authorizedQrReader(decryptQR(content));
     });
 
-    $('#modal-nfcReader').actionHistoryShowModal();
-	$('#modal-nfcReader').on('hidden.bs.modal', function () {
+    $('#modal-qrReader').actionHistoryShowModal();
+	$('#modal-qrReader').on('hidden.bs.modal', function () {
 	    try{
 			scanner.stop();
 		}catch(e){}
-		$('#modal-nfcReader').off('hidden.bs.modal');
+		$('#modal-qrReader').off('hidden.bs.modal');
 	});
 }
 
@@ -282,15 +282,17 @@ function openHistory(){
 	}
 }
 
-function openClubHistory() {
-    $('#modal-clubHistory').localize();
-    $('#modal-clubHistory').actionHistoryShowModal();
-}
-
 var qrJson;
 
-function authorizedNfcReader(qrJsonStr) {
-    qrJson = JSON.parse(qrJsonStr);
+function authorizedQrReader(qrJsonStr) {
+    try {
+        qrJson = JSON.parse(qrJsonStr);
+    } catch(e) {
+        alert('error: json parse error');
+        return;
+    }
+
+    if (!validateQRInfo(qrJson)) return;
 
 	operationCellUrl = qrJson.url;
     $.ajax({
@@ -406,7 +408,7 @@ function authorizedNfcReader(qrJsonStr) {
 
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
-    $('#modal-nfcReader').modal('hide');
+    $('#modal-qrReader').modal('hide');
     $('#top').actionHistoryShowView();;
 }
 
@@ -432,7 +434,9 @@ function closeHelpConfirm(f) {
             })
             .done(function() {
                 helpAuthorized = false;
-				qrJson = null;
+                qrJson = null;
+                getArticleList();
+                getUserProfile();
                 $('#editPrflBtn button').prop('disabled', false);
 
                 $(".endHelpOp").addClass('hidden');
@@ -469,27 +473,17 @@ function startHelpOp() {
     $("#during_help").removeClass("hidden");
 }
 
-function viewInfoDisclosureDetail(type){
-    $("#modal-inforDisclosureHistory .title_text").attr("data-i18n", "profile." + type);
-    $('#modal-inforDisclosureHistory').localize();
-    $('#modal-inforDisclosureHistory').actionHistoryShowModal();
-}
-function openInforDisclosureHistoryPer(type) {
-    $("#modal-inforDisclosureHistoryPer .title_text").html(type);
-    $('#modal-inforDisclosureHistoryPer').localize();
-    $('#modal-inforDisclosureHistoryPer').actionHistoryShowModal();
-}
-
-function openSendReplyModal(reply, articleId, userReplyId, orgReplyId) {
+function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
     var arg = reply + ",'" + articleId + "'";
     if(userReplyId && orgReplyId) {
         arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
     }
+    arg += "," + sameReply;
 
     $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
 
 	var title;
-	if(reply === 1){
+	if(reply === REPLY.JOIN){
 		title = "msg.join";
 	}else{
 		title = "msg.consider";
@@ -531,7 +525,7 @@ $(function() {
     $("#opHistory").load("opHistory.html");
     $("#articleDetail").load("articleDetail.html");
     $("#entryList").load("entryList.html");
-    $("#modal-nfcReader").load("modal-nfcReader.html");
+    $("#modal-qrReader").load("modal-qrReader.html");
     $("#modal-helpConfirm").load("modal-helpConfirm.html");
 
     $("#modal-startHelpOp").load("modal-startHelpOp.html");
@@ -542,10 +536,9 @@ $(function() {
         $(".slide-menu").removeClass('slide-on');
     });
 
-    $("#profileBasic").collapse('hide');
-
 });
 
+<<<<<<< HEAD
 
 var skip = 0;
 var isLoad = false
@@ -559,18 +552,37 @@ $(window).scroll(function() {
 });
 
 function getArticleList(divId) {
+=======
+function getArticleList() {
+>>>>>>> b2177034eb315ac7381c3911309dba97222fb5d1
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
 
         var now = String(new Date().getTime());
+<<<<<<< HEAD
 		
         $.ajax({
             type: "GET",
             url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + '&\$orderby=__updated desc&\$top=10&\$skip=' + 10 * skip,
+=======
+
+        var filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
+        if (userInfo.sex == SEX.ALL) {
+            filter += 'true';
+        } else {
+            filter += '(target_sex eq ' + SEX.ALL + ' or target_sex eq ' + userInfo.sex + ')';
+        }
+        $.ajax({
+            type: "GET",
+            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=(end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + ') and ' + filter + '&\$orderby=__updated desc',
+>>>>>>> b2177034eb315ac7381c3911309dba97222fb5d1
             headers: {
                 "Authorization": "Bearer " + token,
                 "Accept" : "application/json"
+            },
+            data: {
+                '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
             setArticle(data.d.results, token, skip === 0 ? true : false);
@@ -581,7 +593,7 @@ function getArticleList(divId) {
         .fail(function() {
             alert('failed to get article list');
         });
-    }, divId);
+    });
 }
 
 function getArticleListImage(id, token) {
@@ -630,6 +642,9 @@ function getJoinInfoList(token) {
         headers: {
             "Authorization": "Bearer " + token,
             "Accept": "application/json"
+        },
+        data: {
+            '\$top': REPLY_COUNT
         }
     })
     .done(function(res) {
@@ -676,7 +691,10 @@ function viewJoinConsiderList(entryFlag,articleId){
 	        headers: {
 	            "Authorization": "Bearer " + token,
 	            "Accept": "application/json"
-	        }
+            },
+            data: {
+                '\$top': REPLY_LIST_NUM
+            }
 	    })
 	    .done(function(res) {
 			var list = [];
@@ -796,7 +814,8 @@ function getArticleDetail(id) {
                     'Accept': 'application/json'
                 },
                 data: {
-                    "\$filter": "provide_id eq '" + id + "'"
+                    "\$filter": "provide_id eq '" + id + "'",
+                    '\$top': REPLY_LIST_NUM
                 },
                 success: function (res) {
                     return res;
@@ -884,7 +903,8 @@ function getArticleDetail(id) {
                                 "Accept": "application/json"
                             },
                             data: {
-                                "\$filter": "provide_id eq '" + article.__id + "'"
+                                "\$filter": "provide_id eq '" + article.__id + "'",
+                                '\$top': REPLY_LIST_NUM
                             }
                         }),
                         $.ajax({
@@ -997,12 +1017,13 @@ function getCurrentCellToken(callback, id) {
 
 /**
  * Send the reply to user cell and organization cell.
- * @param {int} reply REPLY.JOIN or REPLY.CONSIDER
+ * @param {int} reply :REPLY.JOIN or REPLY.CONSIDER
  * @param {string} articleId
- * @param {string} userReplyId if id is exist, this func's role is the update
+ * @param {string} userReplyId :if id is exist, this func's role is the update
  * @param {string} orgReplyId
+ * @param {bool} sameReply :same entry flag already sanded
  */
-function replyEvent(reply, articleId, userReplyId, orgReplyId) {
+function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
     var oData = 'reply';
     var entityType = 'reply_history';
 
@@ -1131,13 +1152,17 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId) {
                 var join = $('#joinNum').html();
                 var consider = $('#considerNum').html();
                 if (reply == REPLY.JOIN) {
-                    join++;
-                    if (userReplyId) {
+                    if (!userReplyId) {
+                        join++;
+                    } else if (!sameReply) {
+                        join++;
                         consider--;
                     }
                 } else {
-                    consider++;
-                    if (userReplyId) {
+                    if (!userReplyId) {
+                        consider++;
+                    } else if (!sameReply) {
+                        consider++;
                         join--;
                     }
                 }
@@ -1160,13 +1185,13 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId){
     var argConsider = '';
     switch (reply) {
         case REPLY.JOIN:
-            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
-            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
+            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
+            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
             break;
 
         case REPLY.CONSIDER:
-            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
-            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "'";
+            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
+            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
             break;
 
         default:
@@ -1272,6 +1297,7 @@ function addLinkToGrid() {
 function getUserProfile() {
     getCurrentCellToken(function(token){
         let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
         $.when(
             $.ajax({
                 type: 'GET',
@@ -1296,14 +1322,41 @@ function getUserProfile() {
                     "Authorization": "Bearer " + token,
                     "Accept": "application/json"
                 }
+            }),
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_household",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: cellUrl + '__/profile.json',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: "GET",
+                url: boxUrl + 'user_info/user_evacuation',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
             })
         )
-        .done(function(res1, res2, res3){
+        .done(function(res1, res2, res3, res4, res5, res6){
             vitalList = _.sortBy(res3[0].d.results, function(item){return item.__updated;});
             vitalList.reverse();
 
             var basicInfo = res1[0].d.results[0];
             var healthInfo = res2[0].d.results[0];
+            var household = res4[0].d.results[0];
+            var profileJson = res5[0];
+            var evacuation = res6[0].d.results[0];
             var vital = vitalList[0];
             var preVital = vitalList[1];
 
@@ -1322,62 +1375,107 @@ function getUserProfile() {
                 maxDiff = maxDiff < 0 ? maxDiff : '+' + maxDiff;
                 pulseDiff = pulseDiff < 0 ? pulseDiff : '+' + pulseDiff;
             }
-        var sex;
-        switch(basicInfo.sex) {
-            case 'male': sex = i18next.t('sex.male'); break;
-            case 'female': sex = i18next.t('sex.female'); break;
-            default: sex = i18next.t('sex.other');
-        }
 
-        var basicInfoHtml = '';
-        if(basicInfo) {
-            basicInfoHtml = '<dt>' +
-                '<dt>' + i18next.t('basicInfo.name') + ':</dt>' +
-                '<dd>' + basicInfo.name + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.howToRead') + ':</dt>' +
-                '<dd>' + basicInfo.name_kana + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.sex') + ':</dt>' +
-                '<dd>' + sex + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.birthday') + ' (' + i18next.t('basicInfo.age') + '):</dt>' +
-                '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</dd>' +
-                '<dt>' + i18next.t('basicInfo.postalCode') + ':</dt>' +
-                '<dd>' + basicInfo.postal_code + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.address') + ':</dt>' +
-                '<dd>' + basicInfo.address + '</dd>' +
-                '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
-                '<dd>' + basicInfo.comment + '</dd>' +
-                '</dt>';
-        }
-        $('#basicInfo').html(basicInfoHtml);
+            var sex;
+            switch(basicInfo.sex) {
+                case 'male':
+                sex = i18next.t('sex.male');
+                userInfo.sex = SEX.MALE;
+                break;
 
-        var healthInfoHtml = '';
-        if(healthInfo) {
-            healthInfoHtml = '<dt>' +
-                '<dt>' + i18next.t('health.height') + ':</dt>' +
-                '<dd>' + healthInfo.height + ' cm</dd>' +
-                '<dt>' + i18next.t('health.weight') + ':</dt>' +
-                '<dd>' + healthInfo.weight + ' kg</dd>' +
-                '<dt>BMI:</dt>' +
-                '<dd>' + healthInfo.bmi + '</dd>' +
-                '<dt>' + i18next.t('health.girthAbdomen') + ':</dt>' +
-                '<dd>' + healthInfo.grith_abdomen + ' cm</dd>' +
-                '</dt>';
-        }
-        $('#healthInfo').html(healthInfoHtml);
+                case 'female':
+                sex = i18next.t('sex.female');
+                userInfo.sex = SEX.FEMALE;
+                break;
 
-        var vitalHtml = '';
-        if(vital) {
-            vitalHtml = '<dt>' +
-                '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
-                '<dd>' + vital.temperature + ' &deg;C (' + (tempDiff || '-') + ')' + '</dd>' +
-                '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
-                '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
-                '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
-                '<dt>' + i18next.t('vital.pulse') + ':</dt>' +
-                '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>' +
-                '</dt>';
-        }
-        $('#vital').html(vitalHtml);
+                default:
+                sex = i18next.t('sex.other');
+                userInfo.sex = SEX.ALL;
+            }
+
+            var basicInfoHtml = '';
+            if(basicInfo) {
+                basicInfoHtml = '<dt>' +
+                    '<dt>' + i18next.t('basicInfo.name') + ':</dt>' +
+                    '<dd>' + basicInfo.name + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.howToRead') + ':</dt>' +
+                    '<dd>' + basicInfo.name_kana + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.sex') + ':</dt>' +
+                    '<dd>' + sex + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.birthday') + ' (' + i18next.t('basicInfo.age') + '):</dt>' +
+                    '<dd>' + basicInfo.birthday + ' (' + currentTime.diff(moment(basicInfo.birthday), 'years') + ')</dd>' +
+                    '<dt>' + i18next.t('basicInfo.postalCode') + ':</dt>' +
+                    '<dd>' + basicInfo.postal_code + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.address') + ':</dt>' +
+                    '<dd>' + basicInfo.address + '</dd>' +
+                    '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
+                    '<dd>' + basicInfo.comment + '</dd>' +
+                    '</dt>';
+            }
+            $('#basicInfo').html(basicInfoHtml);
+
+            var healthInfoHtml = '';
+            if(healthInfo) {
+                healthInfoHtml = '<dt>' +
+                    '<dt>' + i18next.t('health.height') + ':</dt>' +
+                    '<dd>' + healthInfo.height + ' cm</dd>' +
+                    '<dt>' + i18next.t('health.weight') + ':</dt>' +
+                    '<dd>' + healthInfo.weight + ' kg</dd>' +
+                    '<dt>BMI:</dt>' +
+                    '<dd>' + healthInfo.bmi + '</dd>' +
+                    '<dt>' + i18next.t('health.girthAbdomen') + ':</dt>' +
+                    '<dd>' + healthInfo.grith_abdomen + ' cm</dd>' +
+                    '</dt>';
+            }
+            $('#healthInfo').html(healthInfoHtml);
+
+            var vitalHtml = '';
+            if(vital) {
+                vitalHtml = '<dt>' +
+                    '<dt>' + i18next.t('vital.bodyTemp') + ':</dt>' +
+                    '<dd>' + vital.temperature + ' &deg;C (' + (tempDiff || '-') + ')' + '</dd>' +
+                    '<dt>' + i18next.t('vital.bloodPressure') + ':</dt>' +
+                    '<dd>' + i18next.t('vital.max') + ': ' + vital.max_pressure + ' mmHg' + ' (' + (maxDiff || '-') + ')' + '</dd>' +
+                    '<dd>' + i18next.t('vital.min') + ': ' + vital.min_pressure + ' mmHg' + ' (' + (minDiff || '-') + ')' + '</dd>' +
+                    '<dt>' + i18next.t('vital.pulse') + ':</dt>' +
+                    '<dd>' + vital.pulse + ' bpm' + ' (' + (pulseDiff || '-') + ')' +  '</dd>' +
+                    '</dt>';
+            }
+            $('#vital').html(vitalHtml);
+
+            var age = currentTime.diff(moment(basicInfo.birthday), 'years');
+            if (age < 60) {
+                userInfo.age = AGE.UNDER_FIFTY;
+            } else if (age < 70) {
+                userInfo.age = AGE.SIXTY;
+            } else if (age < 80) {
+                userInfo.age = AGE.SEVENTY;
+            } else {
+                userInfo.age = AGE.OVER_EIGHTY;
+            }
+            var profile =
+                '<tr><th>' + i18next.t('basicInfo.name') + ':</th><td>' + basicInfo.name + '<br>(' + basicInfo.name_kana + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.birthday') + ':</th><td>' + basicInfo.birthday + '<br>(' + age + ')</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.sex') + ':</th><td>' + basicInfo.name + '</td></tr>' +
+                // '<tr><th>' + i18next.t('basicInfo.bloodType') + ':</th><td>' + basicInfo.bloodType + '</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.address') + ':</th><td>' + basicInfo.address + '</td></tr>' +
+                '<tr><th>' + i18next.t('basicInfo.residentType') + ':</th><td>' + household.resident_type + '</td></tr>';
+            $('#userProfile').html(profile);
+
+            if(profileJson.Image.length == 0) {
+                var cellImgDef = ut.getJdenticon(Common.getCellUrl());
+                $("#monitoring .profileImg").attr("src", cellImgDef);
+            } else {
+                $("#monitoring .profileImg").attr("src", profileJson.Image);
+            }
+
+            $('#monitoring .nickname').html(profileJson.DisplayName);
+
+            let location = evacuation.not_at_home ? i18next.t('locationState.outdoor') : i18next.t('locationState.indoor');
+            $('#monitoring .nowLocation').html(location);
+
+            $('#modal-helpConfirm .userName').html(basicInfo.name);
+            $('#modal-startHelpOp .userName').html(basicInfo.name);
 
         })
         .fail(function() {
@@ -1385,4 +1483,66 @@ function getUserProfile() {
         });
     });
 
+}
+
+/**
+ * decrypt read from QRcode to ID,pass,cellUrl
+ * @param {String} content :encrypted information
+ */
+function decryptQR(content) {
+    var array_rawData = content.split(',');
+
+    var salt = CryptoJS.enc.Hex.parse(array_rawData[0]);  // passwordSalt
+    var iv = CryptoJS.enc.Hex.parse(array_rawData[1]);    // initialization vector
+    var encrypted_data = CryptoJS.enc.Base64.parse(array_rawData[2]);
+
+    // password (define key)
+    var secret_passphrase = CryptoJS.enc.Utf8.parse(Common.getBoxName());
+    var key128Bits500Iterations =
+        CryptoJS.PBKDF2(secret_passphrase, salt, { keySize: 128 / 8, iterations: 500 });
+
+    // decrypt option (same of encrypt)
+    var options = { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 };
+
+    // decrypt
+    var decrypted = CryptoJS.AES.decrypt({ "ciphertext": encrypted_data }, key128Bits500Iterations, options);
+    // convert to UTF8
+    return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+function validateQRInfo(qrJson) {
+    if ('userId' in qrJson && 'password' in qrJson && 'url' in qrJson) {
+        let id = qrJson.userId;
+
+        let pass = qrJson.password;
+        if (MIN_PASS_LENGTH >= pass.length || pass.length >= MAX_PASS_LENGTH ||
+            !pass.match(/^([a-zA-Z0-9\-\_])+$/)) {
+                alert('error: invalid password');
+            return false;
+        }
+
+        let pUrl = $.url(qrJson.url);
+        if (!(pUrl.attr('protocol').match(/^(https)$/) && pUrl.attr('host'))) {
+            alert('error: invalid url');
+            return false;
+        } else {
+            let labels = pUrl.attr('host').split('.');
+            for (let label of labels) {
+                if (!label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/)) {
+                    alert('error: invalid url');
+                    return false;
+                }
+            }
+
+            if (pUrl.attr('source') == Common.getCellUrl()) {
+                alert('error: own user cell');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    alert('error: invalid QRcode data');
+    return false;
 }

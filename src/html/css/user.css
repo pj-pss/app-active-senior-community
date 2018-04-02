@@ -823,7 +823,7 @@ table.tbl_prof input[type="text"] {
 	margin-top: 30px;
 	margin-bottom: 10px;
 }
-.img_nfc{
+.img_qr{
 	width: 229px;
 	height: 149px;
 }
@@ -1286,4 +1286,16 @@ pre.text {
 }
 #profileForm .picture-src {
   width: 100%;
+}
+
+#monitoring .profileImg {
+  width: 106px;
+  height: 106px;
+  background-color: #CCCCCC;
+  color: #FFFFFF;
+  border-radius: 50%;
+  margin: 5px auto;
+  overflow: hidden;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
 }
