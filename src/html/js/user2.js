@@ -46,7 +46,8 @@ getNamesapces = function () {
     return ['common', 'glossary'];
 };
 
-function getArticleList() {
+async function getArticleList() {
+    await getUserProfile();
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
@@ -74,9 +75,11 @@ function getArticleList() {
             setArticle(data.d.results, token);
             getJoinInfoList(token);
             getPersonalJoinInfo();
+            return Promise.resolve();
         })
         .fail(function() {
             alert('failed to get article list');
+            return Promise.reject();
         });
     });
 }
@@ -486,7 +489,7 @@ function createTopContent(id, title, date, type) {
             '</div>';
 }
 
-function getUserProfile() {
+async function getUserProfile() {
     getCurrentCellToken(function (token) {
         let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
         let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
@@ -670,8 +673,12 @@ function getUserProfile() {
                 $('#modal-startHelpOp .userName').html(basicInfo.name);
 
             })
+            .done(function () {
+                return Promise.resolve();
+            })
             .fail(function () {
                 alert('error: get user profile');
+                return Promise.reject();
             });
     });
 
