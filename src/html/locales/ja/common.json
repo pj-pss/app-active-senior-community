@@ -4,6 +4,10 @@
         "message": "セッションの期限が切れています。<br>$t(glossary:sessionExpiredDialog.action)",
         "btnOk": "$t(glossary:sessionExpiredDialog.btnOk)"
     },
+    "irrecoverableErrorDialog": {
+        "title": "$t(glossary:irrecoverableErrorDialog.title)"
+    },
+
 
     "msg": {
         "backToTop" : "$t(pageTitle.top)に戻る",
@@ -33,7 +37,14 @@
         "failedDeleteArticle": "記事の削除に失敗しました",
         "completeGetArticle": "記事の削除が完了しました",
         "confirmSendReply": "回答しますか?",
-        "anonymousReply": "匿名で回答する"
+        "anonymousReply": "匿名で回答する",
+
+        "error": {
+            "targetCellNotSelected": "対象セルが設定されていません。",
+            "refreshTokenMissing": "リフレッシュ$t(msg.error.tokenMissing)",
+            "failedToRefreshToken": "リフレッシュトークンの更新に失敗しました。<br>画面をリロードしてください。",
+            "failedToGetBoxUrl": "Box URLの取得に失敗しました。"
+        }
     },
     "entry": {"anonymous" : "匿名"},
 
