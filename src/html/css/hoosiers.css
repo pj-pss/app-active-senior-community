@@ -88,7 +88,7 @@ header.top #sort_btn {
 header.top > .header-title{
   flex: 0 0 auto;
   font-family: Segoe Script !important;
-  font-size: 21px;
+  font-size: 26px;
   font-weight: normal;
 }
 header.top .subtitle {
