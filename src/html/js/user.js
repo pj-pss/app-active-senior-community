@@ -409,7 +409,7 @@ function authorizedQrReader(qrJsonStr) {
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
     $('#modal-qrReader').modal('hide');
-    $('#top').actionHistoryShowView();;
+    $('#top').actionHistoryShowView();
 }
 
 

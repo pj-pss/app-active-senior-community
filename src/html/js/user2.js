@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+var articleList;
 var imageList = {};
 var joinList = {};
+var personalJoinList = {};
 var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
@@ -36,7 +38,8 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        $.when(getUserProfile()).done(getArticleList());
+        getUserProfile();
+        getArticleList();
 		actionHistory.logWrite('top');
     });
 };
@@ -69,8 +72,10 @@ function getArticleList() {
                 '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
+            articleList = data.d.results;
             setArticle(data.d.results, token);
             getJoinInfoList(token);
+            getPersonalJoinInfo();
         })
         .fail(function() {
             alert('failed to get article list');
@@ -153,15 +158,49 @@ function getJoinInfoList(token) {
         }
         for (let key in count) {
             var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i>'+
-            count[key].join +
+            count[key].consider +
             ' <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i>' +
-            count[key].consider;
+            count[key].join;
             joinList[key] = joinHtml;
             $('#join_' + key).html(joinHtml);
         }
     })
     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
         alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+    });
+}
+
+function getPersonalJoinInfo() {
+    getCurrentCellToken(function (token) {
+        // get reply list
+        var oData = 'reply';
+        var entityType = 'reply_history';
+
+        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        $.ajax({
+            type: "GET",
+            url: boxUrl + oData + '/' + entityType,
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json"
+            },
+            data: {
+                '\$top': REPLY_LIST_NUM
+            }
+        })
+        .done(function (res) {
+            // set num
+            var count = {};
+            for (let val of res.d.results) {
+                if ($('#join_' + val.provide_id)[0]) {
+                    $('#join_' + val.provide_id).parents('li').addClass('entry' + val.entry_flag);
+                    personalJoinList[val.provide_id] = val.entry_flag;
+                }
+            }
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+        });
     });
 }
 
@@ -320,26 +359,11 @@ function getCurrentCellToken(callback, id) {
 function setArticle(articleList, token){
 
     $('#topInfoList>ul').children().remove();
+    $('.top-content').children().remove();
     let first = true;
     for(let article of articleList){
         if (first) {
-            let entry =
-                '<i class="fa fa-star fa-2x icon"></i>0' +
-                ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
-            let dispDate = formatDate(article.start_date);
-            let topContent =
-                '<div class="etc_area">' +
-                    '<div class="date">' +
-                        dispDate +
-                    '</div>' +
-                    '<div class="evaluation" id="join_' + article.__id + '">' +
-                        (dispDate ? entry : '') +
-                    '</div>' +
-                '</div>' +
-                '<div class="title-area">' +
-                    article.title +
-                '</div>';
-            $('.top-content').html(topContent);
+            $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
         }
@@ -360,17 +384,50 @@ function setArticle(articleList, token){
     // addLinkToGrid();
 }
 
-function setFilter(key) {
-    $(".display" + String(key)).show();
-    if (key === TYPE.INFO) {
-        $(".display" + String(TYPE.EVENT)).hide();
-    } else {
-        $(".display" + String(TYPE.INFO)).hide();
+function setFilter(key, reset) {
+    $('#topInfoList>ul').children().remove();
+    $('.top-content').children().remove();
+    let first = true;
+    for (let article of articleList) {
+        if (!reset && article.type != key) continue;
+        if (first) {
+            $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
+            $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
+        } else {
+            $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
+            $('#img_' + article.__id).attr('src', imageList[article.__id]);
+        }
+        first = false;
     }
+    setEntryNumber();
+}
+
+function setPersonalFilter(key) {
+    $('#topInfoList>ul').children().remove();
+    $('.top-content').children().remove();
+    let first = true;
+    for (let article of articleList) {
+        if (!personalJoinList.hasOwnProperty(article.__id) || personalJoinList[article.__id] != key) continue;
+        if (first) {
+            $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
+            $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
+        } else {
+            $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
+            $('#img_' + article.__id).attr('src', imageList[article.__id]);
+        }
+        first = false;
+    }
+    setEntryNumber();
 }
 
 function clearFilter() {
-    $('#topInfoList>ul').children().show();
+    setFilter('', true);
+}
+
+function setEntryNumber() {
+    for (let key in joinList) {
+        $('#join_' + key).html(joinList[key]);
+    }
 }
 
 function formatDate(date) {
@@ -411,6 +468,24 @@ function createArticleGrid(id, title, date, type){
         '</li>';
 
     return li;
+}
+
+function createTopContent(id, title, date, type) {
+    let entry =
+        '<i class="fa fa-star fa-2x icon"></i>0' +
+        ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
+    let dispDate = formatDate(date);
+    return  '<div class="etc_area">' +
+                '<div class="date">' +
+                    dispDate +
+                '</div>' +
+                '<div class="evaluation" id="join_' + id + '">' +
+                    (dispDate ? entry : '') +
+                '</div>' +
+            '</div>' +
+            '<div class="title-area">' +
+                title +
+            '</div>';
 }
 
 function getUserProfile() {
