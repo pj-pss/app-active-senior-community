@@ -546,23 +546,37 @@ $(function() {
 
 });
 
+
+var skip = 0;
+var isLoad = false
+
+$(window).scroll(function() {
+     var current = $(window).scrollTop() + window.innerHeight;
+     if (current < $(document).height() - 50) return;
+     if (isLoad) return;
+     isLoad = true;
+     getArticleList();
+});
+
 function getArticleList(divId) {
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
 
         var now = String(new Date().getTime());
-
+		
         $.ajax({
             type: "GET",
-            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + '&\$orderby=__updated desc',
+            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + '&\$orderby=__updated desc&\$top=10&\$skip=' + 10 * skip,
             headers: {
                 "Authorization": "Bearer " + token,
                 "Accept" : "application/json"
             }
         }).done(function(data) {
-			setArticle(data.d.results, token);
+			setArticle(data.d.results, token, skip === 0 ? true : false);
+			skip = skip + 1;
             getJoinInfoList(token);
+			isLoad = false;
         })
         .fail(function() {
             alert('failed to get article list');
@@ -598,6 +612,7 @@ function getArticleListImage(id, token) {
             imageList[id] = image;
         }, this);
         reader.readAsArrayBuffer(res);
+
     })
     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
         alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
@@ -1164,11 +1179,22 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId){
     $('#considerEvent').attr('href', "javascript:openSendReplyModal(" + argConsider + ")");
 }
 
-function setArticle(articleList, token){
+function setArticle(articleList, token, isClear = true){
 
-    $('#topEvent').children().remove();
+    if(isClear){
+		$('#topEvent').children().remove();
+	}
     for(let article of articleList){
-        getArticleListImage(article.__id, token);
+        if(!isClear){
+            var item = $("#topEvent .article_" + article.__id);
+            if(item.length === 0){
+                getArticleListImage(article.__id, token);
+            }else{
+				item.remove();
+			}
+        }else{
+            getArticleListImage(article.__id, token);
+        }
         $('#topEvent').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
     }
 
@@ -1212,7 +1238,7 @@ function createArticleGrid(id, title, date, type){
         dispDate = "";
     }
 
-    var div = '<div class=\'display' + String(type) + '\' data-href="javascript:getArticleDetail(\'' + id + '\')">';
+    var div = '<div class=\'display' + String(type) + ' article_' + id + '\' data-href="javascript:getArticleDetail(\'' + id + '\')">';
     div += '<div class="col-xs-4 col-md-2 block_img">'
         + '<span id="' + id + '" class="cover"></span>'
         + '</div>';
