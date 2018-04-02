@@ -50,6 +50,34 @@
 </head>
 
 <body>
+  <div class="modal fade" id="qrcodeModal" tabindex="-1" role="dialog" aria-labelledby="qrcodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog pn-modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="title">
+            <div class="text-center"><span data-i18n="msg.scanQR"></span></div>
+          </div>
+        </div>
+        <div class="modal-body pn-modal-body">
+          <video id="camera-preview" playsinline autoplay muted loop style="width: 100%;"></video>
+        </div>
+        <div class="modal-footer pn-modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-startHelpOp" tabindex="-1" role="dialog" aria-labelledby="modal-startHelpOpLabel" aria-hidden="true">
+    <div class="modal-dialog pn-modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body pn-modal-body">
+          <span class="userName"></span><span data-i18n="msg.startOpHelp"></span>
+        </div>
+        <div class="modal-footer pn-modal-footer">
+          <button class="btn" data-dismiss="modal" data-i18n="btn.ok"></button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div id="drawer">
     <div id="menu-background">
       <div id="drawer_menu">
@@ -57,7 +85,7 @@
           <li class="user-info">
             <div class="pn-list">
               <div class="pn-list-icon">
-                <img src="../img/user-icon-01.png" alt="アイコン">
+                <img src="../img/user-circle.png" alt="アイコン">
               </div>
               <div class="account-info">
                 <div class="user-name"></div>
@@ -73,9 +101,14 @@
               <span>履歴</span>
             </a>
           </li>
-          <li class="menu-list">
-            <a href="#">
+          <li class="menu-list startHelpOp">
+            <a href="#" onclick="javascript:$('#menu-background').click();openQrReader();return false;" >
               <span>操作支援する(QRコード)</span>
+            </a>
+          </li>
+          <li class="menu-list endHelpOp" style="display:none">
+            <a href="#" onclick="javascript:$('#menu-background').click();openHelpConfirm();return false;" >
+              <span>操作支援終了</span>
             </a>
           </li>
         </ul>
@@ -89,8 +122,8 @@
       <div class="icon-text">メニュー</div>
     </button>
     <div class="header-title">
-      <div class="title">Hoosiers</div>
-      <div class="subtitle">地域のイベント情報コミュニティー</div>
+      <div class="title">Personiumコミュニティ</div>
+      <div class="subtitle" style="display:none"></div>
     </div>
     <button id="sort_btn">
       <i class="fas fa-sort-amount-down fa-2x icon"></i>

@@ -598,11 +598,237 @@ function getUserProfile() {
                 $("#drawer_menu .user-info .user-status span").text(location);
                 $('#modal-helpConfirm .userName').html(basicInfo.name);
                 $('#modal-startHelpOp .userName').html(basicInfo.name);
-
+                if(!helpAuthorized){
+                    $(".top .header-title .subtitle").text(i18next.t('msg.duringOpHelp',{name:basicInfo.name}));
+                }
             })
             .fail(function () {
                 alert('error: get user profile');
             });
     });
 
+}
+
+var scanner;
+
+function openQrReader() {
+	helpAuthorized = false;
+    $('#qrcodeModal').localize();
+
+    var videoComponent = $("#camera-preview");
+    var options = {};
+    options = initVideoObjectOptions("camera-preview");
+    var cameraId = 0;
+    initScanner(options);
+    initCamera(cameraId);
+    scanStart(function (content){
+        authorizedQrReader(decryptQR(content));
+    });
+
+    $('#qrcodeModal').actionHistoryShowModal();
+	$('#qrcodeModal').on('hidden.bs.modal', function () {
+	    try{
+			scanner.stop();
+		}catch(e){}
+		$('#qrcodeModal').off('hidden.bs.modal');
+	});
+}
+
+var qrJson;
+
+function authorizedQrReader(qrJsonStr) {
+    try {
+        qrJson = JSON.parse(qrJsonStr);
+    } catch(e) {
+        alert('error: json parse error');
+        return;
+    }
+
+    if (!validateQRInfo(qrJson)) return;
+
+	operationCellUrl = qrJson.url;
+    $.ajax({
+        url: operationCellUrl + '__token',
+        type: 'POST',
+        data: 'grant_type=password&username=' + qrJson.userId + '&password=' + qrJson.password
+    })
+    .done(function (res) {
+        let getExtCellList = function () {
+            return $.ajax({
+                type: 'GET',
+                url: operationCellUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token,
+                    'Accept': 'application/json'
+                }
+            });
+        };
+
+        let deleteExtCell = function () {
+            return $.ajax({
+                type: 'DELETE',
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                }
+            });
+        };
+
+        let createExtCell = function () {
+            return $.ajax({
+                type: 'POST',
+                url: operationCellUrl + '__ctl/ExtCell',
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                },
+                data: JSON.stringify({
+                    'Url': Common.getCellUrl()
+                })
+            })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                        return Promise.reject();
+                    }
+                );
+        };
+
+        let setRole = function () {
+            return $.ajax({
+                type: 'POST',
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')/$links/_Role",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                },
+                data: JSON.stringify({
+                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='" + Common.getBoxName() + "')"
+                })
+            })
+                .then(
+                    function (res) {
+                        return res;
+                    },
+                    function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                    }
+                );
+        };
+
+        getExtCellList().done(function (res) {
+            let existFlg = false;
+            for (let result of res.d.results) {
+                if (result.Url == Common.getCellUrl()) {
+                    existFlg = true;
+                }
+            }
+
+            // if ext role is exist, delete and recreate
+            if (existFlg) {
+                deleteExtCell().then(createExtCell).then(setRole)
+                    .done(function () {
+                        helpAuthorized = true;
+//                        $('#editPrflBtn button').prop('disabled', true);
+                        getArticleList();
+                        getUserProfile();
+                        startHelpOp();
+                    })
+                    .fail(function () {
+                        alert('error: help operation');
+                    });
+            } else {
+                createExtCell().then(setRole)
+                    .done(function () {
+                        helpAuthorized = true;
+//                        $('#editPrflBtn button').prop('disabled', true);
+                        getArticleList();
+                        getUserProfile();
+                        startHelpOp();
+                    })
+                    .fail(function () {
+                        alert('error: help operation');
+                    });
+            }
+        });
+
+    })
+    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+    });
+
+    $('#qrcodeModal').modal('hide');
+//    $('#top').actionHistoryShowView();
+}
+
+function startHelpOp() {
+    $('#modal-startHelpOp').localize();
+    $('#modal-startHelpOp').actionHistoryShowModal();
+
+    $(".startHelpOp").hide();
+    $(".endHelpOp").show();
+    $(".top .header-title .subtitle").show();
+}
+
+/**
+ * decrypt read from QRcode to ID,pass,cellUrl
+ * @param {String} content :encrypted information
+ */
+function decryptQR(content) {
+    var array_rawData = content.split(',');
+
+    var salt = CryptoJS.enc.Hex.parse(array_rawData[0]);  // passwordSalt
+    var iv = CryptoJS.enc.Hex.parse(array_rawData[1]);    // initialization vector
+    var encrypted_data = CryptoJS.enc.Base64.parse(array_rawData[2]);
+
+    // password (define key)
+    var secret_passphrase = CryptoJS.enc.Utf8.parse(Common.getBoxName());
+    var key128Bits500Iterations =
+        CryptoJS.PBKDF2(secret_passphrase, salt, { keySize: 128 / 8, iterations: 500 });
+
+    // decrypt option (same of encrypt)
+    var options = { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 };
+
+    // decrypt
+    var decrypted = CryptoJS.AES.decrypt({ "ciphertext": encrypted_data }, key128Bits500Iterations, options);
+    // convert to UTF8
+    return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+function validateQRInfo(qrJson) {
+    if ('userId' in qrJson && 'password' in qrJson && 'url' in qrJson) {
+        let id = qrJson.userId;
+
+        let pass = qrJson.password;
+        if (MIN_PASS_LENGTH >= pass.length || pass.length >= MAX_PASS_LENGTH ||
+            !pass.match(/^([a-zA-Z0-9\-\_])+$/)) {
+                alert('error: invalid password');
+            return false;
+        }
+
+        let pUrl = $.url(qrJson.url);
+        if (!(pUrl.attr('protocol').match(/^(https)$/) && pUrl.attr('host'))) {
+            alert('error: invalid url');
+            return false;
+        } else {
+            let labels = pUrl.attr('host').split('.');
+            for (let label of labels) {
+                if (!label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/)) {
+                    alert('error: invalid url');
+                    return false;
+                }
+            }
+
+            if (pUrl.attr('source') == Common.getCellUrl()) {
+                alert('error: own user cell');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    alert('error: invalid QRcode data');
+    return false;
 }
