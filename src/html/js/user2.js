@@ -530,7 +530,6 @@ function getUserProfile() {
                         '<dt>' + i18next.t('basicInfo.comment') + ':</dt>' +
                         '<dd>' + basicInfo.comment + '</dd>' +
                         '</dt>';
-                        $("#drawer_menu .user-info .user-status span").text(basicInfo.comment);
                 }
                 $('#basicInfo').html(basicInfoHtml);
 
@@ -596,7 +595,7 @@ function getUserProfile() {
 
                 let location = evacuation.not_at_home ? i18next.t('locationState.outdoor') : i18next.t('locationState.indoor');
                 $('#monitoring .nowLocation').html(location);
-
+                $("#drawer_menu .user-info .user-status span").text(location);
                 $('#modal-helpConfirm .userName').html(basicInfo.name);
                 $('#modal-startHelpOp .userName').html(basicInfo.name);
 
