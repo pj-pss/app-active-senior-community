@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+var articleList;
 var imageList = {};
 var joinList = {};
 var sort_key = 'updated';
@@ -70,6 +71,7 @@ function getArticleList() {
                 '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
+            articleList = data.d.results;
             setArticle(data.d.results, token);
             getJoinInfoList(token);
             getPersonalJoinInfo();
@@ -191,6 +193,7 @@ function getPersonalJoinInfo() {
             for (let val of res.d.results) {
                 if ($('#join_' + val.provide_id)[0]) {
                     $('#join_' + val.provide_id).parents('li').addClass('entry' + val.entry_flag);
+                    joinList[val.provide_id].personalEntry = val.entry_flag;
                 }
             }
         })
@@ -355,6 +358,7 @@ function getCurrentCellToken(callback, id) {
 function setArticle(articleList, token){
 
     $('#topInfoList>ul').children().remove();
+    $('.top-content').children().remove();
     let first = true;
     for(let article of articleList){
         if (first) {
@@ -396,11 +400,35 @@ function setArticle(articleList, token){
 }
 
 function setFilter(key) {
-    $(".display" + String(key)).show();
-    if (key === TYPE.INFO) {
-        $(".display" + String(TYPE.EVENT)).hide();
-    } else {
-        $(".display" + String(TYPE.INFO)).hide();
+    $('#topInfoList>ul').children().remove();
+    $('.top-content').children().remove();
+    let first = true;
+    for (let article of articleList) {
+        if (article.type != key) continue;
+        if (first) {
+            let entry =
+                '<i class="fa fa-star fa-2x icon"></i>0' +
+                ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
+            let dispDate = formatDate(article.start_date);
+            let topContent =
+                '<div class="etc_area">' +
+                    '<div class="date">' +
+                        dispDate +
+                    '</div>' +
+                    '<div class="evaluation" id="join_' + article.__id + '">' +
+                        (dispDate ? entry : '') +
+                    '</div>' +
+                '</div>' +
+                '<div class="title-area">' +
+                    article.title +
+                '</div>';
+            $('.top-content').html(topContent);
+            $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
+        } else {
+            $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
+            $('#img_' + article.__id).attr('src', imageList[article.__id]);
+        }
+        first = false;
     }
 }
 
