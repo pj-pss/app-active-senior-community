@@ -38,9 +38,7 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        getUserProfile();
-        getArticleList();
-		actionHistory.logWrite('top');
+        viewTop();
     });
 };
 
@@ -677,4 +675,24 @@ function getUserProfile() {
             });
     });
 
+}
+
+function clearMainContents() {
+    $('main').children().remove();
+}
+
+function setMainContents(html) {
+    $('main').html(html);
+}
+
+function viewTop(){
+    clearMainContents();
+    let mainHtml =  '<div class="top-content new"></div>' +
+                    '<div class="list" id="topInfoList">' +
+                        '<ul></ul>' +
+                    '</div>';
+    setMainContents(mainHtml);
+    getUserProfile();
+    getArticleList();
+    actionHistory.logWrite('top');
 }
