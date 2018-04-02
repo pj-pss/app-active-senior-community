@@ -538,7 +538,6 @@ $(function() {
 
 });
 
-<<<<<<< HEAD
 
 var skip = 0;
 var isLoad = false
@@ -551,21 +550,12 @@ $(window).scroll(function() {
      getArticleList();
 });
 
-function getArticleList(divId) {
-=======
 function getArticleList() {
->>>>>>> b2177034eb315ac7381c3911309dba97222fb5d1
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
 
         var now = String(new Date().getTime());
-<<<<<<< HEAD
-		
-        $.ajax({
-            type: "GET",
-            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + '&\$orderby=__updated desc&\$top=10&\$skip=' + 10 * skip,
-=======
 
         var filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
         if (userInfo.sex == SEX.ALL) {
@@ -575,8 +565,7 @@ function getArticleList() {
         }
         $.ajax({
             type: "GET",
-            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=(end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + ') and ' + filter + '&\$orderby=__updated desc',
->>>>>>> b2177034eb315ac7381c3911309dba97222fb5d1
+            url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=(end_date gt \'' + now + '\' or type eq ' + TYPE.INFO + ') and ' + filter + '&\$orderby=__updated desc&\$skip=' + 50 * skip,
             headers: {
                 "Authorization": "Bearer " + token,
                 "Accept" : "application/json"
@@ -586,7 +575,9 @@ function getArticleList() {
             }
         }).done(function(data) {
             setArticle(data.d.results, token, skip === 0 ? true : false);
-            skip = skip + 1;
+            if(data.d.results.length > 0){
+                skip = skip + 1;
+            }
             getJoinInfoList(token);
             isLoad = false;
         })
