@@ -399,6 +399,7 @@ function setFilter(key) {
         }
         first = false;
     }
+    setEntryNumber();
 }
 
 function setPersonalFilter(key) {
@@ -416,10 +417,17 @@ function setPersonalFilter(key) {
         }
         first = false;
     }
+    setEntryNumber();
 }
 
 function clearFilter() {
-    $('#topInfoList>ul').children().show();
+    setFilter('', true);
+}
+
+function setEntryNumber() {
+    for (let key in joinList) {
+        $('#join_' + key).html(joinList[key]);
+    }
 }
 
 function formatDate(date) {
