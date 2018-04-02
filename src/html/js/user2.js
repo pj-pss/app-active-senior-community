@@ -384,12 +384,12 @@ function setArticle(articleList, token){
     // addLinkToGrid();
 }
 
-function setFilter(key) {
+function setFilter(key, reset) {
     $('#topInfoList>ul').children().remove();
     $('.top-content').children().remove();
     let first = true;
     for (let article of articleList) {
-        if (article.type != key) continue;
+        if (!reset && article.type != key) continue;
         if (first) {
             $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
