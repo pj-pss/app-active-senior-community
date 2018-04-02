@@ -362,23 +362,7 @@ function setArticle(articleList, token){
     let first = true;
     for(let article of articleList){
         if (first) {
-            let entry =
-                '<i class="fa fa-star fa-2x icon"></i>0' +
-                ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
-            let dispDate = formatDate(article.start_date);
-            let topContent =
-                '<div class="etc_area">' +
-                    '<div class="date">' +
-                        dispDate +
-                    '</div>' +
-                    '<div class="evaluation" id="join_' + article.__id + '">' +
-                        (dispDate ? entry : '') +
-                    '</div>' +
-                '</div>' +
-                '<div class="title-area">' +
-                    article.title +
-                '</div>';
-            $('.top-content').html(topContent);
+            $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
         }
@@ -406,23 +390,7 @@ function setFilter(key) {
     for (let article of articleList) {
         if (article.type != key) continue;
         if (first) {
-            let entry =
-                '<i class="fa fa-star fa-2x icon"></i>0' +
-                ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
-            let dispDate = formatDate(article.start_date);
-            let topContent =
-                '<div class="etc_area">' +
-                    '<div class="date">' +
-                        dispDate +
-                    '</div>' +
-                    '<div class="evaluation" id="join_' + article.__id + '">' +
-                        (dispDate ? entry : '') +
-                    '</div>' +
-                '</div>' +
-                '<div class="title-area">' +
-                    article.title +
-                '</div>';
-            $('.top-content').html(topContent);
+            $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
@@ -483,6 +451,24 @@ function createArticleGrid(id, title, date, type){
         '</li>';
 
     return li;
+}
+
+function createTopContent(id, title, date, type) {
+    let entry =
+        '<i class="fa fa-star fa-2x icon"></i>0' +
+        ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
+    let dispDate = formatDate(date);
+    return  '<div class="etc_area">' +
+                '<div class="date">' +
+                    dispDate +
+                '</div>' +
+                '<div class="evaluation" id="join_' + id + '">' +
+                    (dispDate ? entry : '') +
+                '</div>' +
+            '</div>' +
+            '<div class="title-area">' +
+                title +
+            '</div>';
 }
 
 function getUserProfile() {
