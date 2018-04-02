@@ -659,15 +659,18 @@ function getUserProfile() {
                 if (profileJson.Image.length == 0) {
                     var cellImgDef = ut.getJdenticon(Common.getCellUrl());
                     $("#monitoring .profileImg").attr("src", cellImgDef);
+                    $("#drawer_menu .user-info .pn-list-icon img").attr("src", cellImgDef);
                 } else {
                     $("#monitoring .profileImg").attr("src", profileJson.Image);
+                    $("#drawer_menu .user-info .pn-list-icon img").attr("src", profileJson.Image);
                 }
 
                 $('#monitoring .nickname').html(profileJson.DisplayName);
+                $("#drawer_menu .user-info .account-info .user-name").text(profileJson.DisplayName);
 
                 let location = evacuation.not_at_home ? i18next.t('locationState.outdoor') : i18next.t('locationState.indoor');
                 $('#monitoring .nowLocation').html(location);
-
+                $("#drawer_menu .user-info .user-status span").text(location);
                 $('#modal-helpConfirm .userName').html(basicInfo.name);
                 $('#modal-startHelpOp .userName').html(basicInfo.name);
 
