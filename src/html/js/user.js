@@ -573,10 +573,10 @@ function getArticleList(divId) {
                 "Accept" : "application/json"
             }
         }).done(function(data) {
-			setArticle(data.d.results, token, skip === 0 ? true : false);
-			skip = skip + 1;
+            setArticle(data.d.results, token, skip === 0 ? true : false);
+            skip = skip + 1;
             getJoinInfoList(token);
-			isLoad = false;
+            isLoad = false;
         })
         .fail(function() {
             alert('failed to get article list');
@@ -1190,8 +1190,8 @@ function setArticle(articleList, token, isClear = true){
             if(item.length === 0){
                 getArticleListImage(article.__id, token);
             }else{
-				item.remove();
-			}
+                item.remove();
+            }
         }else{
             getArticleListImage(article.__id, token);
         }
