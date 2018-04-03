@@ -834,7 +834,7 @@ function authorizedQrReader(qrJsonStr) {
     });
 
     $('#modal-qrReader').modal('hide');
-//    $('#top').actionHistoryShowView();
+	clearFilter();
 }
 
 function startHelpOp() {
@@ -844,6 +844,49 @@ function startHelpOp() {
     $(".startHelpOp").hide();
     $(".endHelpOp").show();
     $(".top .header-title .subtitle").show();
+}
+
+function openHelpConfirm() {
+    $('#modal-helpConfirm').localize();
+    $('#modal-helpConfirm').actionHistoryShowModal();
+}
+
+function closeHelpConfirm(f) {
+    if(f) {
+        $.ajax({
+            url: operationCellUrl + '__token',
+            type: 'POST',
+            data: 'grant_type=password&username=' + qrJson.userId + '&password=' + qrJson.password
+        }).done(function(res){
+            $.ajax({
+                type: 'DELETE',
+                url: operationCellUrl + "__ctl/ExtCell('" + encodeURIComponent(Common.getCellUrl()) + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + res.access_token
+                }
+            })
+            .done(function() {
+                helpAuthorized = false;
+                qrJson = null;
+                getArticleList();
+                getUserProfile();
+                //$('#editPrflBtn button').prop('disabled', false);
+
+                $(".startHelpOp").show();
+                $(".endHelpOp").hide();
+                $(".top .header-title .subtitle").hide();
+                clearFilter();
+
+            })
+            .fail(function() {
+                alert('error: delete ext cell');
+            });
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+        });
+    }
+    $('#modal-helpConfirm').modal('hide');
 }
 
 /**
