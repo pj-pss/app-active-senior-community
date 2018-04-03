@@ -385,7 +385,7 @@ main {
 
 /*User Icon (Picture) Above Text*/
 
-.user-name-and-icon>.user-icon>span {
+.user-name-and-icon .user-icon>span {
     width: 100%;
     position: absolute;
     bottom: 0px;

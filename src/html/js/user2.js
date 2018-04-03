@@ -665,11 +665,11 @@ async function getUserProfile() {
 
             if (!profileJson.Image || profileJson.Image.length == 0) {
                 var cellImgDef = ut.getJdenticon(Common.getCellUrl());
-                $("#profile .my_icon").css('background', 'url(' + cellImgDef + ')  center center no-repeat').css('background-size', 'contain');
                 $("#drawer_menu .user-info .pn-list-icon img").attr("src", cellImgDef);
+                $("#editPicturePreview").attr("src", cellImgDef);
             } else {
-                $("#profile .my_icon").css('background', 'url(' + profileJson.Image + ')  center center no-repeat').css('background-size', 'contain');
                 $("#drawer_menu .user-info .pn-list-icon img").attr("src", profileJson.Image);
+                $("#editPicturePreview").attr("src", profileJson.Image);
             }
 
             $('#user-name-form').attr('placeholder', profileJson.DisplayName);
@@ -718,6 +718,13 @@ function closeMenu() {
 }
 
 function viewProfile() {
+    $("#edit-picture").click(function () {
+        clearInput(this);
+    }).change(function () {
+        readURL(this);
+    });
+    ut.createCropperModal({ dispCircleMaskBool: true });
+
     getUserProfile();
     $("#popupEditDisplayNameErrorMsg").empty();
     switchCurrentButton('fa-address-card');
@@ -1099,4 +1106,30 @@ function validateDisplayName(displayName, displayNameSpan) {
 
 function clearInput(input) {
     input.value = null;
+}
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        $('#ProfileImageName').val(input.files[0].name);
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // Set images in cropper modal
+            ut.setCropperModalImage(e.target.result);
+            // Set functions in cropper modal ok button
+            let okFunc = function () {
+                let cropImg = ut.getCroppedModalImage();
+                $('#editPicturePreview').attr('src', cropImg).fadeIn('slow');
+                $("#editPicturePreview").data("attached", true);
+            };
+            ut.setCropperModalOkBtnFunc(okFunc);
+
+            // Remove focus from input
+            document.activeElement.blur();
+
+            // Start cropper modal
+            ut.showCropperModal();
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }

@@ -8,9 +8,15 @@
         <span class="block-title-text" data-i18n="profile.displayNameIcon"></span>
     </div>
     <div class="user-name-and-icon">
-        <div class="my_icon user-icon user-icon-middle">
-            <span data-i18n="btn.edit"></span>
-        </div>
+        <form id="profileForm">
+            <div rel="tooltip" data-i18n="[title]edit.profile.Image.tooltip;[data-original-title]edit.profile.Image.tooltip">
+                <div class="user-icon user-icon-middle">
+                    <img src="../img/default-avatar.png" class="picture-src" id="editPicturePreview" title="">
+                    <input type="file" id="edit-picture">
+                    <span data-i18n="btn.edit"></span>
+                </div>
+            </div>
+        </form>
         <div class="account-info">
             <div class="account-info-title">
                 <span data-i18n="profile.displayName"></span>:
