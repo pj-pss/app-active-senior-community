@@ -360,6 +360,22 @@ main {
     fill: #7D4297
 }
 
+.location-ic {
+    fill: rgb(73, 183, 71);
+}
+
+.vital-ic {
+    fill: rgb(255, 74, 145);
+}
+
+.basic-ic {
+    fill: rgb(255, 38, 42);
+}
+
+.health-ic {
+    fill: rgb(58, 115, 183);
+}
+
 /*User Icon(Picture)*/
 
 .user-name-and-icon {
