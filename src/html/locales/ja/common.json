@@ -19,7 +19,7 @@
         "comment" : "コメント",
         "scanQR" : "支援する入居者のQRコードをかざしてください",
         "startOpHelp" : " さん の操作支援を開始します",
-        "duringOpHelp" : "支援者：$t(user.002)が操作しています",
+        "duringOpHelp" : "{{name}} さんが操作しています",
         "endOpHelp" : " さん の操作支援を終了しますか?",
         "registerImg" : "※登録された写真は公開されます",
         "canNotEditInfo" : "以下の情報は変更できません",

@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * The followings should be shared among applications.
  */
+
 * {
   box-sizing: border-box;
 }
@@ -56,18 +58,40 @@ header {
   padding: 0;
   position: absolute;
 }
+
 #back_btn .icon {
   height: 30px;
   width: 30px;
 }
+
 .icon-text {
   font-size: 12px;
 }
 
+.user-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.user-info {
+  padding: 0px !important;
+}
+
+.user-info>.pn-list::after {
+  content: "\f107";
+}
+
+.fa-map-marker-alt {
+  color: #0A7866;
+  vertical-align: -3px !important;
+}
+
 /* トップページ用 */
+
 header.top {
   color: #e56700;
 }
+
 header.top #drawer_btn {
   background: none;
   border: none;
@@ -75,6 +99,7 @@ header.top #drawer_btn {
   height: 100%;
   padding: 0;
 }
+
 header.top #sort_btn {
   position: absolute;
   right: 12px;
@@ -85,40 +110,47 @@ header.top #sort_btn {
   padding: 0;
   height: 100%;
 }
-header.top > .header-title{
+
+header.top>.header-title {
   flex: 0 0 auto;
   font-family: Segoe Script !important;
-  font-size: 26px;
+  font-size: 20px;
   font-weight: normal;
 }
+
 header.top .subtitle {
   font-size: 12px;
 }
+
 header.top .icon {
   height: 22px;
   width: 22px;
 }
 
-
 /* /ヘッダー */
 
 /* メイン */
+
 main {
   flex: 1 1 auto;
   overflow: auto;
+  z-index: 1;
 }
+
 .top-content {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   /* background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(0,0,0,0.5) 100%),url(../img/clean.JPG); */
   color: #ffffff;
-  height: 220px;
+  /* height: 220px; */
+  height: 280px;
   background-size: cover;
   padding: 10px;
   position: relative;
   width: 100%;
 }
+
 .top-content.new::before {
   display: block;
   content: "NEW";
@@ -134,37 +166,55 @@ main {
   background: #ff3500;
   font-size: 12px;
 }
+
 .etc_area {
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
-  font-size: 0.75rem;
+  /* font-size: 0.75rem; */
+  font-size: 0.9rem;
 }
-.etc_area > .date {
+
+.etc_area>.date {
   flex: 1 1 auto;
 }
-.etc_area > .evaluation {
+
+.etc_area>.evaluation {
   flex: 0 0 auto;
 }
-.etc_area .icon {
-  height: 14px;
-  width: 14px;
+
+.evaluation>span{
+  margin-right: 5px;
 }
+
+.etc_area .icon {
+  /* height: 14px;
+  width: 14px; */
+
+    height: 18px;
+  width: 18px;
+}
+
 .title-area {
   flex: 0 0 auto;
-  font-size: 1.2rem;
+  /* font-size: 1.2rem; */
+  font-size: 1.5rem;
+  font-weight: bold;
 }
+
 .list ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .list ul li {
   display: flex;
   background: #fafafa;
   border-bottom: 1px solid #969696;
 }
-.list ul li .list-image{
+
+.list ul li .list-image {
   flex: 0 0 auto;
   position: relative;
   padding: 4px;
@@ -186,30 +236,38 @@ main {
   font-size: 8px;
 }
 
-.list ul li .list-text{
+.list ul li .list-text {
   flex: 1 1 auto;
   padding: 4px;
   display: flex;
   flex-direction: column;
 }
-.list ul li .list-text > .title{
+
+.list ul li .list-text>.title {
   flex: 1 1 auto;
   color: #5d5d5d;
-  font-size: 18px;
+  /* font-size: 18px; */
+  font-size: 1.3rem;
   font-weight: bold;
 }
-.list ul li .list-text > .etc_area{
+
+.list ul li .list-text>.etc_area {
   flex: 0 0 auto;
   color: #757575;
 }
+
 .list ul li .list-thumbnail {
-  height: 88px;
-  width: 88px;
+  /* height: 88px; */
+  /* width: 88px; */
+  height: 100px;
+  width: 100px;
   object-fit: cover;
 }
+
 /* /メイン */
 
 /* フッター */
+
 footer {
   flex: 0 0 auto;
   overflow: hidden;
@@ -217,27 +275,31 @@ footer {
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
-  box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.6);
-  border-radius:1px;
-  z-index: 2;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.6);
+  border-radius: 1px;
+  z-index: 3;
 }
-footer > button {
+
+footer>button {
   width: 80px;
   background: none;
   border: none;
   color: #9c9c9c;
 }
-footer > button.current {
+
+footer>button.current {
   width: 80px;
   background: none;
   border: none;
   color: #e56700;
 }
-footer > button > .icon {
+
+footer>button>.icon {
   height: 26px;
 }
-footer > button > .icon-text {
+
+footer>button>.icon-text {
   font-size: 12px;
 }
-/* /フッター */
 
+/* /フッター */
