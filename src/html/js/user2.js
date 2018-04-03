@@ -688,7 +688,7 @@ var scanner;
 
 function openQrReader() {
 	helpAuthorized = false;
-    $('#qrcodeModal').localize();
+    $('#modal-qrReader').localize();
 
     var videoComponent = $("#camera-preview");
     var options = {};
@@ -700,12 +700,12 @@ function openQrReader() {
         authorizedQrReader(decryptQR(content));
     });
 
-    $('#qrcodeModal').actionHistoryShowModal();
-	$('#qrcodeModal').on('hidden.bs.modal', function () {
+    $('#modal-qrReader').actionHistoryShowModal();
+	$('#modal-qrReader').on('hidden.bs.modal', function () {
 	    try{
 			scanner.stop();
 		}catch(e){}
-		$('#qrcodeModal').off('hidden.bs.modal');
+		$('#modal-qrReader').off('hidden.bs.modal');
 	});
 }
 
@@ -833,7 +833,7 @@ function authorizedQrReader(qrJsonStr) {
         alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
     });
 
-    $('#qrcodeModal').modal('hide');
+    $('#modal-qrReader').modal('hide');
 //    $('#top').actionHistoryShowView();
 }
 
