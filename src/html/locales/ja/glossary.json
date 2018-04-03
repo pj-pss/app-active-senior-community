@@ -4,5 +4,8 @@
         "action": "アプリを終了します。",
         "btnOk": "OK"
     },
+    "irrecoverableErrorDialog": {
+        "title": "アプリを終了します ..."
+    },
     "title": "user-app"
 }

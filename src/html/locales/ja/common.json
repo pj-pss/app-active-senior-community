@@ -4,6 +4,10 @@
         "message": "セッションの期限が切れています。<br>$t(glossary:sessionExpiredDialog.action)",
         "btnOk": "$t(glossary:sessionExpiredDialog.btnOk)"
     },
+    "irrecoverableErrorDialog": {
+        "title": "$t(glossary:irrecoverableErrorDialog.title)"
+    },
+
 
     "msg": {
         "backToTop" : "$t(pageTitle.top)に戻る",
@@ -33,7 +37,15 @@
         "failedDeleteArticle": "記事の削除に失敗しました",
         "completeGetArticle": "記事の削除が完了しました",
         "confirmSendReply": "回答しますか?",
-        "anonymousReply": "匿名で回答する"
+        "anonymousReply": "匿名で回答する",
+        "noContent" : "対象記事がありません",
+
+        "error": {
+            "targetCellNotSelected": "対象セルが設定されていません。",
+            "refreshTokenMissing": "リフレッシュ$t(msg.error.tokenMissing)",
+            "failedToRefreshToken": "リフレッシュトークンの更新に失敗しました。<br>画面をリロードしてください。",
+            "failedToGetBoxUrl": "Box URLの取得に失敗しました。"
+        }
     },
     "entry": {"anonymous" : "匿名"},
 
@@ -108,7 +120,7 @@
     },
     "profile" : {
         "prefix" : "情報開示詳細: ",
-        "location" : "現在地",
+        "location" : "在宅情報",
         "basicInfo" : "基本情報",
         "basicContact" : "連絡先",
         "basicRoom" : "部屋情報",
@@ -126,7 +138,7 @@
         "sgmntOwnr" : "区分所有者",
         "rcptsCnfrmtn" : "受領書類・確認",
         "healthInfo" : "健康情報",
-        "vital" : "バイタル",
+        "vital" : "バイタル情報",
         "healthInsurance" : "健康保険",
         "prmryNursingCare" : "要介護認定",
         "disability" : "身体障害",
@@ -136,7 +148,9 @@
         "medicine" : "内服薬・外用薬",
         "vaccination" : "予防接種",
         "examination" : "検診受診状況",
-        "careService" : "介護サービス"
+        "careService" : "介護サービス",
+        "displayNameIcon" : "表示名・アイコン",
+        "displayName" : "表示名"
     },
     "vital" : {
         "bloodPressure" : "血圧",

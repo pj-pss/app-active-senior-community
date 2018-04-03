@@ -28,7 +28,7 @@ body {
 
 header {
     line-height: 4.0rem;
-    background-image: url(../img/personium_header_bg.png);
+    /* background-image: url(../img/personium_header_bg.png); */
     background-repeat: no-repeat;
     background-size: cover;
     color: #ffffff;
@@ -116,9 +116,9 @@ main {
 
 /*User icon*/
 
-.my_icon {
+/* .my_icon {
     background: url(../img/user-icon-01.png) center center no-repeat;
-}
+} */
 
 .link_icon {
     background: url(../img/user-icon-02.png) center center no-repeat;
@@ -188,7 +188,7 @@ main {
 
 /*Application & Service's title*/
 
-.title {
+/* .title {
     background-color: #E5E6EB;
     height: 40px;
     line-height: 40px;
@@ -196,7 +196,7 @@ main {
     font-size: 1.2rem;
     font-weight: bold;
     flex: 0 0 auto;
-}
+} */
 
 /*Application list*/
 
@@ -358,6 +358,22 @@ main {
 
 .qr-code-ic {
     fill: #7D4297
+}
+
+.location-ic {
+    fill: rgb(73, 183, 71);
+}
+
+.vital-ic {
+    fill: rgb(255, 74, 145);
+}
+
+.basic-ic {
+    fill: rgb(255, 38, 42);
+}
+
+.health-ic {
+    fill: rgb(58, 115, 183);
 }
 
 /*User Icon(Picture)*/
