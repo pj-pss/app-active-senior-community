@@ -32,17 +32,8 @@ body {
 /* ヘッダー */
 /* 共通 */
 header {
-  align-items: center;
   background-color: #fafafa;
-  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.6);
   display: flex;
-  justify-content: center;
-  flex: 0 0 auto;
-  height: 4.0rem;
-  text-align: center;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
 }
 .header-title{
   flex: 0 0 auto;
