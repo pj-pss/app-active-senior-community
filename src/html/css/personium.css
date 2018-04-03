@@ -58,6 +58,24 @@ a:hover {
     color: #707070;
 }
 
+header {
+    height: 4.0rem;
+    flex: 0 0 auto;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+main{
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 /*drawer menu*/
 
 #drawer {
@@ -83,6 +101,7 @@ a:hover {
 #drawer_menu>ul>li>a {
     text-decoration: none;
     color: #707070;
+    display: block;
 }
 
 #drawer_menu>ul {
@@ -288,4 +307,78 @@ a:hover {
     width: 40px;
     padding: 0;
     margin: 0 15px;
+}
+
+/*list(Right arrow)*/
+.pn-list{
+    position: relative;
+    display: flex;
+    min-height: 80px;
+    padding-right: 50px;
+}
+
+.pn-list>.pn-list-icon {
+    margin: auto 10px;
+}
+
+.pn-list>.pn-list-icon-02 {
+    margin: auto 20px;
+}
+
+.pn-list>.pn-list-icon>img{
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.pn-list::after {
+    font-family: "Font Awesome 5 Free";
+    position: absolute;
+    font-size: 2em;
+    vertical-align: middle;
+    font-weight: 900;
+    content: "\f105";
+    right: 10px;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.text-hidden{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*Account infomation*/
+
+.account-info {
+    margin: auto 20px auto 10px;
+    display: inline-block;
+    flex: 1;
+    position: relative;
+}
+
+.account-info>div {
+    height: 50%;
+    padding: 5px 0px;
+}
+
+
+/*batch*/
+.pn-list-batch{
+    line-height: 24px;
+    font-size: 14px;
+    margin: auto 0px;
+}
+
+.pn-list-batch>span{
+    display: inline-block;
+    text-align: center;
+    background-color: #E9142B;
+    color: #ffffff;
+    border-radius: 20px;
+    width: 30px;
 }
