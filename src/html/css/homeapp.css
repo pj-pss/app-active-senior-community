@@ -27,19 +27,11 @@ body {
 }
 
 header {
-    text-align: center;
-    font-size: 1.5rem;
-    height: 4.0rem;
     line-height: 4.0rem;
-    flex: 0 0 auto;
     background-image: url(../img/personium_header_bg.png);
     background-repeat: no-repeat;
     background-size: cover;
     color: #ffffff;
-    overflow: hidden;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
 }
 
 .back-btn,
@@ -103,12 +95,9 @@ header {
 }
 
 main {
-    /* display: flex; */
     flex-direction: column;
     flex: 1 1 auto;
     position: relative;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 /*-------------------------top(From here)-------------------------*/
@@ -146,20 +135,6 @@ main {
 .user-icon>img {
     overflow: hidden;
     object-fit: cover;
-}
-
-/*Account infomation*/
-
-.account-info {
-    margin: 0 20px 0 10px;
-    display: inline-block;
-    flex: 1;
-    position: relative;
-}
-
-.account-info>div {
-    height: 50%;
-    padding: 5px 0px;
 }
 
 /*Use name*/
@@ -268,38 +243,7 @@ main {
     margin: 0px;
 }
 
-.links-list {
-    position: relative;
-    display: flex;
-    min-height: 80px;
-}
-
-.links-list>.links-icon {
-    margin: 10px
-}
-
-.links-list>.links-icon>img {
-    width: 60px;
-    height: 60px;
-    overflow: hidden;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-.links-list::after {
-    font-family: "Font Awesome 5 Free";
-    position: absolute;
-    font-size: 2em;
-    vertical-align: middle;
-    font-weight: 900;
-    content: "\f105";
-    right: 10px;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
-.links-list>.account-info>.user-name {
+.pn-list>.account-info>.user-name {
     font-weight: normal;
 }
 
@@ -318,7 +262,6 @@ main {
     line-height: 80px;
     text-align: center;
     font-size: 1.5rem;
-
 }
 
 .edit-list>span::before {
@@ -351,6 +294,7 @@ main {
 .extcell-profile>.user-description,
 .extcell-profile>.user-cell-url {
     text-align: left;
+    margin-top: 10px;
 }
 
 .extcell-profile>.user-cell-url {
@@ -369,7 +313,7 @@ main {
     text-align: center;
 }
 
-.links-list-text {
+.pn-list-text {
     margin: auto 0;
     flex: 1;
     font-size: 1.2rem;
@@ -491,11 +435,13 @@ main {
     font-size: 0.8rem;
 }
 
-.form-control:disabled, .form-control[readonly]{
+.form-control:disabled,
+.form-control[readonly] {
     background-color: #ffffff;
     border: 0;
     color: #495057;
 }
+
 /*-------------------------profile page(To here)-------------------------*/
 
 /*-------------------------account page(From here)-------------------------*/
@@ -557,37 +503,135 @@ main {
     vertical-align: -1.2em;
 }
 
-.edit-role::before{
+.edit-role::before {
     content: "\f044";
 }
 
-.account-info-footer{
+.account-info-footer {
     border-top: 1px solid #999999;
 }
 
 /*-------------------------account infomation page(To here)-------------------------*/
 
 /*-------------------------add new account page(From here)-------------------------*/
-.form-title{
+
+.form-title {
     width: 120px;
     font-size: 1.4rem;
     background-color: #ffffff;
 }
 
-.account-form{
+.account-form {
     height: 80px;
     font-size: 1.4rem;
 }
 
-.form-no-border{
-    border: 0;
+.form-no-border {
+    border: 0 !important;
 }
 
-.edit-list-btn-area{
+.footer-btn-area {
     padding: 15px;
 }
 
-.edit-list-btn{
+.footer-btn {
     width: 50%;
     margin: 5px;
+}
+
+/*-------------------------add new account page(To here)-------------------------*/
+
+/*-------------------------incoming message page(From here)-------------------------*/
+
+.incoming_msg {
+    flex-direction: column;
+}
+
+.sender::after {
+    content: "";
+}
+
+.message-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 20px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.message-text {
+    font-size: 1.2rem;
+    padding: 20px;
+}
+
+.replay-btn-area {
+    padding: 5px 90px;
+}
+
+.replay-btn-area>button {
+    border: 0;
+    background-color: #ffffff;
+    color: #707070;
+}
+
+/*-------------------------incoming message page(To here)-------------------------*/
+
+/*-------------------------message page(From here)-------------------------*/
+
+.msg-menu-text {
+    margin: auto 10px auto 0px;
+    flex: 1;
+    position: relative;
+    font-size: 1.1rem;
+}
+
+.msg-menu-text>span {
+    display: table-cell;
+}
+
+.msg-list-icon {
+    font-size: 1.5rem;
+}
+
+.msg-menu-text-area{
+    width: 100%;
+    position: relative;
+}
+
+.msg-list-batch {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 2px;
+}
+
+/*-------------------------message page(To here)-------------------------*/
+
+/*-------------------------incoming message list page(From here)-------------------------*/
+
+.message-list {
+    margin: auto 0px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.message-list-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.received-info {
+    position: relative;
+    width: 100%;
+    font-size: 1.0rem;
+}
+
+.received-date {
+    position: absolute;
+    right: 0;
+}
+
+.received-info,
+.message-list-text {
+    font-size: 0.85rem;
 }
