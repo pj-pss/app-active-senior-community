@@ -111,7 +111,7 @@
             </div>
           </li>
           <li class="menu-list">
-            <a href="javascript:viewProfile();closeMenu()">プロフィール編集</a>
+            <a href="#" onclick="javascript:viewProfile();closeMenu();return false;">プロフィール編集</a>
           </li>
           <li class="menu-list">
             <a href="#">
@@ -158,15 +158,15 @@
   </main>
 
   <footer>
-    <button class="current" onclick="clearFilter();view('top')">
+    <button class="current" onclick="clearFilter()">
       <i class="fas fa-home fa-2x icon"></i>
       <div class="icon-text">ホーム</div>
     </button>
-    <button onclick="setPersonalFilter(REPLY.CONSIDER);view('top')">
+    <button onclick="setPersonalFilter(REPLY.CONSIDER)">
       <i class="fa fa-star fa-2x icon"></i>
       <div class="icon-text">検討中</div>
     </button>
-    <button onclick="setPersonalFilter(REPLY.JOIN);view('top')">
+    <button onclick="setPersonalFilter(REPLY.JOIN)">
       <i class="fas fa-calendar-check fa-2x icon"></i>
       <div class="icon-text">参加予定</div>
     </button>

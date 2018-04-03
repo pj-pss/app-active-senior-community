@@ -434,11 +434,13 @@ function setPersonalFilter(key) {
 
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
+    view('top');
 }
 
 function clearFilter() {
     setFilter('', true);
     switchCurrentButton('fa-home');
+    view('top');
 }
 
 function setEntryNumber() {
