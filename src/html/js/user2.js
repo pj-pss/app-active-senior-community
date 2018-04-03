@@ -1040,12 +1040,12 @@ function Control_Input_Editer(pushed_btn, target_input) {
         check_ic.addClass('fa-edit');
 
         target_input.blur();
-        saveProfile();
+        saveUserName();
         target_input.attr('disabled', true);
     }
 }
 
-function saveProfile() {
+function saveUserName() {
     if (validateDisplayName($("#user-name-form").val(), "popupEditDisplayNameErrorMsg")) {
         Common.refreshToken(function () {
             $.ajax({
@@ -1055,10 +1055,10 @@ function saveProfile() {
                 headers: {
                     "Accept": "application/json"
                 }
-            }).done(function () {
+            }).done(function (profileJson) {
                 var saveData = _.clone(arguments[0]);
                 saveData.DisplayName = $("#user-name-form").val();
-                saveData.Image = $("#editPicturePreview").attr("src");
+                saveData.Image = profileJson.Image;
                 $.ajax({
                     type: "PUT",
                     url: Common.getCellUrl() + '__/profile.json',
