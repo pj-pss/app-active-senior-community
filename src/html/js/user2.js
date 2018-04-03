@@ -663,7 +663,7 @@ async function getUserProfile() {
                 userInfo.age = AGE.OVER_EIGHTY;
             }
 
-            if (profileJson.Image.length == 0) {
+            if (!profileJson.Image || profileJson.Image.length == 0) {
                 var cellImgDef = ut.getJdenticon(Common.getCellUrl());
                 $("#profile .my_icon").css('background', 'url(' + cellImgDef + ')  center center no-repeat').css('background-size', 'contain');
                 $("#drawer_menu .user-info .pn-list-icon img").attr("src", cellImgDef);
@@ -719,6 +719,7 @@ function closeMenu() {
 
 function viewProfile() {
     getUserProfile();
+    $("#popupEditDisplayNameErrorMsg").empty();
     switchCurrentButton('fa-address-card');
     view('profile');
 }
@@ -735,7 +736,14 @@ $(function () {
                         '<ul></ul>' +
                     '</div>';
     $("#top").html(topHtml);
-    $("#profile").load("profile.html");
+    $("#profile").load("profile.html", function() {
+        /*Edit button clicked action*/
+        $('.edit-btn').on('click', function () {
+            if ($(this).attr('id') == 'user-name-edit-btn') {
+                Control_Input_Editer($(this), $('#user-name-form'));
+            }
+        })
+    });
 });
 
 function showMessage(msg) {
@@ -1007,4 +1015,88 @@ function validateQRInfo(qrJson) {
 
     alert('error: invalid QRcode data');
     return false;
+}
+
+/**
+ * Control_Input_Editer
+ * param:
+ * pushed_btn -> Pushed Edit Button
+ * target_input -> Want To Edit Input Box
+ */
+function Control_Input_Editer(pushed_btn, target_input) {
+    var edit_ic = pushed_btn.find('.fa-edit');
+    var check_ic = pushed_btn.find('.fa-check');
+
+    if (!(pushed_btn.hasClass('editing'))) {
+        pushed_btn.addClass('editing');
+        edit_ic.removeClass('fa-edit');
+        edit_ic.addClass('fa-check');
+        target_input.attr('disabled', false);
+        target_input.focus();
+    } else {
+        pushed_btn.removeClass('editing');
+
+        check_ic.removeClass('fa-check');
+        check_ic.addClass('fa-edit');
+
+        target_input.blur();
+        saveProfile();
+        target_input.attr('disabled', true);
+    }
+}
+
+function saveProfile() {
+    if (validateDisplayName($("#user-name-form").val(), "popupEditDisplayNameErrorMsg")) {
+        Common.refreshToken(function () {
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: Common.getCellUrl() + '__/profile.json',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function () {
+                var saveData = _.clone(arguments[0]);
+                saveData.DisplayName = $("#user-name-form").val();
+                saveData.Image = $("#editPicturePreview").attr("src");
+                $.ajax({
+                    type: "PUT",
+                    url: Common.getCellUrl() + '__/profile.json',
+                    data: JSON.stringify(saveData),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + Common.getToken()
+                    }
+                }).done(function () {
+                    viewProfile();
+                });
+            });
+        });
+    }
+}
+
+editDisplayNameBlurEvent = function () {
+    var displayName = $("#user-name-form").val();
+    var displayNameSpan = "popupEditDisplayNameErrorMsg";
+    validateDisplayName(displayName, displayNameSpan);
+};
+
+function validateDisplayName(displayName, displayNameSpan) {
+    var MINLENGTH = 1;
+    var lenDisplayName = displayName.length;
+    if (lenDisplayName < MINLENGTH || displayName == undefined || displayName == null || displayName == "") {
+        return false;
+    }
+
+    var MAXLENGTH = 128;
+    $("#" + displayNameSpan).empty();
+    if (lenDisplayName > MAXLENGTH) {
+        $("#" + displayNameSpan).html(i18next.t("errorValidateNameLength"));
+        return false;
+    }
+    return true;
+}
+
+function clearInput(input) {
+    input.value = null;
 }

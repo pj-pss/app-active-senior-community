@@ -86,7 +86,7 @@ function viewProfile(){
             "Accept" : "application/json"
         }
 	}).done(function(){
-		if(arguments[0].Image.length === 0){
+        if (!arguments[0].Image || arguments[0].Image.length === 0){
 			var cellImgDef = ut.getJdenticon(Common.getCellUrl());
     		$("#editPicturePreview").attr("src", cellImgDef);
 		}else{
