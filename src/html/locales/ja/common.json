@@ -38,6 +38,7 @@
         "completeGetArticle": "記事の削除が完了しました",
         "confirmSendReply": "回答しますか?",
         "anonymousReply": "匿名で回答する",
+        "noContent" : "対象記事がありません",
 
         "error": {
             "targetCellNotSelected": "対象セルが設定されていません。",

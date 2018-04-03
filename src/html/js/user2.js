@@ -388,12 +388,13 @@ function setArticle(articleList, token){
 }
 
 function setFilter(key, reset) {
-    $('#topInfoList>ul').children().remove();
-    $('.top-content').children().remove();
     let first = true;
     for (let article of articleList) {
         if (!reset && article.type != key) continue;
         if (first) {
+            $('#topInfoList>ul').children().remove();
+            $('.top-content').children().remove();
+
             $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
         } else {
@@ -402,16 +403,22 @@ function setFilter(key, reset) {
         }
         first = false;
     }
+    if (first) {
+        showMessage(i18next.t('msg.noContent'));
+        return;
+    }
+
     setEntryNumber();
 }
 
 function setPersonalFilter(key) {
-    $('#topInfoList>ul').children().remove();
-    $('.top-content').children().remove();
     let first = true;
     for (let article of articleList) {
         if (!personalJoinList.hasOwnProperty(article.__id) || personalJoinList[article.__id] != key) continue;
         if (first) {
+            $('#topInfoList>ul').children().remove();
+            $('.top-content').children().remove();
+
             $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
         } else {
@@ -420,8 +427,12 @@ function setPersonalFilter(key) {
         }
         first = false;
     }
-    setEntryNumber();
+    if (first) {
+        showMessage(i18next.t('msg.noContent'));
+        return;
+    }
 
+    setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
 }
 
@@ -715,3 +726,8 @@ $(function () {
     $("#top").html(topHtml);
     $("#profile").load("profile.html");
 });
+
+function showMessage(msg) {
+    $('#messageModal .modal-body').html(msg);
+    $('#messageModal').modal('show');
+}
