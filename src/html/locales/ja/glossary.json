@@ -5,7 +5,7 @@
         "btnOk": "OK"
     },
     "irrecoverableErrorDialog": {
-        "title": "MyBoardを終了します ..."
+        "title": "アプリを終了します ..."
     },
     "title": "user-app"
 }
