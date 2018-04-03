@@ -56,7 +56,7 @@
       <div id="drawer_menu">
         <ul>
           <li class="menu-list">
-            <a href="javascript:view('profile')">プロフィール編集</a>
+            <a href="javascript:viewProfile();closeMenu()">プロフィール編集</a>
           </li>
           <li class="menu-list">
             <a href="#">パスワード変更</a>
@@ -110,15 +110,15 @@
       <i class="fas fa-home fa-2x icon"></i>
       <div class="icon-text">ホーム</div>
     </button>
-    <button onclick="setPersonalFilter(REPLY.CONSIDER)">
+    <button onclick="setPersonalFilter(REPLY.CONSIDER);view('top')">
       <i class="fa fa-star fa-2x icon"></i>
       <div class="icon-text">検討中</div>
     </button>
-    <button onclick="setPersonalFilter(REPLY.JOIN)">
+    <button onclick="setPersonalFilter(REPLY.JOIN);view('top')">
       <i class="fas fa-calendar-check fa-2x icon"></i>
       <div class="icon-text">参加予定</div>
     </button>
-    <button>
+    <button onclick="viewProfile()">
       <i class="fas fa-address-card fa-2x icon"></i>
       <div class="icon-text">私の情報</div>
     </button>

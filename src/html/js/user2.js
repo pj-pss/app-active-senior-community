@@ -681,7 +681,9 @@ function view(menuId) {
     $("#" + menuId).localize();
     nowViewMenu = menuId;
     window.scrollTo(0, 0);
+}
 
+function closeMenu() {
     $('#drawer_menu').animate({
         width: 'hide'
     }, 300, function () {
@@ -691,9 +693,9 @@ function view(menuId) {
 }
 
 function viewProfile() {
-    // get user profile
-    // make html
+    getUserProfile()
     // set button color
+    view('profile');
 }
 
 // load html
