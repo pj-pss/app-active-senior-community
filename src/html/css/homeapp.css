@@ -26,7 +26,7 @@ body {
     overflow: hidden;
 }
 
-header {
+/* header {
     text-align: center;
     font-size: 1.5rem;
     height: 4.0rem;
@@ -40,7 +40,7 @@ header {
     position: relative;
     z-index: 2;
     box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
-}
+} */
 
 .back-btn,
 #drawer_btn,
@@ -213,7 +213,7 @@ main {
 
 /*Application & Service's title*/
 
-.title {
+/* .title {
     background-color: #E5E6EB;
     height: 40px;
     line-height: 40px;
@@ -221,7 +221,7 @@ main {
     font-size: 1.2rem;
     font-weight: bold;
     flex: 0 0 auto;
-}
+} */
 
 /*Application list*/
 

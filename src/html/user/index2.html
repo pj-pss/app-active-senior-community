@@ -11,6 +11,7 @@
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/personium.css">
   <link rel="stylesheet" href="../css/hoosiers.css">
+  <link rel="stylesheet" href="../css/homeapp.css">
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -55,7 +56,7 @@
       <div id="drawer_menu">
         <ul>
           <li class="menu-list">
-            <a href="#">プロフィール編集</a>
+            <a href="javascript:view('profile')">プロフィール編集</a>
           </li>
           <li class="menu-list">
             <a href="#">パスワード変更</a>
@@ -96,10 +97,16 @@
   </header>
 
   <main>
+    <div id="top"></div>
+    <div id="profile" class="d-none"></div>
+    <!-- <div id="opHistory" class="hidden"></div>
+    <div id="viewQRCode" class="hidden"></div>
+    <div id="articleDetail" class="hidden"></div>
+    <div id="entryList" class="hidden"></div> -->
   </main>
 
   <footer>
-    <button class="current" onclick="clearFilter()">
+    <button class="current" onclick="clearFilter();view('top')">
       <i class="fas fa-home fa-2x icon"></i>
       <div class="icon-text">ホーム</div>
     </button>
