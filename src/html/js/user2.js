@@ -647,6 +647,13 @@ async function getUserProfile() {
                 userInfo.age = AGE.OVER_EIGHTY;
             }
 
+            if (profileJson.Image.length == 0) {
+                var cellImgDef = ut.getJdenticon(Common.getCellUrl());
+                $("#profile .my_icon").css('background', 'url(' + cellImgDef + ')  center center no-repeat').css('background-size', 'contain');
+            } else {
+                $("#profile .my_icon").css('background', 'url(' + profileJson.Image + ')  center center no-repeat').css('background-size', 'contain');
+            }
+
             $('#user-name-form').attr('placeholder', profileJson.DisplayName);
             $('#user-name-form').attr('aria-label', profileJson.DisplayName);
 
