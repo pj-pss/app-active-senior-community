@@ -1065,7 +1065,6 @@ function saveUserName() {
             }).done(function (profileJson) {
                 var saveData = _.clone(arguments[0]);
                 saveData.DisplayName = $("#user-name-form").val();
-                saveData.Image = profileJson.Image;
                 $.ajax({
                     type: "PUT",
                     url: Common.getCellUrl() + '__/profile.json',
@@ -1121,6 +1120,31 @@ function readURL(input) {
                 let cropImg = ut.getCroppedModalImage();
                 $('#editPicturePreview').attr('src', cropImg).fadeIn('slow');
                 $("#editPicturePreview").data("attached", true);
+
+                Common.refreshToken(function () {
+                    $.ajax({
+                        type: "GET",
+                        dataType: 'json',
+                        url: Common.getCellUrl() + '__/profile.json',
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }).done(function (profileJson) {
+                        var saveData = _.clone(arguments[0]);
+                        saveData.Image = $("#editPicturePreview").attr("src")
+                        $.ajax({
+                            type: "PUT",
+                            url: Common.getCellUrl() + '__/profile.json',
+                            data: JSON.stringify(saveData),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Authorization': 'Bearer ' + Common.getToken()
+                            }
+                        }).done(function () {
+                            viewProfile();
+                        });
+                    });
+                });
             };
             ut.setCropperModalOkBtnFunc(okFunc);
 
