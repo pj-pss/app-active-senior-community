@@ -125,6 +125,7 @@ function getArticleListImage(id, token, topContent) {
 }
 
 function getJoinInfoList(token) {
+    joinList = {};
     // get reply list
     var oData = 'reply';
     var entityType = 'reply_history';
@@ -174,6 +175,7 @@ function getJoinInfoList(token) {
 }
 
 function getPersonalJoinInfo() {
+    personalJoinList = {};
     getCurrentCellToken(function (token) {
         // get reply list
         var oData = 'reply';
