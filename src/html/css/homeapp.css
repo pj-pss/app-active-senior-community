@@ -27,7 +27,7 @@ body {
 }
 
 header {
-    line-height: 4.0rem;
+    /* line-height: 4.0rem; */
     /* background-image: url(../img/personium_header_bg.png); */
     background-repeat: no-repeat;
     background-size: cover;
