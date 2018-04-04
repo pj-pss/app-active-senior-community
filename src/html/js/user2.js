@@ -731,11 +731,13 @@ function viewProfile() {
     $("#popupEditDisplayNameErrorMsg").empty();
     switchCurrentButton('fa-address-card');
     $(".top .header-title .title").text(i18next.t('pageTitle.profile'));
+    $("#sort_btn").hide();
     view('profile');
 }
 
 function viewTop() {
     $(".top .header-title .title").text(i18next.t('pageTitle.articleList'));
+    $("#sort_btn").show();
     view('top');
 }
 
