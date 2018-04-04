@@ -77,11 +77,9 @@ async function getArticleList() {
             setArticle(data.d.results, token);
             getJoinInfoList(token);
             getPersonalJoinInfo();
-            return Promise.resolve();
         })
         .fail(function() {
             alert('failed to get article list');
-            return Promise.reject();
         });
     });
 }
@@ -510,7 +508,7 @@ function createTopContent(id, title, date, type) {
 }
 
 async function getUserProfile() {
-    getCurrentCellToken(function (token) {
+    getCurrentCellToken(await function (token) {
         let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
         let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
         $.when(
@@ -691,12 +689,8 @@ async function getUserProfile() {
             }
 
         })
-        .done(function () {
-            return Promise.resolve();
-        })
         .fail(function () {
             alert('error: get user profile');
-            return Promise.reject();
         });
     });
 
@@ -849,7 +843,6 @@ function authorizedQrReader(qrJsonStr) {
                     },
                     function (XMLHttpRequest, textStatus, errorThrown) {
                         alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
-                        return Promise.reject();
                     }
                 );
         };
