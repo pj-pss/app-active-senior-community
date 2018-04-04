@@ -436,13 +436,13 @@ function setPersonalFilter(key) {
 
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
-    view('top');
+    viewTop();
 }
 
 function clearFilter() {
     setFilter('', true);
     switchCurrentButton('fa-home');
-    view('top');
+    viewTop();
 }
 
 function setEntryNumber() {
@@ -730,7 +730,13 @@ function viewProfile() {
     getUserProfile();
     $("#popupEditDisplayNameErrorMsg").empty();
     switchCurrentButton('fa-address-card');
+    $(".top .header-title .title").text(i18next.t('pageTitle.profile'));
     view('profile');
+}
+
+function viewTop() {
+    $(".top .header-title .title").text(i18next.t('pageTitle.articleList'));
+    view('top');
 }
 
 function switchCurrentButton(buttonName) {
