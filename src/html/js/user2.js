@@ -878,7 +878,6 @@ function authorizedQrReader(qrJsonStr) {
                 deleteExtCell().then(createExtCell).then(setRole)
                     .done(function () {
                         helpAuthorized = true;
-//                        $('#editPrflBtn button').prop('disabled', true);
                         getArticleList();
                         getUserProfile();
                         startHelpOp();
@@ -890,7 +889,6 @@ function authorizedQrReader(qrJsonStr) {
                 createExtCell().then(setRole)
                     .done(function () {
                         helpAuthorized = true;
-//                        $('#editPrflBtn button').prop('disabled', true);
                         getArticleList();
                         getUserProfile();
                         startHelpOp();
@@ -917,6 +915,9 @@ function startHelpOp() {
     $(".startHelpOp").hide();
     $(".endHelpOp").show();
     $(".top .header-title .subtitle").show();
+    $('#edit-picture').prop('disabled', true);
+    $('#edit-picture +span').hide();
+    $('#user-name-edit-btn').hide();
 }
 
 function openHelpConfirm() {
@@ -942,12 +943,13 @@ function closeHelpConfirm(f) {
                 helpAuthorized = false;
                 qrJson = null;
                 getArticleList();
-                getUserProfile();
-                //$('#editPrflBtn button').prop('disabled', false);
 
                 $(".startHelpOp").show();
                 $(".endHelpOp").hide();
                 $(".top .header-title .subtitle").hide();
+                $('#edit-picture').prop('disabled', false);
+                $('#edit-picture +span').show();
+                $('#user-name-edit-btn').show();
                 clearFilter();
 
             })
