@@ -723,7 +723,7 @@ function viewProfile() {
     }).change(function () {
         readURL(this);
     });
-    ut.createCropperModal({ dispCircleMaskBool: true });
+    ut.createCropperModal2({ dispCircleMaskBool: true });
 
     getUserProfile();
     $("#popupEditDisplayNameErrorMsg").empty();
