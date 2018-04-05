@@ -98,6 +98,13 @@ $(function () {
 
       $('#sort-menu').find('.checked').removeClass('checked');
       $(this).addClass('checked');
+
+      $('#sort-menu').animate({
+        height: 'hide'
+      }, 300, function () {
+        $('#sort-background').hide();
+        return false;
+      });
     });
   }
 
