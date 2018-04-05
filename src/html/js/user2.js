@@ -442,6 +442,8 @@ function setPersonalFilter(key) {
 function clearFilter() {
     setFilter('', true);
     switchCurrentButton('fa-home');
+    $('#sort-menu li').removeClass('checked');
+    $('#sort-menu li.all').addClass('checked');
     viewTop();
 }
 
