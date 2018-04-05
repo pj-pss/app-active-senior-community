@@ -10,7 +10,7 @@
 
 
     "msg": {
-        "backToTop" : "$t(pageTitle.top)に戻る",
+        "backToTop" : "$t(pageTitle.calendar)に戻る",
         "backToArticle" : "記事本文に戻る",
         "backToBbs" : "$t(pageTitle.bbs)に戻る",
         "readMore" : "もっと見る",
@@ -73,7 +73,8 @@
     },
     "pageTitle" : {
         "action" : "アクション",
-        "top" : "カレンダー",
+        "top" : "Personiumコミュニティ",
+        "calendar" : "カレンダー",
         "monitoring" : "見守り",
         "opHistory" : "私の操作履歴",
         "startHelpOp" : "操作支援",
@@ -85,8 +86,7 @@
         "bbs" : "みんなの掲示板",
 		"participate" : "参加する人",
         "consider" : "検討している人",
-        "profile" : "私の情報",
-        "articleList" : "Personiumコミュニティ"
+        "profile" : "私の情報"
     },
     "org" : {
         "title" : "運用者ポータル",
@@ -227,10 +227,11 @@
 	},
     "log": {
 		"top" : "{{name}} さんがトップ画面を表示しました。",
+        "profile" : "{{name}} さんがプロフィール画面を表示しました。",
+		"opHistory" : "{{name}} さんが私の操作履歴画面を表示しました。",
 		"myhealth" : "{{name}} さんが私の健康画面を表示しました。",
 		"monitoring" : "{{name}} さんが見守り画面を表示しました。",
         "profileEdit" : "{{name}} さんがプロフィール変更画面を表示しました。",
-		"opHistory" : "{{name}} さんが私の操作履歴画面を表示しました。",
 		"helperOpHistory" : "{{name}} さんが支援者の操作履歴画面を表示しました。",
 		"consentHistory" : "{{name}} さんが私の同意履歴画面を表示しました。",
 		"modal-qrReader" : "{{name}} さんが操作支援ダイアログを表示しました。",

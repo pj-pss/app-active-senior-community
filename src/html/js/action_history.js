@@ -6,6 +6,12 @@ $.prototype.actionHistoryShowModal = function actionHistoryShowModal(arg = {}){
 
 $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	var id = this.attr("id");
+	if(id === "top"){
+		$("#sort_btn").show();
+	}else{
+		$("#sort_btn").hide();
+	}
+	$(".top .header-title .title").text(i18next.t('pageTitle.' + id));
 	view(id);
 	actionHistory.post("log." + id, arg);
 }

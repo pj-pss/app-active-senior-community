@@ -12,3 +12,30 @@
 #profileForm .picture-src {
     width: 100%;
 }
+
+.pn-list-h{
+    position: relative;
+    display: flex;
+    min-height: 80px;
+    padding-right: 50px;
+}
+
+.pn-list-h>.pn-list-icon {
+    margin: auto 10px;
+}
+
+.pn-list-h>.pn-list-icon>img {
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.pn-list-h>.account-info>.user-name {
+    font-weight: normal;
+}
+
+#opHistory li{
+	border-bottom: none;
+}
