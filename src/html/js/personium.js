@@ -80,6 +80,22 @@ $(function () {
     });
 
     $('.sort-menu-list').click(function(event){
+      let isContent = true;
+      switch (this.innerText) {
+        case 'イベント':
+        isContent = setFilter(TYPE.EVENT);
+        break;
+
+        case 'お知らせ':
+        isContent = setFilter(TYPE.INFO);
+        break;
+
+        default:
+        clearFilter();
+      }
+
+      if(!isContent) return;
+
       $('#sort-menu').find('.checked').removeClass('checked');
       $(this).addClass('checked');
     });

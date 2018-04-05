@@ -405,10 +405,11 @@ function setFilter(key, reset) {
     }
     if (first) {
         showMessage(i18next.t('msg.noContent'));
-        return;
+        return false;
     }
 
     setEntryNumber();
+    return true;
 }
 
 function setPersonalFilter(key) {
