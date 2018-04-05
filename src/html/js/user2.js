@@ -409,6 +409,7 @@ function setFilter(key, reset) {
     }
 
     setEntryNumber();
+    switchCurrentButton('fa-home');
     return true;
 }
 
