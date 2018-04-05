@@ -77,11 +77,9 @@ async function getArticleList() {
             setArticle(data.d.results, token);
             getJoinInfoList(token);
             getPersonalJoinInfo();
-            return Promise.resolve();
         })
         .fail(function() {
             alert('failed to get article list');
-            return Promise.reject();
         });
     });
 }
@@ -125,6 +123,7 @@ function getArticleListImage(id, token, topContent) {
 }
 
 function getJoinInfoList(token) {
+    joinList = {};
     // get reply list
     var oData = 'reply';
     var entityType = 'reply_history';
@@ -174,6 +173,7 @@ function getJoinInfoList(token) {
 }
 
 function getPersonalJoinInfo() {
+    personalJoinList = {};
     getCurrentCellToken(function (token) {
         // get reply list
         var oData = 'reply';
@@ -434,13 +434,13 @@ function setPersonalFilter(key) {
 
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
-    view('top');
+    viewTop();
 }
 
 function clearFilter() {
     setFilter('', true);
     switchCurrentButton('fa-home');
-    view('top');
+    viewTop();
 }
 
 function setEntryNumber() {
@@ -508,7 +508,7 @@ function createTopContent(id, title, date, type) {
 }
 
 async function getUserProfile() {
-    getCurrentCellToken(function (token) {
+    getCurrentCellToken(await function (token) {
         let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
         let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
         $.when(
@@ -663,13 +663,13 @@ async function getUserProfile() {
                 userInfo.age = AGE.OVER_EIGHTY;
             }
 
-            if (profileJson.Image.length == 0) {
+            if (!profileJson.Image || profileJson.Image.length == 0) {
                 var cellImgDef = ut.getJdenticon(Common.getCellUrl());
-                $("#profile .my_icon").css('background', 'url(' + cellImgDef + ')  center center no-repeat').css('background-size', 'contain');
                 $("#drawer_menu .user-info .pn-list-icon img").attr("src", cellImgDef);
+                $("#editPicturePreview").attr("src", cellImgDef);
             } else {
-                $("#profile .my_icon").css('background', 'url(' + profileJson.Image + ')  center center no-repeat').css('background-size', 'contain');
                 $("#drawer_menu .user-info .pn-list-icon img").attr("src", profileJson.Image);
+                $("#editPicturePreview").attr("src", profileJson.Image);
             }
 
             $('#user-name-form').attr('placeholder', profileJson.DisplayName);
@@ -689,12 +689,8 @@ async function getUserProfile() {
             }
 
         })
-        .done(function () {
-            return Promise.resolve();
-        })
         .fail(function () {
             alert('error: get user profile');
-            return Promise.reject();
         });
     });
 
@@ -718,9 +714,25 @@ function closeMenu() {
 }
 
 function viewProfile() {
+    $("#edit-picture").click(function () {
+        clearInput(this);
+    }).change(function () {
+        readURL(this);
+    });
+    ut.createCropperModal2({ dispCircleMaskBool: true });
+
     getUserProfile();
+    $("#popupEditDisplayNameErrorMsg").empty();
     switchCurrentButton('fa-address-card');
+    $(".top .header-title .title").text(i18next.t('pageTitle.profile'));
+    $("#sort_btn").hide();
     view('profile');
+}
+
+function viewTop() {
+    $(".top .header-title .title").text(i18next.t('pageTitle.articleList'));
+    $("#sort_btn").show();
+    view('top');
 }
 
 function switchCurrentButton(buttonName) {
@@ -735,7 +747,14 @@ $(function () {
                         '<ul></ul>' +
                     '</div>';
     $("#top").html(topHtml);
-    $("#profile").load("profile.html");
+    $("#profile").load("profile.html", function() {
+        /*Edit button clicked action*/
+        $('.edit-btn').on('click', function () {
+            if ($(this).attr('id') == 'user-name-edit-btn') {
+                Control_Input_Editer($(this), $('#user-name-form'));
+            }
+        })
+    });
 });
 
 function showMessage(msg) {
@@ -824,7 +843,6 @@ function authorizedQrReader(qrJsonStr) {
                     },
                     function (XMLHttpRequest, textStatus, errorThrown) {
                         alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
-                        return Promise.reject();
                     }
                 );
         };
@@ -863,7 +881,6 @@ function authorizedQrReader(qrJsonStr) {
                 deleteExtCell().then(createExtCell).then(setRole)
                     .done(function () {
                         helpAuthorized = true;
-//                        $('#editPrflBtn button').prop('disabled', true);
                         getArticleList();
                         getUserProfile();
                         startHelpOp();
@@ -875,7 +892,6 @@ function authorizedQrReader(qrJsonStr) {
                 createExtCell().then(setRole)
                     .done(function () {
                         helpAuthorized = true;
-//                        $('#editPrflBtn button').prop('disabled', true);
                         getArticleList();
                         getUserProfile();
                         startHelpOp();
@@ -902,6 +918,9 @@ function startHelpOp() {
     $(".startHelpOp").hide();
     $(".endHelpOp").show();
     $(".top .header-title .subtitle").show();
+    $('#edit-picture').prop('disabled', true);
+    $('#edit-picture +span').hide();
+    $('#user-name-edit-btn').hide();
 }
 
 function openHelpConfirm() {
@@ -927,12 +946,13 @@ function closeHelpConfirm(f) {
                 helpAuthorized = false;
                 qrJson = null;
                 getArticleList();
-                getUserProfile();
-                //$('#editPrflBtn button').prop('disabled', false);
 
                 $(".startHelpOp").show();
                 $(".endHelpOp").hide();
                 $(".top .header-title .subtitle").hide();
+                $('#edit-picture').prop('disabled', false);
+                $('#edit-picture +span').show();
+                $('#user-name-edit-btn').show();
                 clearFilter();
 
             })
@@ -1007,4 +1027,138 @@ function validateQRInfo(qrJson) {
 
     alert('error: invalid QRcode data');
     return false;
+}
+
+/**
+ * Control_Input_Editer
+ * param:
+ * pushed_btn -> Pushed Edit Button
+ * target_input -> Want To Edit Input Box
+ */
+function Control_Input_Editer(pushed_btn, target_input) {
+    var edit_ic = pushed_btn.find('.fa-edit');
+    var check_ic = pushed_btn.find('.fa-check');
+
+    if (!(pushed_btn.hasClass('editing'))) {
+        pushed_btn.addClass('editing');
+        edit_ic.removeClass('fa-edit');
+        edit_ic.addClass('fa-check');
+        target_input.attr('disabled', false);
+        target_input.focus();
+    } else {
+        pushed_btn.removeClass('editing');
+
+        check_ic.removeClass('fa-check');
+        check_ic.addClass('fa-edit');
+
+        target_input.blur();
+        saveUserName();
+        target_input.attr('disabled', true);
+    }
+}
+
+function saveUserName() {
+    if (validateDisplayName($("#user-name-form").val(), "popupEditDisplayNameErrorMsg")) {
+        Common.refreshToken(function () {
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: Common.getCellUrl() + '__/profile.json',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function (profileJson) {
+                var saveData = _.clone(arguments[0]);
+                saveData.DisplayName = $("#user-name-form").val();
+                $.ajax({
+                    type: "PUT",
+                    url: Common.getCellUrl() + '__/profile.json',
+                    data: JSON.stringify(saveData),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + Common.getToken()
+                    }
+                }).done(function () {
+                    viewProfile();
+                });
+            });
+        });
+    }
+}
+
+editDisplayNameBlurEvent = function () {
+    var displayName = $("#user-name-form").val();
+    var displayNameSpan = "popupEditDisplayNameErrorMsg";
+    validateDisplayName(displayName, displayNameSpan);
+};
+
+function validateDisplayName(displayName, displayNameSpan) {
+    var MINLENGTH = 1;
+    var lenDisplayName = displayName.length;
+    if (lenDisplayName < MINLENGTH || displayName == undefined || displayName == null || displayName == "") {
+        return false;
+    }
+
+    var MAXLENGTH = 128;
+    $("#" + displayNameSpan).empty();
+    if (lenDisplayName > MAXLENGTH) {
+        $("#" + displayNameSpan).html(i18next.t("errorValidateNameLength"));
+        return false;
+    }
+    return true;
+}
+
+function clearInput(input) {
+    input.value = null;
+}
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        $('#ProfileImageName').val(input.files[0].name);
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // Set images in cropper modal
+            ut.setCropperModalImage(e.target.result);
+            // Set functions in cropper modal ok button
+            let okFunc = function () {
+                let cropImg = ut.getCroppedModalImage();
+                $('#editPicturePreview').attr('src', cropImg).fadeIn('slow');
+                $("#editPicturePreview").data("attached", true);
+
+                Common.refreshToken(function () {
+                    $.ajax({
+                        type: "GET",
+                        dataType: 'json',
+                        url: Common.getCellUrl() + '__/profile.json',
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }).done(function (profileJson) {
+                        var saveData = _.clone(arguments[0]);
+                        saveData.Image = $("#editPicturePreview").attr("src")
+                        $.ajax({
+                            type: "PUT",
+                            url: Common.getCellUrl() + '__/profile.json',
+                            data: JSON.stringify(saveData),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Authorization': 'Bearer ' + Common.getToken()
+                            }
+                        }).done(function () {
+                            viewProfile();
+                        });
+                    });
+                });
+            };
+            ut.setCropperModalOkBtnFunc(okFunc);
+
+            // Remove focus from input
+            document.activeElement.blur();
+
+            // Start cropper modal
+            ut.showCropperModal();
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }

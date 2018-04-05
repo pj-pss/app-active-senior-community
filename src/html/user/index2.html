@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/personium.css">
   <link rel="stylesheet" href="../css/hoosiers.css">
   <link rel="stylesheet" href="../css/homeapp.css">
+  <link rel="stylesheet" href="../css/user2.css">
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -45,7 +46,8 @@
   <script src="../js/action_history.js"></script>
   <script src="../js/jquery.binarytransport.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'>
-    <script src="../js/user2.js"></script>
+  <script src="../js/user2.js"></script>
+  <link href="../css/cropper_circle_mask.css" rel="stylesheet" />
 
   <title>Personium</title>
 </head>
@@ -97,21 +99,20 @@
       <div id="drawer_menu">
         <ul class="hover-action">
           <li class="user-info">
-            <div class="pn-list">
-              <div class="pn-list-icon">
-                <img src="../img/user-circle.png" alt="アイコン">
-              </div>
-              <div class="account-info">
-                <div class="user-name"></div>
-                <div class="user-status">
-                  <i class="fas fa-map-marker-alt fa-lg"></i>
-                  <span></span>
+            <a href="#" onclick="javascript:viewProfile();closeMenu();return false;">
+              <div class="pn-list">
+                <div class="pn-list-icon">
+                  <img src="../img/user-circle.png" alt="アイコン">
+                </div>
+                <div class="account-info">
+                  <div class="user-name"></div>
+                  <div class="user-status">
+                    <i class="fas fa-map-marker-alt fa-lg"></i>
+                    <span></span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          <li class="menu-list">
-            <a href="#" onclick="javascript:viewProfile();closeMenu();return false;">プロフィール編集</a>
+            </a>
           </li>
           <li class="menu-list">
             <a href="#">
@@ -139,7 +140,7 @@
       <div class="icon-text">メニュー</div>
     </button>
     <div class="header-title">
-      <div class="title">Personiumコミュニティ</div>
+      <div class="title" data-i18n="pageTitle.articleList"></div>
       <div class="subtitle" style="display:none"></div>
     </div>
     <button id="sort_btn">

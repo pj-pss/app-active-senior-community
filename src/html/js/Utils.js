@@ -28,7 +28,7 @@ ut.loadScript = function (callback) {
         }
         let script = document.createElement('script');
         script.src = scriptList[i];
-        
+
         head.appendChild(script);
         i++;
         script.onload = function (e) {
@@ -376,7 +376,7 @@ ut.createCropperModal = function (paramObj) {
                 cropBoxResizable: false, // Prohibition of crop box resizing
                 toggleDragModeOnDblclick: false, // Prohibit change of drag mode by double click
                 // Specify the size of the crop box
-                // ("cropper" calculates the actual size from the ratio between the specified size and the size of the original image, 
+                // ("cropper" calculates the actual size from the ratio between the specified size and the size of the original image,
                 // so if you specify the result calculated in advance, you can make it look like specified size)
                 data: {
                     width: $("#cropped_img").width() / width_ratio,
@@ -538,4 +538,142 @@ ut.appendCropper = function (croppingImageSelector, dispImageSelector, cropperOp
 
         ctx.restore();
     }
+}
+
+ut.createCropperModal2 = function (paramObj) {
+    let imgSrc = null;
+    if (paramObj.imgSrc) imgSrc = paramObj.imgSrc;
+    let callbackOkBtn = null;
+    if (paramObj.callbackOkBtn) callbackOkBtn = paramObj.callbackOkBtn;
+    let dispCircleMaskBool = false;
+    if (paramObj.dispCircleMaskBool) dispCircleMaskBool = paramObj.dispCircleMaskBool;
+
+    ut.deleteCropperModal();
+
+    let modalTag = $("<div>", {
+        id: "modal-cropper-image",
+        class: "modal fade",
+        role: "dialog",
+        "data-backdrop": "static"
+    });
+
+    let modalDiaTag = $("<div>", {
+        class: "modal-dialog"
+    });
+
+    let modalContTag = $("<div>", {
+        class: "modal-content"
+    });
+
+    let dispImgTag = $("<img>", {
+        id: "cropped_img",
+        class: "image-circle-large"
+    });
+    if (dispCircleMaskBool) {
+        dispImgTag.css("display", "none");
+    }
+
+    let modalBodyTag = $("<div>", {
+        class: "modal-body"
+    });
+
+    let bootContTag = $("<div>", {
+        class: "container",
+        style: "width:100%;"
+    });
+    let bootRowTag = $("<div>", {
+        class: "row"
+    });
+    let bootColTag = $("<div>", {
+        class: "col-md-12"
+    });
+
+    let imgContTag = $("<div>", {
+        style: "text-align:center;"
+    });
+    if (dispCircleMaskBool) {
+        imgContTag.addClass("circle-mask");
+    }
+
+    let cropImgTag = $("<img>", {
+        id: "cropping_img",
+        style: "max-width:100%;max-height: 600px;",
+        src: imgSrc
+    });
+    imgContTag.append(cropImgTag);
+    bootColTag.append(imgContTag);
+    bootRowTag.append(bootColTag);
+    bootContTag.append(bootRowTag);
+    modalBodyTag.append(bootContTag);
+    modalBodyTag.append(dispImgTag);
+    modalContTag.append(modalBodyTag);
+
+    modalContTag.append(ut.createModalFooterTag2("b-cropper-ok"));
+    modalDiaTag.append(modalContTag);
+    modalTag.append(modalDiaTag);
+    $(document.body).append(modalTag);
+
+    // Set processing when pressing OK button.
+    ut.setCropperModalOkBtnFunc(callbackOkBtn);
+
+    // After displaying the modal, set the cropper
+    $("#modal-cropper-image").on("shown.bs.modal", function () {
+        // Destroy cropper once
+        $("#cropping_img").cropper("destroy");
+
+        // Calculate ratio from width / height of original image
+        let width_ratio = 1;
+        if ($("#cropping_img")[0] && $("#cropping_img")[0].naturalWidth > 0) {
+            width_ratio = $("#cropping_img").width() / $("#cropping_img")[0].naturalWidth;
+        }
+
+        let height_ratio = 1;
+        if ($("#cropping_img")[0] && $("#cropping_img")[0].naturalHeight > 0) {
+            height_ratio = $("#cropping_img").height() / $("#cropping_img")[0].naturalHeight;
+        }
+
+        let option = {};
+        if (dispCircleMaskBool) {
+            option = {
+                cropBoxResizable: false, // Prohibition of crop box resizing
+                toggleDragModeOnDblclick: false, // Prohibit change of drag mode by double click
+                // Specify the size of the crop box
+                // ("cropper" calculates the actual size from the ratio between the specified size and the size of the original image,
+                // so if you specify the result calculated in advance, you can make it look like specified size)
+                data: {
+                    width: $("#cropped_img").width() / width_ratio,
+                    height: $("#cropped_img").height() / height_ratio
+                }
+            }
+        }
+        ut.appendCropper('#cropping_img', '#cropped_img', option);
+
+        console.log($("#cropping_img").cropper("getImageData"));
+    });
+}
+
+ut.createModalFooterTag2 = function (id, callback) {
+    let footerTag = $("<div>", {
+        class: "modal-footer pn-modal-footer"
+    });
+    let cancelBtnTag = $("<button>", {
+        type: "button",
+        class: "btn btn-default",
+        "data-dismiss": "modal"
+    }).html("Cancel");
+    footerTag.append(cancelBtnTag);
+
+    let okBtnTag = $("<button>", {
+        type: "button",
+        class: "btn btn-primary",
+        id: id
+    }).html("OK");
+    okBtnTag.click(function () {
+        if ((typeof callback !== "undefined") && $.isFunction(callback)) {
+            callback();
+        }
+    });
+    footerTag.append(okBtnTag);
+
+    return footerTag;
 }

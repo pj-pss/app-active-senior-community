@@ -84,7 +84,9 @@
         "location" : "在宅状況",
         "bbs" : "みんなの掲示板",
 		"participate" : "参加する人",
-		"consider" : "検討している人"
+        "consider" : "検討している人",
+        "profile" : "私の情報",
+        "articleList" : "Personiumコミュニティ"
     },
     "org" : {
         "title" : "運用者ポータル",
