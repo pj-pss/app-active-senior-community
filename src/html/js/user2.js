@@ -367,6 +367,7 @@ function setArticle(articleList, token){
     for(let article of articleList){
         if (first) {
             $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
+            $('.top-content').attr('data-href', "javascript:getArticleDetail('" + article.__id + "')");
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
         }
@@ -375,18 +376,7 @@ function setArticle(articleList, token){
     }
 
     setNewBadge();
-
-    // $.each(imageList, function(key, value) {
-    //     $('#' + key).css('background-image', "url('" + value + "')");
-    // });
-
-    // $.each(joinList, function(key, value) {
-    //     if ($('#join_' + key)[0]){
-    //         $('#join_' + key).html(value);
-    //     }
-    // });
-
-    // addLinkToGrid();
+    addLinkToGrid();
 }
 
 function setFilter(key, reset) {
@@ -414,6 +404,7 @@ function setFilter(key, reset) {
     switchCurrentButton('fa-home');
     $('#sort_btn').addClass('active');
     setNewBadge();
+    addLinkToGrid();
     return true;
 }
 
@@ -441,6 +432,7 @@ function setPersonalFilter(key) {
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
     setNewBadge();
+    addLinkToGrid();
     viewTop();
 }
 
@@ -767,6 +759,27 @@ $(function () {
         })
     });
     $("#opHistory").load("viewHistory.html");
+    let articleDetail =
+        '<div class="top-content news-top-content">' +
+        '</div>' +
+        '<div class="news-article">' +
+            '<div class="etc_area mb-3">' +
+                '<div class="evaluation">' +
+                    '<i class="fa fa-star fa-2x icon-large"></i>' +
+                    '<span class="news-icon-text">' +
+                        '<a href="#">20</a>' + // text
+                    '</span>' +
+                    '<i class="fas fa-calendar-check fa-2x icon-large"></i>' +
+                    '<span class="news-icon-text">' +
+                        '<a href="#">123</a>' + // text
+                    '</span>' +
+                '</div>' +
+                '<div class="date text-right"></div>' +
+            '</div>' +
+            '<div class="news-title mb-3"></div>' +
+            '<div class="news-text"></div>' +
+        '</div>';
+    $("#articleDetail").html(articleDetail);
 });
 
 function showMessage(msg) {
@@ -1293,6 +1306,201 @@ function setNewBadge() {
                     $('#join_' + article.__id).parents('.top-content').addClass('new');
                 }
             }
+        });
+    });
+}
+
+function getArticleDetail(id) {
+
+    getExtCellToken(function (token) {
+        var oData = 'article';
+        var entityType = 'provide_information';
+        var DAV = 'article_image';
+
+        var err = [];
+
+        $.when(
+            // get text
+            $.ajax({
+                type: 'GET',
+                url: Common.getToCellBoxUrl() + oData + '/' + entityType + "('" + id + "')",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                },
+                success: function (res) {
+                    return res;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+                }
+            }),
+
+            // get image
+            $.ajax({
+                type: 'GET',
+                url: Common.getToCellBoxUrl() + DAV + '/' + id,
+                dataType: 'binary',
+                processData: false,
+                responseType: 'blob',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function (res) {
+                    return res;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+                }
+            }),
+
+            // get reply info
+            $.ajax({
+                type: 'GET',
+                url: Common.getToCellBoxUrl() + "reply/reply_history",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                },
+                data: {
+                    "\$filter": "provide_id eq '" + id + "'",
+                    '\$top': REPLY_LIST_NUM
+                },
+                success: function (res) {
+                    return res;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+                }
+            })
+        )
+            .done(function (text, image, reply) {
+                // construct text
+                var article = text[0].d.results;
+
+                var term = '';
+                if (article.type == TYPE.EVENT && article.start_date && article.end_date) {
+                    var startTime = new Date(Math.floor(article.start_date));
+                    var endTime = new Date(Math.floor(article.end_date));
+                    var startDisplayDate = moment(startTime).format("YYYY/MM/DD");
+                    var endDisplayDate = moment(endTime).format("YYYY/MM/DD");
+                    var startDisplayDayOfTheWeek = i18next.t("dayOfTheWeek." + moment(startTime).format("ddd"));
+                    var endDisplayDayOfTheWeek = i18next.t("dayOfTheWeek." + moment(endTime).format("ddd"));
+                    var startDisplayTime = moment(startTime).format("HH:mm");
+                    var endDisplayTime = moment(endTime).format("HH:mm");
+
+                    // term = startDisplayDate + " (" + startDisplayDayOfTheWeek + ") " + startDisplayTime + ' ~ ' + (endDisplayDate == startDisplayDate ? '' : endDisplayDate + " (" + endDisplayDayOfTheWeek + ")") + ' ' + endDisplayTime;
+                    $('#articleDetail .evaluation').css('display', '');
+                } else {
+                    $('#articleDetail .evaluation').css('display', 'none');
+                }
+
+                // link = $('<a></a>').attr('href', article.url);
+                // link.text(article.url);
+
+                // var venue = article.venue ? i18next.t('articleItem.venue') + ': ' + article.venue : '';
+                // $('#articleDetail .term')[0].style.display = venue ? '' : 'none';
+
+                var img = $('<img>').attr('src', article.previewImg).addClass('thumbnail');
+
+                $('#articleDetail .news-title').html(article.title);
+                // $('#articleDetail .url').html(link);
+                // $('#articleDetail .venue').html(venue);
+                // $('#articleDetail .date').html(term);
+                $('#articleDetail .news-text').html(article.detail);
+
+                // show image
+                var reader = new FileReader();
+                reader.onloadend = $.proxy(function (event) {
+                    var binary = '';
+                    var bytes = new Uint8Array(event.currentTarget.result);
+                    var len = bytes.byteLength;
+                    for (var i = 0; i < len; i++) {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    window.btoa(binary);
+                    getImage = "data:image/jpg;base64," + btoa(binary);
+                    $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + getImage + "')").css('background-size', 'cover');
+                }, this);
+                reader.readAsArrayBuffer(image[0]);
+
+                $('#articleDetail .evaluation')[0].style.display = article.type == TYPE.EVENT ? '' : 'none';
+                if (article.type == TYPE.EVENT) {
+                    var replys = reply[0].d.results;
+                    var join = 0, consider = 0;
+                    for (reply of replys) {
+                        switch (reply.entry_flag) {
+                            case REPLY.JOIN: join++; break;
+                            case REPLY.CONSIDER: consider++; break;
+                        }
+                    }
+                    $('#joinNum').html(join);
+                    $('#considerNum').html(consider);
+                    // $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
+                    // $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "');return false;");
+
+                    // get reply information
+                    // getCurrentCellToken(function (currentToken) {
+                    //     let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                    //     let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
+                    //     $.when(
+                    //         $.ajax({
+                    //             type: 'GET',
+                    //             url: boxUrl + "reply/reply_history",
+                    //             headers: {
+                    //                 "Authorization": "Bearer " + currentToken,
+                    //                 "Accept": "application/json"
+                    //             },
+                    //             data: {
+                    //                 "\$filter": "provide_id eq '" + article.__id + "'",
+                    //                 '\$top': REPLY_LIST_NUM
+                    //             }
+                    //         }),
+                    //         $.ajax({
+                    //             type: 'GET',
+                    //             url: Common.getToCellBoxUrl() + "reply/reply_history",
+                    //             headers: {
+                    //                 "Authorization": "Bearer " + token,
+                    //                 "Accept": "application/json"
+                    //             },
+                    //             data: {
+                    //                 "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'"
+                    //             }
+                    //         })
+                    //     )
+                    //         .done(function (res1, res2) {
+                    //             var userCell = res1[0].d ? res1[0].d.results[0] : null;
+                    //             var orgCell = res2[0].d ? res2[0].d.results[0] : null;
+                    //             if (userCell && orgCell) {
+                    //                 updateReplyLink(userCell.entry_flag, article.__id, userCell.__id, orgCell.__id);
+                    //             } else {
+                    //                 $('#joinEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.JOIN + ", '" + article.__id + "')");
+                    //                 $('#considerEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.CONSIDER + ", '" + article.__id + "')");
+                    //             }
+                    //         })
+                    //         .fail(function () {
+                    //             alert('error: get reply information');
+                    //         });
+                    // });
+                }
+
+                $('#articleDetail').actionHistoryShowView();
+
+            })
+            .fail(function () {
+                alert('failed to get article detail\n\n' + err.join('\n'));
+            });
+    }, id);
+}
+
+function addLinkToGrid() {
+    $('[data-href]').addClass('clickable').click(function () {
+        window.location = $(this).attr('data-href');
+    }).find('a').hover(function () {
+        $(this).parents('div').unbind('click');
+    }, function () {
+        $(this).parents('div').click(function () {
+            window.location = $(this).attr('data-href');
         });
     });
 }
