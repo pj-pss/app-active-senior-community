@@ -25,6 +25,7 @@ $(function () {
   Drawer_Menu();
   Control_Slide_List();
   Sort_Menu();
+  Clicked_News_Footer_Btn();
 
   /**
    * Drawer_Menu
@@ -175,6 +176,17 @@ $(function () {
           a_tag.removeClass('disabled');
         }
       }
+    });
+  }
+
+  /**
+   * Clicked_News_Footer_Btn
+   * param:none
+   */
+  function Clicked_News_Footer_Btn() {
+    $('.news-footer-btn').on('click', function () {
+      $(this).toggleClass('clicked');
+      return false;
     });
   }
 });
