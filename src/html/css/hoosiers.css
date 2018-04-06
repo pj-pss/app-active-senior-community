@@ -41,13 +41,7 @@ header {
   font-weight: bold;
 }
 #back_btn {
-  background: none;
-  border: none;
   color: #5d5d5d;
-  height: 100%;
-  left: 12px;
-  padding: 0;
-  position: absolute;
 }
 
 #back_btn .icon {

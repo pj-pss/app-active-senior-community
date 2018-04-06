@@ -421,3 +421,37 @@ main{
     border-radius: 20px;
     width: 30px;
 }
+
+/*personium common button*/
+
+.pn-btn {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+/*Header Button*/
+
+.header-btn {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    padding: 0;
+    display: flex;
+}
+
+.pn-back-btn {
+    left: 12px;
+}
+
+#back_btn {
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+}
+
+/*Footer Button*/
+
+.footer-btn {
+    width: 50%;
+    margin: 5px;
+}

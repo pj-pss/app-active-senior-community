@@ -11,6 +11,13 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	}else{
 		$("#sort_btn").hide();
 	}
+	if (id === 'articleDetail') {
+		$("#back_btn").parents('.pn-back-btn').show();
+		$("#drawer_btn").hide();
+	} else {
+		$("#back_btn").parents('.pn-back-btn').hide();
+		$("#drawer_btn").show();
+	}
 	var isWrite = true;
 	if(id === "top" && $("#top.d-none").length === 0){
 		isWrite = false;
