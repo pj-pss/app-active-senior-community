@@ -24,6 +24,7 @@ $(function () {
 
   Drawer_Menu();
   Control_Slide_List();
+  Sort_Menu();
 
   /**
    * Drawer_Menu
@@ -49,6 +50,61 @@ $(function () {
 
     $('#drawer_menu').click(function (event) {
       event.stopPropagation();
+    });
+  }
+
+  /**
+   * Sort_Menu
+   * param:none
+   */
+  function Sort_Menu() {
+    $('#sort_btn').on('click', function () {
+      $('#sort-background').show();
+      $('#sort-menu').animate({
+        height: 'show'
+      }, 300);
+      return false;
+    });
+
+    $('#sort-background').click(function () {
+      $('#sort-menu').animate({
+        height: 'hide'
+      }, 300, function () {
+        $('#sort-background').hide();
+        return false;
+      });
+    });
+
+    $('#sort-menu').click(function (event) {
+      event.stopPropagation();
+    });
+
+    $('.sort-menu-list').click(function(event){
+      let isContent = true;
+      switch (this.innerText) {
+        case 'イベント':
+        isContent = setFilter(TYPE.EVENT);
+        break;
+
+        case 'お知らせ':
+        isContent = setFilter(TYPE.INFO);
+        break;
+
+        default:
+        clearFilter();
+      }
+
+      if(!isContent) return;
+
+      $('#sort-menu').find('.checked').removeClass('checked');
+      $(this).addClass('checked');
+
+      $('#sort-menu').animate({
+        height: 'hide'
+      }, 300, function () {
+        $('#sort-background').hide();
+        return false;
+      });
     });
   }
 

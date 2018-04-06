@@ -59,9 +59,9 @@ header {
   font-size: 12px;
 }
 
-.user-name {
+.account-info>.user-name {
   font-size: 20px;
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .user-info {
@@ -100,6 +100,10 @@ header.top #sort_btn {
   color: #5d5d5d;
   padding: 0;
   height: 100%;
+}
+
+header.top #sort_btn.active {
+  color: #e56700;
 }
 
 header.top>.header-title {

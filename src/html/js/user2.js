@@ -109,7 +109,7 @@ function getArticleListImage(id, token, topContent) {
             window.btoa(binary);
             image =  "data:image/jpg;base64," + btoa(binary);
             if (topContent) {
-                $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + image + "')");
+                $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + image + "')").css('background-size', 'cover');
             } else {
                 $('#img_' + id).attr('src', image);
             }
@@ -396,7 +396,7 @@ function setFilter(key, reset) {
             $('.top-content').children().remove();
 
             $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
-            $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
+            $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')").css('background-size', 'cover');
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
             $('#img_' + article.__id).attr('src', imageList[article.__id]);
@@ -405,10 +405,13 @@ function setFilter(key, reset) {
     }
     if (first) {
         showMessage(i18next.t('msg.noContent'));
-        return;
+        return false;
     }
 
     setEntryNumber();
+    switchCurrentButton('fa-home');
+    $('#sort_btn').addClass('active');
+    return true;
 }
 
 function setPersonalFilter(key) {
@@ -420,7 +423,7 @@ function setPersonalFilter(key) {
             $('.top-content').children().remove();
 
             $('.top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
-            $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')");
+            $('.top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')").css('background-size', 'cover');
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
             $('#img_' + article.__id).attr('src', imageList[article.__id]);
@@ -434,12 +437,17 @@ function setPersonalFilter(key) {
 
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
+    $('#sort_btn').hide();
     viewTop();
 }
 
 function clearFilter() {
     setFilter('', true);
     switchCurrentButton('fa-home');
+    $('#sort-menu li').removeClass('checked');
+    $('#sort-menu li.all').addClass('checked');
+    $('#sort_btn').removeClass('active');
+    $('#sort_btn').show();
     viewTop();
 }
 
@@ -724,14 +732,10 @@ function viewProfile() {
     getUserProfile();
     $("#popupEditDisplayNameErrorMsg").empty();
     switchCurrentButton('fa-address-card');
-    $(".top .header-title .title").text(i18next.t('pageTitle.profile'));
-    $("#sort_btn").hide();
     $('#profile').actionHistoryShowView();
 }
 
 function viewTop() {
-    $(".top .header-title .title").text(i18next.t('pageTitle.top'));
-    $("#sort_btn").show();
     $('#top').actionHistoryShowView();
 }
 
