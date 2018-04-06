@@ -437,7 +437,6 @@ function setPersonalFilter(key) {
 
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
-    $('#sort_btn').hide();
     viewTop();
 }
 
@@ -447,7 +446,6 @@ function clearFilter() {
     $('#sort-menu li').removeClass('checked');
     $('#sort-menu li.all').addClass('checked');
     $('#sort_btn').removeClass('active');
-    $('#sort_btn').show();
     viewTop();
 }
 
