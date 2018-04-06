@@ -39,6 +39,7 @@
         "confirmSendReply": "回答しますか?",
         "anonymousReply": "匿名で回答する",
         "noContent" : "対象記事がありません",
+        "back" : "戻る",
         "deleteConfirm" : "本当に削除してよろしいですか?",
         "error": {
             "targetCellNotSelected": "対象セルが設定されていません。",
@@ -90,7 +91,9 @@
         "saveDiscInfo" : "開示情報を保存する",
         "editProfile" : "わたしの情報を変更する",
         "selectFile" : "ファイル選択",
-        "clear": "クリア"
+        "clear": "クリア",
+        "join": "参加する",
+        "consider": "検討する"
     },
     "pageTitle" : {
         "action" : "アクション",
@@ -107,7 +110,8 @@
         "bbs" : "みんなの掲示板",
 		"participate" : "参加する人",
         "consider" : "検討している人",
-        "profile" : "私の情報"
+        "profile" : "私の情報",
+        "articleDetail" : "みんなの掲示板"
     },
     "org" : {
         "title" : "運用者ポータル",
