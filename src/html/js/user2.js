@@ -389,6 +389,7 @@ function setFilter(key, reset) {
 
             $('#top .top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('#top .top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')").css('background-size', 'cover');
+            $('#top .top-content').attr('data-href', "javascript:getArticleDetail('" + article.__id + "')");
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
             $('#img_' + article.__id).attr('src', imageList[article.__id]);
@@ -418,6 +419,7 @@ function setPersonalFilter(key) {
 
             $('#top .top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('#top .top-content').css('background', "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),url('" + imageList[article.__id] + "')").css('background-size', 'cover');
+            $('#top .top-content').attr('data-href', "javascript:getArticleDetail('" + article.__id + "')");
         } else {
             $('#topInfoList>ul').append(createArticleGrid(article.__id, article.title, article.start_date, article.type));
             $('#img_' + article.__id).attr('src', imageList[article.__id]);
