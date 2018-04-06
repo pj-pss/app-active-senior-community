@@ -40,3 +40,19 @@
 #opHistory li{
 	border-bottom: none;
 }
+
+pre {
+    background-color: white;
+    border: none;
+    white-space: pre-wrap;
+    padding-top: 0;
+    font-family: -apple-system,
+    'Meiryo UI',
+    'メイリオ',
+    meiryo,
+    'Helvetica Neue',
+    'Hiragino Kaku Gothic ProN',
+    '游ゴシック Medium',
+    sans-serif;
+    color: #707070;
+}

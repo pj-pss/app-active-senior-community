@@ -780,7 +780,7 @@ $(function () {
             '<div class="news-title mb-3"></div>' +
             '<div class="news-venue"></div>' +
             '<div class="news-date mb-3"></div>' +
-            '<div class="news-text mb-3"></div>' +
+            '<pre class="news-text mb-3"></pre>' +
             '<div class="news-url"></div>' +
         '</div>';
     $("#articleDetail").html(articleDetail);
