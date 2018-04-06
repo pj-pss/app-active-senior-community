@@ -11,9 +11,15 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	}else{
 		$("#sort_btn").hide();
 	}
+	var isWrite = true;
+	if(id === "top" && $("#top.d-none").length === 0){
+		isWrite = false;
+	}
 	$(".top .header-title .title").text(i18next.t('pageTitle.' + id));
 	view(id);
-	actionHistory.post("log." + id, arg);
+	if(isWrite){
+		actionHistory.post("log." + id, arg);
+	}
 }
 
 var actionHistory = {};
