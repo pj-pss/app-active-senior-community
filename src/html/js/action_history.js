@@ -16,6 +16,7 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 		$("#drawer_btn").hide();
 		$("#main_footer").hide();
 		$("#article_footer").show();
+		$("#sort_btn").hide();
 	} else {
 		$("#back_btn").parents('.pn-back-btn').hide();
 		$("#drawer_btn").show();
