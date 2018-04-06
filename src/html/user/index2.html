@@ -115,17 +115,17 @@
             </a>
           </li>
           <li class="menu-list">
-            <a href="#">
+            <a href="#" onclick="javascript:viewActionHistory();closeMenu();return false;">
               <span>履歴</span>
             </a>
           </li>
           <li class="menu-list startHelpOp">
-            <a href="#" onclick="javascript:$('#menu-background').click();openQrReader();return false;" >
+            <a href="#" onclick="javascript:openQrReader();closeMenu();return false;" >
               <span>操作支援する(QRコード)</span>
             </a>
           </li>
           <li class="menu-list endHelpOp" style="display:none">
-            <a href="#" onclick="javascript:$('#menu-background').click();openHelpConfirm();return false;" >
+            <a href="#" onclick="javascript:openHelpConfirm();closeMenu();return false;" >
               <span>操作支援終了</span>
             </a>
           </li>
@@ -159,7 +159,7 @@
       <div class="icon-text">メニュー</div>
     </button>
     <div class="header-title">
-      <div class="title" data-i18n="pageTitle.articleList"></div>
+      <div class="title" data-i18n="pageTitle.top"></div>
       <div class="subtitle" style="display:none"></div>
     </div>
     <button id="sort_btn">
@@ -171,8 +171,8 @@
   <main>
     <div id="top"></div>
     <div id="profile" class="d-none"></div>
-    <!-- <div id="opHistory" class="hidden"></div>
-    <div id="viewQRCode" class="hidden"></div>
+    <div id="opHistory" class="d-none"></div>
+    <!-- <div id="viewQRCode" class="hidden"></div>
     <div id="articleDetail" class="hidden"></div>
     <div id="entryList" class="hidden"></div> -->
   </main>
