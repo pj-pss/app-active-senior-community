@@ -155,7 +155,7 @@
       <i class="fas fa-bars fa-2x icon"></i>
       <div class="icon-text" data-i18n="header.menu"></div>
     </button>
-    <a class="header-btn pn-back-btn" href="#" onclick="clearFilter()" style="display:none">
+    <a class="header-btn pn-back-btn" href="#" onclick="viewTop()" style="display:none">
       <div id="back_btn" class="pn-btn">
         <i class="fas fa-angle-left fa-2x icon"></i>
         <div class="icon-text">戻る</div>
@@ -180,7 +180,11 @@
     <div id="entryList" class="hidden"></div> -->
   </main>
 
-  <footer>
+  <footer id="article_footer" style="display:none">
+    <button type="button" class="btn footer-btn news-footer-btn news-star-btn">検討する</button>
+    <button type="button" class="btn footer-btn news-footer-btn news-calendar-btn">参加する</button>
+  </footer>
+  <footer id="main_footer"></footerid>
     <button class="current" onclick="clearFilter()">
       <i class="fas fa-home fa-2x icon"></i>
       <div class="icon-text" data-i18n="footer.home"></div>

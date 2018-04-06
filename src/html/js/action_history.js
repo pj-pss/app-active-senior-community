@@ -14,9 +14,13 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	if (id === 'articleDetail') {
 		$("#back_btn").parents('.pn-back-btn').show();
 		$("#drawer_btn").hide();
+		$("#main_footer").hide();
+		$("#article_footer").show();
 	} else {
 		$("#back_btn").parents('.pn-back-btn').hide();
 		$("#drawer_btn").show();
+		$("#main_footer").show();
+		$("#article_footer").hide();
 	}
 	var isWrite = true;
 	if(id === "top" && $("#top.d-none").length === 0){
