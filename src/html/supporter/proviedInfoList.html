@@ -1,10 +1,10 @@
 <div>
-  <button id="createInfo" onclick="openInfoCreate()">新規作成</button>
+  <button id="createInfo" onclick="openInfoCreate()" data-i18n="articleList.btn.create"></button>
 </div>
 <div>
   <table class="borderTable">
     <thead>
-      <tr class="head"><th>日時</th><th>掲載先</th><th>記事区分</th><th>タイトル</th><th>参加する!</th><th>検討中</th></tr>
+      <tr class="head"><th data-i18n="articleList.header.date"></th><th data-i18n="articleList.header.postingPlace"></th><th data-i18n="articleList.header.type"></th><th data-i18n="articleList.header.title"></th><th data-i18n="articleList.header.join"></th><th data-i18n="articleList.header.consider"></th></tr>
     </thead>
     <tbody id="infoList">
     <tfoot>
@@ -22,11 +22,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <ul><li>本当に削除してよろしいですか?<li></ul>
+        <ul><li data-i18n="msg.deleteConfirm"><li></ul>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" data-dismiss="modal" id="deleteArticle">削除</button>
-        <button class="btn btn-default" data-dismiss="modal">キャンセル</button>
+        <button class="btn btn-danger" data-dismiss="modal" id="deleteArticle" data-i18n="btn.delete"></button>
+        <button class="btn btn-default" data-dismiss="modal" data-i18n="btn.cancel"></button>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
         <ul><li class="message"><li></ul>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal">OK</button>
+        <button class="btn btn-default" data-dismiss="modal" data-i18n="btn.ok"></button>
       </div>
     </div>
   </div>
@@ -55,7 +55,7 @@
         <ul id="articleError"></ul>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal">はい</button>
+        <button class="btn btn-default" data-dismiss="modal" data-i18n="btn.yes"></button>
       </div>
     </div>
   </div>
