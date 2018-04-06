@@ -1221,7 +1221,7 @@ function openHistory(){
 				                             '<img src="' + img + '" alt="icon">' +
 				                         '</div>' +
 				                         '<div class="account-info">' +
-				                             '<div class="user-name">' + updated.format("YYYY/MM/DD HH:mm:ss") + '</div>' +
+				                             '<div class="display-date">' + updated.format("YYYY/MM/DD HH:mm:ss") + '</div>' +
 				                             '<div>' +
 				                                 '<span>' + result.action_detail + '</span>' +
 				                             '</div>' +

@@ -32,8 +32,9 @@
     border-radius: 50%;
 }
 
-.pn-list-h>.account-info>.user-name {
+.pn-list-h>.account-info>.display-date {
     font-weight: normal;
+    font-size: 1.3rem;
 }
 
 #opHistory li{
