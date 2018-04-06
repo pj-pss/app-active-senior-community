@@ -102,6 +102,10 @@ header.top #sort_btn {
   height: 100%;
 }
 
+header.top #sort_btn.active {
+  color: #e56700;
+}
+
 header.top>.header-title {
   flex: 0 0 auto;
   font-family: Segoe Script !important;

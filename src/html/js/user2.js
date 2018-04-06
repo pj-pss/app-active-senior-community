@@ -410,6 +410,7 @@ function setFilter(key, reset) {
 
     setEntryNumber();
     switchCurrentButton('fa-home');
+    $('#sort_btn').addClass('active');
     return true;
 }
 
@@ -444,6 +445,7 @@ function clearFilter() {
     switchCurrentButton('fa-home');
     $('#sort-menu li').removeClass('checked');
     $('#sort-menu li.all').addClass('checked');
+    $('#sort_btn').removeClass('active');
     viewTop();
 }
 
