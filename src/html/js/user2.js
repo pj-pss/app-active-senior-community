@@ -1292,20 +1292,17 @@ function setNewBadge() {
                 "Accept": "application/json"
             },
             data: {
+                "\$filter": "substringof('" + i18next.t('log.top', { name: ' ' }).trim() + "', action_detail) and action_user_cell_url eq null",
                 "\$orderby": "__updated desc",
-                "\$skip": 1
+                "\$skip": 1,
+                "\$top": 1
             }
         })
         .done(function (res) {
             $('.new').removeClass('new');
-            for (let val of res.d.results) {
-                if (val.action_detail.match(i18next.t('log.top', { name: ' ' }).trim())) {
-                    userInfo.lastAction =  val.__updated;
-                    break;
-                }
-            }
+            userInfo.lastAction = res.d.results[0] ? res.d.results[0].__updated : moment(0);
             for (let article of articleList) {
-                if (article.__updated > (userInfo.lastAction || moment(0))) {
+                if (article.__updated > userInfo.lastAction) {
                     $('#img_' + article.__id).parents('.list-image').addClass('new');
                     $('#join_' + article.__id).parents('#top .top-content').addClass('new');
                 }
