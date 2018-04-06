@@ -86,7 +86,8 @@
         "bbs" : "みんなの掲示板",
 		"participate" : "参加する人",
         "consider" : "検討している人",
-        "profile" : "私の情報"
+        "profile" : "私の情報",
+        "articleDetail" : "みんなの掲示板"
     },
     "org" : {
         "title" : "運用者ポータル",

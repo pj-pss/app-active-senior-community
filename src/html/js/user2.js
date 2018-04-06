@@ -1484,6 +1484,7 @@ function getArticleDetail(id) {
                     // });
                 }
 
+                $('footer>button.current').removeClass('current');
                 $('#articleDetail').actionHistoryShowView();
 
             })
