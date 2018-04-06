@@ -102,7 +102,7 @@
             <a href="#" onclick="javascript:viewProfile();closeMenu();return false;">
               <div class="pn-list">
                 <div class="pn-list-icon">
-                  <img src="../img/user-circle.png" alt="アイコン">
+                  <img src="../img/user-circle.png" alt="icon">
                 </div>
                 <div class="account-info">
                   <div class="user-name"></div>
@@ -116,17 +116,17 @@
           </li>
           <li class="menu-list">
             <a href="#" onclick="javascript:viewActionHistory();closeMenu();return false;">
-              <span>履歴</span>
+              <span data-i18n="leftMenu.history"></span>
             </a>
           </li>
           <li class="menu-list startHelpOp">
             <a href="#" onclick="javascript:openQrReader();closeMenu();return false;" >
-              <span>操作支援する(QRコード)</span>
+              <span data-i18n="leftMenu.helpStart"></span>
             </a>
           </li>
           <li class="menu-list endHelpOp" style="display:none">
             <a href="#" onclick="javascript:openHelpConfirm();closeMenu();return false;" >
-              <span>操作支援終了</span>
+              <span data-i18n="leftMenu.helpEnd"></span>
             </a>
           </li>
         </ul>
@@ -137,16 +137,13 @@
   <div id="sort">
     <div id="sort-background">
       <div id="sort-menu">
-        <div class="sort-title">並び替え…</div>
+        <div class="sort-title" data-i18n="sort.title"></div>
         <ul class="hover-action">
-          <li class="sort-menu-list all checked">
-            全て
+          <li class="sort-menu-list all checked" data-i18n="sort.all">
           </li>
-          <li class="sort-menu-list">
-            イベント
+          <li class="sort-menu-list" data-i18n="sort.event">
           </li>
-          <li class="sort-menu-list">
-            お知らせ
+          <li class="sort-menu-list" data-i18n="sort.info">
           </li>
         </ul>
       </div>
@@ -156,7 +153,7 @@
   <header class="top">
     <button id="drawer_btn">
       <i class="fas fa-bars fa-2x icon"></i>
-      <div class="icon-text">メニュー</div>
+      <div class="icon-text" data-i18n="header.menu"></div>
     </button>
     <a class="header-btn pn-back-btn" href="#" onclick="clearFilter()" style="display:none">
       <div id="back_btn" class="pn-btn">
@@ -165,12 +162,12 @@
       </div>
     </a>
     <div class="header-title">
-      <div class="title" data-i18n="pageTitle.top"></div>
+      <div class="title" data-i18n="header.defaultTitle"></div>
       <div class="subtitle" style="display:none"></div>
     </div>
     <button id="sort_btn">
       <i class="fas fa-sort-amount-down fa-2x icon"></i>
-      <div class="icon-text">並び替え</div>
+      <div class="icon-text" data-i18n="header.sort"></div>
     </button>
   </header>
 
@@ -186,19 +183,19 @@
   <footer>
     <button class="current" onclick="clearFilter()">
       <i class="fas fa-home fa-2x icon"></i>
-      <div class="icon-text">ホーム</div>
+      <div class="icon-text" data-i18n="footer.home"></div>
     </button>
     <button onclick="setPersonalFilter(REPLY.CONSIDER)">
       <i class="fa fa-star fa-2x icon"></i>
-      <div class="icon-text">検討中</div>
+      <div class="icon-text" data-i18n="footer.consider"></div>
     </button>
     <button onclick="setPersonalFilter(REPLY.JOIN)">
       <i class="fas fa-calendar-check fa-2x icon"></i>
-      <div class="icon-text">参加予定</div>
+      <div class="icon-text" data-i18n="footer.join"></div>
     </button>
     <button onclick="viewProfile()">
       <i class="fas fa-address-card fa-2x icon"></i>
-      <div class="icon-text">私の情報</div>
+      <div class="icon-text" data-i18n="footer.profile"></div>
     </button>
   </footer>
 </body>

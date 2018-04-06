@@ -48,7 +48,28 @@
         }
     },
     "entry": {"anonymous" : "匿名"},
-
+    "leftMenu" : {
+        "history" : "履歴",
+        "helpStart" : "操作支援する(QRコード)",
+        "helpEnd" : "操作支援終了"
+    },
+    "sort" : {
+        "title" : "並び替え…",
+        "all" : "全て",
+        "event" : "$t(articleItem.event)",
+        "info" : "$t(articleItem.info)"
+    },
+    "header" : {
+        "menu" : "メニュー",
+        "defaultTitle" : "$t(pageTitle.top)",
+        "sort" : "並び替え"
+    },
+    "footer" : {
+        "home" : "メニュー",
+        "consider" : "検討中",
+        "join" : "参加予定",
+        "profile" : "私の情報"
+    },
     "btn": {
         "ok" : "OK",
         "cancel": "キャンセル",
