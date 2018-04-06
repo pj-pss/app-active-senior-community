@@ -374,6 +374,8 @@ function setArticle(articleList, token){
         first = false;
     }
 
+    setNewBadge();
+
     // $.each(imageList, function(key, value) {
     //     $('#' + key).css('background-image', "url('" + value + "')");
     // });
@@ -411,6 +413,7 @@ function setFilter(key, reset) {
     setEntryNumber();
     switchCurrentButton('fa-home');
     $('#sort_btn').addClass('active');
+    setNewBadge();
     return true;
 }
 
@@ -437,6 +440,7 @@ function setPersonalFilter(key) {
 
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
+    setNewBadge();
     viewTop();
 }
 
@@ -474,7 +478,7 @@ function createArticleGrid(id, title, date, type){
         ' <i class="fas fa-calendar-check fa-2x icon"></i>0';
     var li =
         '<li data-href="javascript:getArticleDetail(\'' + id + '\')" class=\'display' + String(type) + '\'>' +
-            '<div class="list-image new">' +
+            '<div class="list-image">' +
                 '<img class="list-thumbnail" id ="img_' + id + '">' +
             '</div>' +
             '<div class="list-text">' +
@@ -749,7 +753,7 @@ function switchCurrentButton(buttonName) {
 
 // load html
 $(function () {
-    let topHtml =   '<div class="top-content new"></div>' +
+    let topHtml =   '<div class="top-content"></div>' +
                     '<div class="list" id="topInfoList">' +
                         '<ul></ul>' +
                     '</div>';
@@ -1258,4 +1262,37 @@ function openHistory(){
 			}).done(displayHistoryFunc);
 		});
 	}
+}
+
+function setNewBadge() {
+    getCurrentCellToken(function (token) {
+        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        $.ajax({
+            type: 'GET',
+            url: boxUrl + "action/action_history",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json"
+            },
+            data: {
+                "\$orderby": "__updated desc",
+                "\$skip": 1
+            }
+        })
+        .done(function (res) {
+            $('.new').removeClass('new');
+            for (let val of res.d.results) {
+                if (val.action_detail.match(i18next.t('log.top', { name: ' ' }).trim())) {
+                    userInfo.lastAction =  val.__updated;
+                    break;
+                }
+            }
+            for (let article of articleList) {
+                if (article.__updated > (userInfo.lastAction || moment(0))) {
+                    $('#img_' + article.__id).parents('.list-image').addClass('new');
+                    $('#join_' + article.__id).parents('.top-content').addClass('new');
+                }
+            }
+        });
+    });
 }
