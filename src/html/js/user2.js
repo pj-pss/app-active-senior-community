@@ -1439,52 +1439,6 @@ function getArticleDetail(id) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
-                    // $('#join-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "');return false;");
-                    // $('#consider-link').attr('onclick', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "');return false;");
-
-                    // get reply information
-                    // getCurrentCellToken(function (currentToken) {
-                    //     let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
-                    //     let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
-                    //     $.when(
-                    //         $.ajax({
-                    //             type: 'GET',
-                    //             url: boxUrl + "reply/reply_history",
-                    //             headers: {
-                    //                 "Authorization": "Bearer " + currentToken,
-                    //                 "Accept": "application/json"
-                    //             },
-                    //             data: {
-                    //                 "\$filter": "provide_id eq '" + article.__id + "'",
-                    //                 '\$top': REPLY_LIST_NUM
-                    //             }
-                    //         }),
-                    //         $.ajax({
-                    //             type: 'GET',
-                    //             url: Common.getToCellBoxUrl() + "reply/reply_history",
-                    //             headers: {
-                    //                 "Authorization": "Bearer " + token,
-                    //                 "Accept": "application/json"
-                    //             },
-                    //             data: {
-                    //                 "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'"
-                    //             }
-                    //         })
-                    //     )
-                    //         .done(function (res1, res2) {
-                    //             var userCell = res1[0].d ? res1[0].d.results[0] : null;
-                    //             var orgCell = res2[0].d ? res2[0].d.results[0] : null;
-                    //             if (userCell && orgCell) {
-                    //                 updateReplyLink(userCell.entry_flag, article.__id, userCell.__id, orgCell.__id);
-                    //             } else {
-                    //                 $('#joinEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.JOIN + ", '" + article.__id + "')");
-                    //                 $('#considerEvent').attr('href', "javascript:openSendReplyModal(" + REPLY.CONSIDER + ", '" + article.__id + "')");
-                    //             }
-                    //         })
-                    //         .fail(function () {
-                    //             alert('error: get reply information');
-                    //         });
-                    // });
                 }
 
                 $('#articleDetail').actionHistoryShowView();
