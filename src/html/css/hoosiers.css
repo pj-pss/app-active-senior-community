@@ -308,7 +308,8 @@ footer>button>.icon-text {
   font-weight: bold;
 }
 
-.news-icon-text>a {
+.news-icon-text>a,
+.news-url>a {
   color: #007bff;
   text-decoration: underline !important;
 }

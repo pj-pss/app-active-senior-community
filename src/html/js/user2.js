@@ -774,10 +774,12 @@ $(function () {
                         '<a id="joinNum" href="#"></a>' +
                     '</span>' +
                 '</div>' +
-                '<div class="date text-right"></div>' +
             '</div>' +
             '<div class="news-title mb-3"></div>' +
-            '<div class="news-text"></div>' +
+            '<div class="news-venue"></div>' +
+            '<div class="news-date mb-3"></div>' +
+            '<div class="news-text mb-3"></div>' +
+            '<div class="news-url"></div>' +
         '</div>';
     $("#articleDetail").html(articleDetail);
 });
@@ -1391,24 +1393,23 @@ function getArticleDetail(id) {
                     var startDisplayTime = moment(startTime).format("HH:mm");
                     var endDisplayTime = moment(endTime).format("HH:mm");
 
-                    // term = startDisplayDate + " (" + startDisplayDayOfTheWeek + ") " + startDisplayTime + ' ~ ' + (endDisplayDate == startDisplayDate ? '' : endDisplayDate + " (" + endDisplayDayOfTheWeek + ")") + ' ' + endDisplayTime;
+                    term = startDisplayDate + " (" + startDisplayDayOfTheWeek + ") " + startDisplayTime + ' ~ ' + (endDisplayDate == startDisplayDate ? '' : endDisplayDate + " (" + endDisplayDayOfTheWeek + ")") + ' ' + endDisplayTime;
                     $('#articleDetail .evaluation').css('display', '');
                 } else {
                     $('#articleDetail .evaluation').css('display', 'none');
                 }
 
-                // link = $('<a></a>').attr('href', article.url);
-                // link.text(article.url);
+                link = $('<a></a>').attr('href', article.url);
+                link.text(article.url);
 
-                // var venue = article.venue ? i18next.t('articleItem.venue') + ': ' + article.venue : '';
-                // $('#articleDetail .term')[0].style.display = venue ? '' : 'none';
+                var venue = article.venue ? i18next.t('articleItem.venue') + ': ' + article.venue : '';
 
                 var img = $('<img>').attr('src', article.previewImg).addClass('thumbnail');
 
                 $('#articleDetail .news-title').html(article.title);
-                // $('#articleDetail .url').html(link);
-                // $('#articleDetail .venue').html(venue);
-                // $('#articleDetail .date').html(term);
+                $('#articleDetail .news-url').html(link);
+                $('#articleDetail .news-venue').html(venue);
+                $('#articleDetail .news-date').html(term);
                 $('#articleDetail .news-text').html(article.detail);
 
                 // show image
@@ -1486,7 +1487,6 @@ function getArticleDetail(id) {
                     // });
                 }
 
-                $('footer>button.current').removeClass('current');
                 $('#articleDetail').actionHistoryShowView();
 
             })
