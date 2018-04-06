@@ -767,11 +767,11 @@ $(function () {
                 '<div class="evaluation">' +
                     '<i class="fa fa-star fa-2x icon-large"></i>' +
                     '<span class="news-icon-text">' +
-                        '<a href="#">20</a>' + // text
+                        '<a id="considerNum" href="#"></a>' +
                     '</span>' +
                     '<i class="fas fa-calendar-check fa-2x icon-large"></i>' +
                     '<span class="news-icon-text">' +
-                        '<a href="#">123</a>' + // text
+                        '<a id="joinNum" href="#"></a>' +
                     '</span>' +
                 '</div>' +
                 '<div class="date text-right"></div>' +
