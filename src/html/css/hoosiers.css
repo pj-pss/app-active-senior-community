@@ -298,3 +298,73 @@ footer>button>.icon-text {
 }
 
 /* /フッター */
+
+
+.news-top-content {
+  height: 250px;
+}
+
+.etc_area .icon-large {
+  height: 25px;
+  width: 25px;
+}
+
+.news-icon-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.news-icon-text>a {
+  color: #007bff;
+  text-decoration: underline !important;
+}
+
+.news-article {
+  margin: 15px;
+}
+
+.news-article>.etc_area>.date {
+  text-align: right;
+  margin: auto 0 0 0;
+}
+
+.news-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.news-text {
+  font-size: 1.2rem;
+}
+
+.news-footer-btn {
+  border: 1px solid #5D5D5D;
+  color: #5D5D5D;
+  font-weight: bold;
+}
+
+.news-footer-btn::before {
+  font-family: "Font Awesome 5 Free";
+  font-size: 1.2em;
+  vertical-align: 0px;
+  font-weight: 900;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  padding-right: 10px;
+}
+
+.news-star-btn::before {
+  content: "\f005";
+}
+
+.news-calendar-btn::before {
+  content: "\f274";
+}
+
+.news-footer-btn.clicked {
+  color: #ffffff;
+  background-color: #3B73B7;
+  border: 1px solid #3B73B7;
+}
