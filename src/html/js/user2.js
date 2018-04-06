@@ -437,6 +437,7 @@ function setPersonalFilter(key) {
 
     setEntryNumber();
     switchCurrentButton(key == REPLY.JOIN ? 'fa-calendar-check' : 'fa-star');
+    $('#sort_btn').hide();
     viewTop();
 }
 
@@ -446,6 +447,7 @@ function clearFilter() {
     $('#sort-menu li').removeClass('checked');
     $('#sort-menu li.all').addClass('checked');
     $('#sort_btn').removeClass('active');
+    $('#sort_btn').show();
     viewTop();
 }
 
@@ -737,7 +739,6 @@ function viewProfile() {
 
 function viewTop() {
     $(".top .header-title .title").text(i18next.t('pageTitle.articleList'));
-    $("#sort_btn").show();
     view('top');
 }
 
