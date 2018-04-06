@@ -1104,6 +1104,7 @@ function saveUserName() {
                         'Authorization': 'Bearer ' + Common.getToken()
                     }
                 }).done(function () {
+                    actionHistory.logWrite('profileEdit');
                     viewProfile();
                 });
             });
@@ -1171,6 +1172,7 @@ function readURL(input) {
                                 'Authorization': 'Bearer ' + Common.getToken()
                             }
                         }).done(function () {
+                            actionHistory.logWrite('profileEdit');
                             viewProfile();
                         });
                     });
