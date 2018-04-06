@@ -6,7 +6,7 @@ $.prototype.actionHistoryShowModal = function actionHistoryShowModal(arg = {}){
 
 $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	var id = this.attr("id");
-	if(id === "top"){
+	if ($('footer>button.current').find('.fa-home')[0]){
 		$("#sort_btn").show();
 	}else{
 		$("#sort_btn").hide();
