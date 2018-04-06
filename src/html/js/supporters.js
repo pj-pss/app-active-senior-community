@@ -570,7 +570,7 @@ function saveArticle(editId) {
           'url' : article.url,
           'venue' : article.venue,
           'detail' : article.text,
-          'post_place' : 'みんなの掲示板',
+          'post_place' : i18next.t("pageTitle.bbs"),
           'target_age' : article.age,
           'target_sex' : article.sex
           // ,'update_user_id' : user_id

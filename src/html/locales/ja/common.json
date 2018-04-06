@@ -39,7 +39,7 @@
         "confirmSendReply": "回答しますか?",
         "anonymousReply": "匿名で回答する",
         "noContent" : "対象記事がありません",
-
+        "deleteConfirm" : "本当に削除してよろしいですか?",
         "error": {
             "targetCellNotSelected": "対象セルが設定されていません。",
             "refreshTokenMissing": "リフレッシュ$t(msg.error.tokenMissing)",
@@ -127,6 +127,19 @@
         "date" : "日時",
         "name" : "氏名",
         "anonymous" : "匿名"
+    },
+    "articleList" : {
+        "header": {
+            "date": "日時",
+            "postingPlace" : "掲載先",
+            "type" : "記事区分",
+            "title" : "タイトル",
+            "join" : "参加する!",
+            "consider" : "検討中"
+        },
+        "btn": {
+            "create" : "新規作成"
+        }
     },
     "articleItem" : {
         "type" : "記事区分",
