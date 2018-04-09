@@ -1294,7 +1294,7 @@ function setNewBadge() {
                 "Accept": "application/json"
             },
             data: {
-                "\$filter": "substringof('" + i18next.t('log.top', { name: ' ' }).trim() + "', action_detail) and action_user_cell_url eq null",
+                "\$filter": "substringof('" + i18next.t('log.top', { name: ' ' }).trim() + "', action_detail)",
                 "\$orderby": "__updated desc",
                 "\$skip": 1,
                 "\$top": 1
