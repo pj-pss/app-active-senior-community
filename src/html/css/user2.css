@@ -37,6 +37,11 @@
     font-size: 1.3rem;
 }
 
+#entryList .pn-list-h>.account-info>.user-name {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
 #opHistory li{
 	border-bottom: none;
 }

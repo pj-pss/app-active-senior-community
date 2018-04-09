@@ -244,35 +244,41 @@ function viewJoinConsiderList(entryFlag,articleId){
 				if(!this.multi){
 					profiles = {0:arguments};
 				}
-				$("#entry-list table").children().remove();
+				$("#entryList ul").children().remove();
 				var title;
 				if(arg[0] === REPLY.JOIN){
 					title = "pageTitle.participate";
-					$("#entry-list-title").attr("data-i18n", "pageTitle.participate");
 				}else{
 					title = "pageTitle.consider";
-					$("#entry-list-title").attr("data-i18n", "pageTitle.consider");
 				}
-
-				$("#entry-list-count").text(this.entryDatas.length.toString());
 
 				for(var i = 0; i < this.entryDatas.length; i++){
 					var updated = moment(new Date(parseInt(this.entryDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
-					var dispname = '<td data-i18n=\"entry.anonymous\"></td>';
-					var dispdescription = "";
+					var dispname = '<span data-i18n=\"entry.anonymous\"></span>';
 					var	imgsrc = "../img/user-circle.png";
 					if(!this.entryDatas[i].anonymous){
-						dispname = '<td>' + profiles[i][0].DisplayName + '</td>';
-						dispdescription = profiles[i][0].Description;
+						dispname = '<span>' + profiles[i][0].DisplayName + '</span>';
 						if(profiles[i][0].Image !== ""){
 							imgsrc = profiles[i][0].Image;
 						}
 					}
 
-					var img = '<img class=\"image-circle-large\" src=\"' + imgsrc + '\" alt=\"image\"></img>';
-					var elem = '<tr><td rowspan="3" class="td-bd">' + img + '</td>' + dispname + '<td rowspan="3" class="td-bd"><i class="fa fa-fw fa-angle-right icon" aria-hidden="true"></i></td></tr><tr><td>' + dispdescription + '</td></tr><tr><td class="td-bd">' + updated.format("YYYY/MM/DD") + '</td></tr>';
+                    var appendHtml =
+                        '<li>' +
+                            '<div class="pn-list-h">' +
+                                '<div class="pn-list-icon">' +
+                                        '<img src="' + imgsrc + '" alt="icon">' +
+                                    '</div>' +
+                                    '<div class="account-info">' +
+                                    '<div class="user-name">' + dispname + '</div>' +
+                                    '<div>' +
+                        '<span>' + updated.format("YYYY/MM/DD HH:mm:ss") + '</span>' +
+                                        '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</li>';
 
-					$("#entry-list table").append(elem);
+                    $("#entryList ul").append(appendHtml);
 				}
 
 				$('#entryList').actionHistoryShowView({detail : i18next.t(title)});
@@ -784,6 +790,13 @@ $(function () {
             '<div class="news-url"></div>' +
         '</div>';
     $("#articleDetail").html(articleDetail);
+    let entryHtml =
+        '<div class="bg-gray">' +
+            '<div class="list">' +
+                '<ul></ul>' +
+            '</div>' +
+        '</div>';
+    $("#entryList").html(entryHtml);
 });
 
 function showMessage(msg) {
