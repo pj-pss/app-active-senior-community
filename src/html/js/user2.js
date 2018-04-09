@@ -1544,8 +1544,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                         "Authorization": "Bearer " + currentToken
                     },
                     data: JSON.stringify({
-                        // 'update_user_id'
-                        'user_cell_url': userCellUrl, // dummy ID
+                        'user_cell_url': userCellUrl,
                         'provide_id': articleId,
                         'entry_flag': reply,
                         'anonymous': anonymous
@@ -1578,7 +1577,6 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                         "Authorization": "Bearer " + token
                     },
                     data: JSON.stringify({
-                        // 'update_user_id'
                         'user_cell_url': userCellUrl,
                         'provide_id': articleId,
                         'entry_flag': reply,
@@ -1616,7 +1614,6 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                                         'Authorization': 'Bearer ' + currentToken
                                     },
                                     data: JSON.stringify({
-                                        // 'update_user_id'
                                         'provide_id': articleId,
                                         'entry_flag': reply == REPLY.JOIN ? REPLY.CONSIDER : REPLY.JOIN
                                     })
