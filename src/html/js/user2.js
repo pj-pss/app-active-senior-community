@@ -1479,6 +1479,8 @@ function getArticleDetail(id) {
                             } else {
                                 $('#joinEventBtn').attr('onclick', "openSendReplyModal(" + REPLY.JOIN + ", '" + article.__id + "')");
                                 $('#considerEventBtn').attr('onclick', "javascript:openSendReplyModal(" + REPLY.CONSIDER + ", '" + article.__id + "')");
+                                $('#joinEventBtn').removeClass('clicked');
+                                $('#considerEventBtn').removeClass('clicked');
                             }
                         })
                         .fail(function () {
