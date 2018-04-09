@@ -208,85 +208,84 @@ function getPersonalJoinInfo() {
 }
 
 function viewJoinConsiderList(entryFlag,articleId){
-    alert('viewJoinConsiderList');
-    // getExtCellToken(function (token,arg) {
-	//     var oData = 'reply';
-	//     var entityType = 'reply_history';
+    getExtCellToken(function (token,arg) {
+	    var oData = 'reply';
+	    var entityType = 'reply_history';
 
-	//     $.ajax({
-	//         type: "GET",
-	//         url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=entry_flag eq ' + arg[0] + ' and provide_id eq \'' + arg[1] + '\'&\$orderby=__updated desc',
-	//         headers: {
-	//             "Authorization": "Bearer " + token,
-	//             "Accept": "application/json"
-    //         },
-    //         data: {
-    //             '\$top': REPLY_LIST_NUM
-    //         }
-	//     })
-	//     .done(function(res) {
-	// 		var list = [];
-	// 		this.entryDatas = res.d.results;
-	// 		_.each(this.entryDatas, $.proxy(function(entryData){
-	// 		    list.push($.ajax({
-	// 		        type: "GET",
-	// 				dataType: 'json',
-	// 		        url : entryData.user_cell_url + '__/profile.json',
-	// 		        headers: {
-	// 		            "Authorization": "Bearer " + token,
-	// 		            "Accept" : "application/json"
-	// 		        }
-	// 	    	}));
-	// 		},this));
+	    $.ajax({
+	        type: "GET",
+	        url: Common.getToCellBoxUrl() + oData + '/' + entityType + '?\$filter=entry_flag eq ' + arg[0] + ' and provide_id eq \'' + arg[1] + '\'&\$orderby=__updated desc',
+	        headers: {
+	            "Authorization": "Bearer " + token,
+	            "Accept": "application/json"
+            },
+            data: {
+                '\$top': REPLY_LIST_NUM
+            }
+	    })
+	    .done(function(res) {
+			var list = [];
+			this.entryDatas = res.d.results;
+			_.each(this.entryDatas, $.proxy(function(entryData){
+			    list.push($.ajax({
+			        type: "GET",
+					dataType: 'json',
+			        url : entryData.user_cell_url + '__/profile.json',
+			        headers: {
+			            "Authorization": "Bearer " + token,
+			            "Accept" : "application/json"
+			        }
+		    	}));
+			},this));
 
-	// 		this.multi = list.length !== 1 ? true : false;
-	// 		$.when.apply($, list).done($.proxy(function () {
-	// 			var profiles = arguments;
-	// 			if(!this.multi){
-	// 				profiles = {0:arguments};
-	// 			}
-	// 			$("#entry-list table").children().remove();
-	// 			var title;
-	// 			if(arg[0] === REPLY.JOIN){
-	// 				title = "pageTitle.participate";
-	// 				$("#entry-list-title").attr("data-i18n", "pageTitle.participate");
-	// 			}else{
-	// 				title = "pageTitle.consider";
-	// 				$("#entry-list-title").attr("data-i18n", "pageTitle.consider");
-	// 			}
+			this.multi = list.length !== 1 ? true : false;
+			$.when.apply($, list).done($.proxy(function () {
+				var profiles = arguments;
+				if(!this.multi){
+					profiles = {0:arguments};
+				}
+				$("#entry-list table").children().remove();
+				var title;
+				if(arg[0] === REPLY.JOIN){
+					title = "pageTitle.participate";
+					$("#entry-list-title").attr("data-i18n", "pageTitle.participate");
+				}else{
+					title = "pageTitle.consider";
+					$("#entry-list-title").attr("data-i18n", "pageTitle.consider");
+				}
 
-	// 			$("#entry-list-count").text(this.entryDatas.length.toString());
+				$("#entry-list-count").text(this.entryDatas.length.toString());
 
-	// 			for(var i = 0; i < this.entryDatas.length; i++){
-	// 				var updated = moment(new Date(parseInt(this.entryDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
-	// 				var dispname = '<td data-i18n=\"entry.anonymous\"></td>';
-	// 				var dispdescription = "";
-	// 				var	imgsrc = "../img/user-circle.png";
-	// 				if(!this.entryDatas[i].anonymous){
-	// 					dispname = '<td>' + profiles[i][0].DisplayName + '</td>';
-	// 					dispdescription = profiles[i][0].Description;
-	// 					if(profiles[i][0].Image !== ""){
-	// 						imgsrc = profiles[i][0].Image;
-	// 					}
-	// 				}
+				for(var i = 0; i < this.entryDatas.length; i++){
+					var updated = moment(new Date(parseInt(this.entryDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
+					var dispname = '<td data-i18n=\"entry.anonymous\"></td>';
+					var dispdescription = "";
+					var	imgsrc = "../img/user-circle.png";
+					if(!this.entryDatas[i].anonymous){
+						dispname = '<td>' + profiles[i][0].DisplayName + '</td>';
+						dispdescription = profiles[i][0].Description;
+						if(profiles[i][0].Image !== ""){
+							imgsrc = profiles[i][0].Image;
+						}
+					}
 
-	// 				var img = '<img class=\"image-circle-large\" src=\"' + imgsrc + '\" alt=\"image\"></img>';
-	// 				var elem = '<tr><td rowspan="3" class="td-bd">' + img + '</td>' + dispname + '<td rowspan="3" class="td-bd"><i class="fa fa-fw fa-angle-right icon" aria-hidden="true"></i></td></tr><tr><td>' + dispdescription + '</td></tr><tr><td class="td-bd">' + updated.format("YYYY/MM/DD") + '</td></tr>';
+					var img = '<img class=\"image-circle-large\" src=\"' + imgsrc + '\" alt=\"image\"></img>';
+					var elem = '<tr><td rowspan="3" class="td-bd">' + img + '</td>' + dispname + '<td rowspan="3" class="td-bd"><i class="fa fa-fw fa-angle-right icon" aria-hidden="true"></i></td></tr><tr><td>' + dispdescription + '</td></tr><tr><td class="td-bd">' + updated.format("YYYY/MM/DD") + '</td></tr>';
 
-	// 				$("#entry-list table").append(elem);
-	// 			}
+					$("#entry-list table").append(elem);
+				}
 
-	// 			$('#entryList').actionHistoryShowView({detail : i18next.t(title)});
+				$('#entryList').actionHistoryShowView({detail : i18next.t(title)});
 
-	// 		},this)).fail(function() {
-	// 			console.log('error: get profile.json');
-	// 		});
-	//     })
-	//     .fail(function() {
-	//         alert('error: get reply_history');
-	//     });
+			},this)).fail(function() {
+				console.log('error: get profile.json');
+			});
+	    })
+	    .fail(function() {
+	        alert('error: get reply_history');
+	    });
 
-    // }, [entryFlag,articleId]);
+    }, [entryFlag,articleId]);
 }
 
 /**
