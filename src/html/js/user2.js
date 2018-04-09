@@ -1682,11 +1682,15 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId) {
         case REPLY.JOIN:
             argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
             argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
+            $('#joinEventBtn').addClass('clicked');
+            $('#considerEventBtn').removeClass('clicked');
             break;
 
         case REPLY.CONSIDER:
             argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
             argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
+            $('#joinEventBtn').removeClass('clicked');
+            $('#considerEventBtn').addClass('clicked');
             break;
 
         default:
