@@ -1700,13 +1700,13 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId) {
 }
 
 function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
-    // var arg = reply + ",'" + articleId + "'";
-    // if (userReplyId && orgReplyId) {
-        //     arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
-        // }
-    // arg += "," + sameReply;
+    var arg = reply + ",'" + articleId + "'";
+    if (userReplyId && orgReplyId) {
+            arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
+        }
+    arg += "," + sameReply;
 
-    // $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
+    $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
 
     var title;
     if (reply === REPLY.JOIN) {
