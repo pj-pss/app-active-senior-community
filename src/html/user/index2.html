@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../css/hoosiers.css">
   <link rel="stylesheet" href="../css/homeapp.css">
   <link rel="stylesheet" href="../css/user2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css">
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -208,6 +209,26 @@
   <div class="modal-dialog pn-modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body pn-modal-body">
+      </div>
+      <div class="modal-footer pn-modal-footer">
+        <button type="button" class="btn" data-dismiss="modal" data-i18n="btn.cancel"></button>
+        <button type="button" class="btn ok-btn" data-dismiss="modal" data-i18n="btn.ok"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-sendReply" tabindex="-1" role="dialog" aria-labelledby="modal-sendReplyLabel" aria-hidden="true">
+  <div class="modal-dialog pn-modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body pn-modal-body">
+        <div id="confirmSendReplyMessage"></div>
+        <div class="pretty p-default">
+          <input name="checkAnonymous" type="checkbox">
+          <div class="state p-primary">
+            <label data-i18n="msg.anonymousReply"></label>
+          </div>
+        </div>
       </div>
       <div class="modal-footer pn-modal-footer">
         <button type="button" class="btn" data-dismiss="modal" data-i18n="btn.cancel"></button>

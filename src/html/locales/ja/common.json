@@ -36,7 +36,7 @@
         "failedGetArticle": "記事の取得に失敗しました",
         "failedDeleteArticle": "記事の削除に失敗しました",
         "completeGetArticle": "記事の削除が完了しました",
-        "confirmSendReply": "回答しますか?",
+        "confirmSendReply": "{{reply}}しますか?",
         "anonymousReply": "匿名で回答する",
         "noContent" : "対象記事がありません",
         "back" : "戻る",
@@ -278,5 +278,9 @@
 	},
 	"pleaseEnterName": "名前を入力して下さい。",
 	"errorValidateNameLength": "名前は128文字以下で入力して下さい。",
-	"Cancel": "キャンセル"
+    "Cancel": "キャンセル",
+    "reply" : {
+        "join": "参加",
+        "consider" : "検討"
+    }
 }

@@ -1700,20 +1700,22 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId) {
 }
 
 function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
-    alert('open send reply modal');
     // var arg = reply + ",'" + articleId + "'";
     // if (userReplyId && orgReplyId) {
-    //     arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
-    // }
+        //     arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
+        // }
     // arg += "," + sameReply;
 
     // $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
 
-    // var title;
-    // if (reply === REPLY.JOIN) {
-    //     title = "msg.join";
-    // } else {
-    //     title = "msg.consider";
-    // }
-    // $('#modal-sendReply').actionHistoryShowModal({ detail: i18next.t(title) });
+    var title;
+    if (reply === REPLY.JOIN) {
+        title = "msg.join";
+        msg = 'reply.join';
+    } else {
+        title = "msg.consider";
+        msg = 'reply.consider';
+    }
+    $('#confirmSendReplyMessage').html(i18next.t('msg.confirmSendReply', {reply: i18next.t(msg)}));
+    $('#modal-sendReply').actionHistoryShowModal({ detail: i18next.t(title) });
 }
