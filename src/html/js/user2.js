@@ -1445,6 +1445,8 @@ function getArticleDetail(id) {
 
                 $('#articleDetail .evaluation')[0].style.display = article.type == TYPE.EVENT ? '' : 'none';
                 if (article.type == TYPE.EVENT) {
+                    $('#articleDetail .evaluation .disabled').removeClass('disabled');
+
                     var replys = reply[0].d.results;
                     var join = 0, consider = 0;
                     for (reply of replys) {
@@ -1455,6 +1457,9 @@ function getArticleDetail(id) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+                    if (join == 0) $('#joinNum').addClass('disabled');
+                    if (consider == 0) $('#considerNum').addClass('disabled');
+
 
                     $('#joinNum').attr('onclick', "viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
                     $('#considerNum').attr('onclick', "viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");

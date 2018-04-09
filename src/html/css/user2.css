@@ -61,3 +61,10 @@ pre {
     sans-serif;
     color: #707070;
 }
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none !important;
+    color: #707070;
+}
