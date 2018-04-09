@@ -11,11 +11,20 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	}else{
 		$("#sort_btn").hide();
 	}
+
 	if (id === 'articleDetail') {
 		$("#back_btn").parents('.pn-back-btn').show();
+		$("#back_btn").attr('onclick', 'viewTop()');
 		$("#drawer_btn").hide();
 		$("#main_footer").hide();
 		$("#article_footer").show();
+		$("#sort_btn").hide();
+	} else if (id === 'entryList') {
+		$("#back_btn").parents('.pn-back-btn').show();
+		$("#back_btn").attr('onclick', 'viewArticleDetail()');
+		$("#drawer_btn").hide();
+		$("#main_footer").hide();
+		$("#article_footer").hide();
 		$("#sort_btn").hide();
 	} else {
 		$("#back_btn").parents('.pn-back-btn').hide();
@@ -23,6 +32,7 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 		$("#main_footer").show();
 		$("#article_footer").hide();
 	}
+
 	var isWrite = true;
 	if(id === "top" && $("#top.d-none").length === 0){
 		isWrite = false;

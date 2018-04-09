@@ -741,6 +741,10 @@ function viewTop() {
     $('#top').actionHistoryShowView();
 }
 
+function viewArticleDetail() {
+    $('#articleDetail').actionHistoryShowView();
+}
+
 function viewActionHistory(){
     $('footer>button.current').removeClass('current');
     openHistory();
