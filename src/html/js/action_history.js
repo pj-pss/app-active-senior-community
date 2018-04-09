@@ -37,7 +37,11 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	if(id === "top" && $("#top.d-none").length === 0){
 		isWrite = false;
 	}
-	$(".top .header-title .title").text(i18next.t('pageTitle.' + id));
+	if (arg.hasOwnProperty('detail')) {
+		$(".top .header-title .title").text(i18next.t(arg.detail));
+	} else {
+		$(".top .header-title .title").text(i18next.t('pageTitle.' + id));
+	}
 	view(id);
 	if(isWrite){
 		actionHistory.post("log." + id, arg);
