@@ -1488,9 +1488,13 @@ function getArticleDetail(id) {
                         });
                     });
 
+                    $('#articleDetail').actionHistoryShowView();
+                } else {
+                    $('#articleDetail').actionHistoryShowView();
+                    $("#main_footer").show();
+                    $("#article_footer").hide();
                 }
 
-                $('#articleDetail').actionHistoryShowView();
 
             })
             .fail(function () {
