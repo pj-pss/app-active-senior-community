@@ -38,6 +38,8 @@
         "completeGetArticle": "記事の削除が完了しました",
         "confirmSendReply": "{{reply}}しますか?",
         "anonymousReply": "匿名で回答する",
+        "completeReply": "回答が完了しました",
+        "failedReply": "回答に失敗しました",
         "noContent" : "対象記事がありません",
         "back" : "戻る",
         "deleteConfirm" : "本当に削除してよろしいですか?",

@@ -1636,12 +1636,11 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
 
             saveToUserCell().then(saveToOrganizationCell)
                 .fail(function () {
-                    alert('faild to send reply\n' + err.join('\n'));
+                    showMessage(i18next.t('msg.failedReply'));
                 })
                 .done(function (res) {
                     var userId = userReplyId || res.d.results.user_reply_id;
                     var orgId = orgReplyId || res.d.results.__id;
-                    alert('done');
                     updateReplyLink(reply, articleId, userId, orgId);
 
                     var join = $('#joinNum').html();
@@ -1663,6 +1662,8 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+
+                    showMessage(i18next.t('msg.completeReply'));
                 });
         });
     }, userReplyId);
