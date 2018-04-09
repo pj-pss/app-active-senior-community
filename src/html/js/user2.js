@@ -780,7 +780,7 @@ $(function () {
             '<div class="news-title mb-3"></div>' +
             '<div class="news-venue"></div>' +
             '<div class="news-date mb-3"></div>' +
-            '<div class="news-text mb-3"></div>' +
+            '<pre class="news-text mb-3"></pre>' +
             '<div class="news-url"></div>' +
         '</div>';
     $("#articleDetail").html(articleDetail);
@@ -1438,9 +1438,63 @@ function getArticleDetail(id) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+
+                    $('#joinNum').attr('onclick', "viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
+                    $('#considerNum').attr('onclick', "viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
+
+                    // get reply information
+                    getCurrentCellToken(function (currentToken) {
+                        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                        let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
+                        $.when(
+                            $.ajax({
+                                type: 'GET',
+                                url: boxUrl + "reply/reply_history",
+                                headers: {
+                                    "Authorization": "Bearer " + currentToken,
+                                    "Accept": "application/json"
+                                },
+                                data: {
+                                    "\$filter": "provide_id eq '" + article.__id + "'",
+                                    '\$top': REPLY_LIST_NUM
+                                }
+                            }),
+                            $.ajax({
+                                type: 'GET',
+                                url: Common.getToCellBoxUrl() + "reply/reply_history",
+                                headers: {
+                                    "Authorization": "Bearer " + token,
+                                    "Accept": "application/json"
+                                },
+                                data: {
+                                    "\$filter": "provide_id eq '" + article.__id + "' and user_cell_url eq '" + cellUrl + "'"
+                                }
+                            })
+                        )
+                        .done(function (res1, res2) {
+                            var userCell = res1[0].d ? res1[0].d.results[0] : null;
+                            var orgCell = res2[0].d ? res2[0].d.results[0] : null;
+                            if (userCell && orgCell) {
+                                updateReplyLink(userCell.entry_flag, article.__id, userCell.__id, orgCell.__id);
+                            } else {
+                                $('#joinEventBtn').attr('onclick', "openSendReplyModal(" + REPLY.JOIN + ", '" + article.__id + "')");
+                                $('#considerEventBtn').attr('onclick', "javascript:openSendReplyModal(" + REPLY.CONSIDER + ", '" + article.__id + "')");
+                                $('#joinEventBtn').removeClass('clicked');
+                                $('#considerEventBtn').removeClass('clicked');
+                            }
+                        })
+                        .fail(function () {
+                            alert('error: get reply information');
+                        });
+                    });
+
+                    $('#articleDetail').actionHistoryShowView();
+                } else {
+                    $('#articleDetail').actionHistoryShowView();
+                    $("#main_footer").show();
+                    $("#article_footer").hide();
                 }
 
-                $('#articleDetail').actionHistoryShowView();
 
             })
             .fail(function () {
@@ -1459,4 +1513,216 @@ function addLinkToGrid() {
             window.location = $(this).attr('data-href');
         });
     });
+}
+
+/**
+ * Send the reply to user cell and organization cell.
+ * @param {int} reply :REPLY.JOIN or REPLY.CONSIDER
+ * @param {string} articleId
+ * @param {string} userReplyId :if id is exist, this func's role is the update
+ * @param {string} orgReplyId
+ * @param {bool} sameReply :same entry flag already sanded
+ */
+function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
+    var oData = 'reply';
+    var entityType = 'reply_history';
+
+    getExtCellToken(function (token) {
+        var err = [];
+        var anonymous = $('[name=checkAnonymous]').prop('checked');
+        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var userCellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
+
+        getCurrentCellToken(function (currentToken) {
+            var saveToUserCell = function () {
+                var method = 'POST';
+                var url = boxUrl + oData + '/' + entityType;
+                if (userReplyId) {
+                    method = 'PUT';
+                    url += "('" + userReplyId + "')";
+                }
+
+                return $.ajax({
+                    type: method,
+                    url: url,
+                    headers: {
+                        "Authorization": "Bearer " + currentToken
+                    },
+                    data: JSON.stringify({
+                        'user_cell_url': userCellUrl,
+                        'provide_id': articleId,
+                        'entry_flag': reply,
+                        'anonymous': anonymous
+                    })
+                })
+                    .then(
+                        function (res) {
+                            return userReplyId || res;
+                        },
+                        function (XMLHttpRequest, textStatus, errorThrown) {
+                            err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+                        }
+                    );
+            };
+
+            var saveToOrganizationCell = function (res) {
+                var id = res.d ? res.d.results.__id : res;
+
+                var method = 'POST';
+                var url = Common.getToCellBoxUrl() + oData + '/' + entityType;
+                if (orgReplyId) {
+                    method = 'PUT';
+                    url += "('" + orgReplyId + "')";
+                }
+
+                return $.ajax({
+                    type: method,
+                    url: url,
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    data: JSON.stringify({
+                        'user_cell_url': userCellUrl,
+                        'provide_id': articleId,
+                        'entry_flag': reply,
+                        'user_reply_id': id,
+                        'anonymous': anonymous
+                    })
+                })
+                    .then(
+                        function (res) {
+                            return res;
+                        },
+                        function (XMLHttpRequest, textStatus, errorThrown) {
+                            err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+
+                            // delete/change the reply on user cell
+                            if (!userReplyId) {
+                                $.ajax({
+                                    type: 'DELETE',
+                                    url: boxUrl + oData + '/' + entityType + "('" + id + "')",
+                                    headers: {
+                                        'Authorization': 'Bearer ' + currentToken
+                                    }
+                                })
+                                    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                        alert('delete failed');
+                                    })
+                                    .done(function () {
+                                        alert('delete done');
+                                    });
+                            } else {
+                                $.ajax({
+                                    type: 'PUT',
+                                    url: boxUrl + oData + '/' + entityType + "('" + id + "')",
+                                    headers: {
+                                        'Authorization': 'Bearer ' + currentToken
+                                    },
+                                    data: JSON.stringify({
+                                        'provide_id': articleId,
+                                        'entry_flag': reply == REPLY.JOIN ? REPLY.CONSIDER : REPLY.JOIN
+                                    })
+                                })
+                                    .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                        alert('change failed');
+                                    })
+                                    .done(function () {
+                                        alert('change done');
+                                    });
+                            }
+
+                            return Promise.reject();
+                        }
+                    );
+            };
+
+            saveToUserCell().then(saveToOrganizationCell)
+                .fail(function () {
+                    showMessage(i18next.t('msg.failedReply'));
+                })
+                .done(function (res) {
+                    var userId = userReplyId || res.d.results.user_reply_id;
+                    var orgId = orgReplyId || res.d.results.__id;
+                    updateReplyLink(reply, articleId, userId, orgId);
+
+                    var join = $('#joinNum').html();
+                    var consider = $('#considerNum').html();
+                    if (reply == REPLY.JOIN) {
+                        if (!userReplyId) {
+                            join++;
+                        } else if (!sameReply) {
+                            join++;
+                            consider--;
+                        }
+                    } else {
+                        if (!userReplyId) {
+                            consider++;
+                        } else if (!sameReply) {
+                            consider++;
+                            join--;
+                        }
+                    }
+                    $('#joinNum').html(join);
+                    $('#considerNum').html(consider);
+
+                    showMessage(i18next.t('msg.completeReply'));
+                });
+        });
+    }, userReplyId);
+}
+
+/**
+ * Update link for sending the reply.
+ * @param {int} reply :Sended users reply type ( REPLY.JOIN or REPLY.CONSIDER )
+ * @param {string} articleId
+ * @param {string} userReplyId
+ * @param {string} orgReplyId
+ */
+function updateReplyLink(reply, articleId, userReplyId, orgReplyId) {
+    var argJoin = '';
+    var argConsider = '';
+    switch (reply) {
+        case REPLY.JOIN:
+            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
+            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
+            $('#joinEventBtn').addClass('clicked');
+            $('#considerEventBtn').removeClass('clicked');
+            break;
+
+        case REPLY.CONSIDER:
+            argJoin += REPLY.JOIN + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', false";
+            argConsider += REPLY.CONSIDER + ",'" + articleId + "', '" + userReplyId + "', '" + orgReplyId + "', true";
+            $('#joinEventBtn').removeClass('clicked');
+            $('#considerEventBtn').addClass('clicked');
+            break;
+
+        default:
+            // data is not exist
+            alert('error: read reply information');
+            break;
+    }
+
+    $('#joinEventBtn').attr('onclick', "openSendReplyModal(" + argJoin + ")");
+    $('#considerEventBtn').attr('onclick', "openSendReplyModal(" + argConsider + ")");
+}
+
+function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
+    var arg = reply + ",'" + articleId + "'";
+    if (userReplyId && orgReplyId) {
+            arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
+        }
+    arg += "," + sameReply;
+
+    $('#sendReplyButton').attr('onclick', 'replyEvent(' + arg + ')');
+
+    var title;
+    if (reply === REPLY.JOIN) {
+        title = "msg.join";
+        msg = 'reply.join';
+    } else {
+        title = "msg.consider";
+        msg = 'reply.consider';
+    }
+    $('#confirmSendReplyMessage').html(i18next.t('msg.confirmSendReply', {reply: i18next.t(msg)}));
+    $('#modal-sendReply').actionHistoryShowModal({ detail: i18next.t(title) });
 }
