@@ -268,12 +268,15 @@ function viewJoinConsiderList(entryFlag,articleId){
 					profiles = {0:arguments};
 				}
 				$("#entryList ul").children().remove();
-				var title;
-				if(arg[0] === REPLY.JOIN){
-					title = "pageTitle.participate";
-				}else{
-					title = "pageTitle.consider";
-				}
+                var title;
+                var replyStr;
+                if (arg[0] === REPLY.JOIN) {
+                    title = "pageTitle.participate";
+                    replyStr = 'reply.join';
+                } else {
+                    title = "pageTitle.consider";
+                    replyStr = 'reply.consider';
+                }
 
 				for(var i = 0; i < this.entryDatas.length; i++){
 					var updated = moment(new Date(parseInt(this.entryDatas[i].__updated.match(/\/Date\((.*)\)\//i)[1],10)));
@@ -304,7 +307,7 @@ function viewJoinConsiderList(entryFlag,articleId){
                     $("#entryList ul").append(appendHtml);
 				}
 
-				$('#entryList').actionHistoryShowView({detail : i18next.t(title)});
+                $('#entryList').actionHistoryShowView({ detail: $('#articleDetail .news-title').text(), reply: i18next.t(replyStr) });
 
 			},this)).fail(function() {
 				console.log('error: get profile.json');

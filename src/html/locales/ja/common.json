@@ -266,16 +266,16 @@
 		"Sun" : "日"
 	},
     "log": {
-		"top" : "{{name}} さんがトップ画面を表示しました。",
-        "profile" : "{{name}} さんがプロフィール画面を表示しました。",
-		"opHistory" : "{{name}} さんが私の操作履歴画面を表示しました。",
+		"top" : "{{name}} さんがホームを表示しました。",
+        "profile" : "{{name}} さんがプロフィールを表示しました。",
+		"opHistory" : "{{name}} さんが履歴を表示しました。",
 		"modal-qrReader" : "{{name}} さんが操作支援ダイアログを表示しました。",
 		"modal-startHelpOp" : "{{name}} さんが操作支援開始ダイアログを表示しました。",
 		"modal-helpConfirm" : "{{name}} さんが操作支援終了ダイアログを表示しました。",
 		"profileEdit" : "{{name}} さんがプロフィール変更画面を表示しました。",
-		"articleDetail" : "{{name}} さんが[{{detail}}]詳細画面を表示しました。",
-		"entryList" : "{{name}} さんが{{detail}}画面を表示しました。",
-		"modal-sendReply" : "{{name}} さんが{{detail}}確認画面を表示しました。",
+		"articleDetail" : "{{name}} さんが[{{detail}}]を表示しました。",
+		"entryList" : "{{name}} さんが[{{detail}}]の{{reply}}者リストを表示しました。",
+		"modal-sendReply" : "{{name}} さんが{{detail}}確認ダイアログを表示しました。",
 		"editReplyHistory": "{{name}} さんが[{{detail}}]に {{reply}}する と回答しました。"
 	},
 	"pleaseEnterName": "名前を入力して下さい。",
