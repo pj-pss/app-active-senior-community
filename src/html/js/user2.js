@@ -849,10 +849,13 @@ function openQrReader() {
     var options = {};
     options = initVideoObjectOptions("camera-preview");
     var cameraId = 0;
-    initScanner(options);
-    initCamera(cameraId);
-    scanStart(function (content){
-        authorizedQrReader(decryptQR(content));
+    Instascan.Camera.getCameras().then(function (cameras) {
+        cameraId = cameras.length - 1;
+        initScanner(options);
+        initCamera(cameraId);
+        scanStart(function (content){
+            authorizedQrReader(decryptQR(content));
+        });
     });
 
     $('#modal-qrReader').actionHistoryShowModal();
