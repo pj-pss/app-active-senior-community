@@ -770,6 +770,7 @@ function viewTop() {
 }
 
 function viewArticleDetail() {
+    disableEntryListLink();
     $('#articleDetail').actionHistoryShowView({ detail: $('#articleDetail .news-title').text()});
 }
 
@@ -1473,7 +1474,6 @@ function getArticleDetail(id) {
 
                 $('#articleDetail .evaluation')[0].style.display = article.type == TYPE.EVENT ? '' : 'none';
                 if (article.type == TYPE.EVENT) {
-                    $('#articleDetail .evaluation .disabled').removeClass('disabled');
 
                     var replys = reply[0].d.results;
                     var join = 0, consider = 0;
@@ -1485,9 +1485,6 @@ function getArticleDetail(id) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
-                    if (join == 0) $('#joinNum').addClass('disabled');
-                    if (consider == 0) $('#considerNum').addClass('disabled');
-
 
                     $('#joinNum').attr('onclick', "viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
                     $('#considerNum').attr('onclick', "viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
@@ -1714,6 +1711,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+                    disableEntryListLink();
 
                     actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text()});
                     showMessage(i18next.t('msg.completeReply'));
@@ -1776,4 +1774,11 @@ function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply
     }
     $('#confirmSendReplyMessage').html(i18next.t('msg.confirmSendReply', {reply: i18next.t(msg)}));
     $('#modal-sendReply').actionHistoryShowModal({ detail: i18next.t(title) });
+}
+
+function disableEntryListLink() {
+    $('#articleDetail .evaluation .disabled').removeClass('disabled');
+
+    if ($('#considerNum').text() == 0) $('#considerNum').addClass('disabled');
+    if ($('#joinNum').text() == 0) $('#joinNum').addClass('disabled');
 }
