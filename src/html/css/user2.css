@@ -37,6 +37,11 @@
     font-size: 1.3rem;
 }
 
+#entryList .pn-list-h>.account-info>.user-name {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
 #opHistory li{
 	border-bottom: none;
 }
@@ -54,5 +59,12 @@ pre {
     'Hiragino Kaku Gothic ProN',
     '游ゴシック Medium',
     sans-serif;
+    color: #707070;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none !important;
     color: #707070;
 }
