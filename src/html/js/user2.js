@@ -1694,7 +1694,9 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
 
                     var join = $('#joinNum').html();
                     var consider = $('#considerNum').html();
+                    var replyStr;
                     if (reply == REPLY.JOIN) {
+                        replyStr = i18next.t('reply.join');
                         if (!userReplyId) {
                             join++;
                         } else if (!sameReply) {
@@ -1702,6 +1704,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                             consider--;
                         }
                     } else {
+                        replyStr = i18next.t('reply.consider');
                         if (!userReplyId) {
                             consider++;
                         } else if (!sameReply) {
@@ -1713,7 +1716,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     $('#considerNum').html(consider);
                     disableEntryListLink();
 
-                    actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text()});
+                    actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text(), reply: replyStr});
                     showMessage(i18next.t('msg.completeReply'));
                 });
         });
