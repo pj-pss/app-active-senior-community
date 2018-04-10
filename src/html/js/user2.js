@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 var articleList;
+var articleListAll;
 var imageList = {};
 var joinList = {};
 var personalJoinList = {};
@@ -25,6 +26,9 @@ var operationCellUrl = '';
 var userInfo = {};
 var helpAuthorized = false;
 var nowViewMenu = 'top';
+var skip = 0;
+var isLoad1 = false;
+var isLoad2 = false;
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -73,10 +77,27 @@ async function getArticleList() {
                 '\$top': ARTICLE_NUM
             }
         }).done(function(data) {
-            articleList = data.d.results;
-            setArticle(data.d.results, token);
+            skip = 0;
+            isLoad1 = false;
+            isLoad2 = false;
+            articleListAll = data.d.results;
+            setArticle(articleListAll, token, true);
             getJoinInfoList(token);
             getPersonalJoinInfo();
+            $("main").off('scroll');
+            $("main").on('scroll', function(event){
+                if ($("#sort_btn").css("display") === "none" || skip * ARTICLE_SKIP_NUM > ARTICLE_NUM || isLoad1 || isLoad2){
+                    return;
+                }
+                var current = $(this).scrollTop() + $(this).innerHeight();
+                if (current < $(this).get(0).scrollHeight - 50) return;
+                isLoad1 = isLoad2 = true;
+                getExtCellToken(function (token){
+                    setArticle(articleListAll, token, false);
+                    getJoinInfoList(token);
+                    getPersonalJoinInfo();
+                });
+            });
         })
         .fail(function() {
             alert('failed to get article list');
@@ -166,6 +187,7 @@ function getJoinInfoList(token) {
             joinList[key] = joinHtml;
             $('#join_' + key).html(joinHtml);
         }
+        isLoad1 = false;
     })
     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
         alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
@@ -200,6 +222,7 @@ function getPersonalJoinInfo() {
                     personalJoinList[val.provide_id] = val.entry_flag;
                 }
             }
+            isLoad2 = false;
         })
         .fail(function (XMLHttpRequest, textStatus, errorThrown) {
             alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
@@ -365,12 +388,17 @@ function getCurrentCellToken(callback, id) {
     }
 }
 
-function setArticle(articleList, token){
-
-    $('#topInfoList>ul').children().remove();
-    $('#top .top-content').children().remove();
-    let first = true;
-    for(let article of articleList){
+function setArticle(articleListAll, token, isClear = true){
+    let first;
+    if(isClear){
+        $('#topInfoList>ul').children().remove();
+        $('#top .top-content').children().remove();
+        first = true;
+    }else{
+        first = false;
+    }
+    var skipArticleList = articleListAll.slice(skip * ARTICLE_SKIP_NUM, (skip + 1) * ARTICLE_SKIP_NUM);
+    for(let article of skipArticleList){
         if (first) {
             $('#top .top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('#top .top-content').attr('data-href', "javascript:getArticleDetail('" + article.__id + "')");
@@ -380,7 +408,8 @@ function setArticle(articleList, token){
         getArticleListImage(article.__id, token, first);
         first = false;
     }
-
+    skip = skip + 1;
+    articleList = articleListAll.slice(0, (skip + 1) * ARTICLE_SKIP_NUM);
     setNewBadge();
     addLinkToGrid();
 }
@@ -406,7 +435,6 @@ function setFilter(key, reset) {
         showMessage(i18next.t('msg.noContent'));
         return false;
     }
-
     setEntryNumber();
     switchCurrentButton('fa-home');
     $('#sort_btn').addClass('active');
@@ -1320,7 +1348,7 @@ function setNewBadge() {
         .done(function (res) {
             $('.new').removeClass('new');
             userInfo.lastAction = res.d.results[0] ? res.d.results[0].__updated : moment(0);
-            for (let article of articleList) {
+            for (let article of articleListAll) {
                 if (article.__updated > userInfo.lastAction) {
                     $('#img_' + article.__id).parents('.list-image').addClass('new');
                     $('#join_' + article.__id).parents('#top .top-content').addClass('new');
