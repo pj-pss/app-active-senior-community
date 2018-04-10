@@ -272,7 +272,7 @@
 		"modal-qrReader" : "{{name}} さんが操作支援ダイアログを表示しました。",
 		"modal-startHelpOp" : "{{name}} さんが操作支援開始ダイアログを表示しました。",
 		"modal-helpConfirm" : "{{name}} さんが操作支援終了ダイアログを表示しました。",
-		"profileEdit" : "{{name}} さんがプロフィール変更画面を表示しました。",
+		"profileEdit" : "{{name}} さんがプロフィールを変更しました。",
 		"articleDetail" : "{{name}} さんが[{{detail}}]を表示しました。",
 		"entryList" : "{{name}} さんが[{{detail}}]の{{reply}}者リストを表示しました。",
 		"modal-sendReply" : "{{name}} さんが{{detail}}確認ダイアログを表示しました。",
