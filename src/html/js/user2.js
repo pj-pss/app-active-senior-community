@@ -1715,6 +1715,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
 
+                    actionHistory.logWrite('editReplyHistory');
                     showMessage(i18next.t('msg.completeReply'));
                 });
         });
