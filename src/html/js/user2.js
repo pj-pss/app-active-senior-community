@@ -770,7 +770,7 @@ function viewTop() {
 }
 
 function viewArticleDetail() {
-    $('#articleDetail').actionHistoryShowView();
+    $('#articleDetail').actionHistoryShowView({ detail: $('#articleDetail .news-title').text()});
 }
 
 function viewActionHistory(){
@@ -1538,9 +1538,9 @@ function getArticleDetail(id) {
                         });
                     });
 
-                    $('#articleDetail').actionHistoryShowView();
+                    viewArticleDetail();
                 } else {
-                    $('#articleDetail').actionHistoryShowView();
+                    viewArticleDetail();
                     $("#main_footer").show();
                     $("#article_footer").hide();
                 }
@@ -1715,7 +1715,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
 
-                    actionHistory.logWrite('editReplyHistory');
+                    actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text()});
                     showMessage(i18next.t('msg.completeReply'));
                 });
         });
