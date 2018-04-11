@@ -1,0 +1,13 @@
+{
+  "Roles": [
+    {
+      "Name": "organization"
+    },
+    {
+      "Name": "supporter"
+    },
+    {
+      "Name": "user"
+    }
+  ]
+}
