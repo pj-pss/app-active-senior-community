@@ -326,7 +326,7 @@ function viewJoinConsiderList(entryFlag,articleId){
  * @param {string} id :article/userReply/etc... (for callback function)
  */
 function getExtCellToken(callback, id) {
-    if (Common.getCellUrl() == ORGANIZATION_CELL_URL) {
+    if (Common.getCellUrl() == organization_cell_url) {
         callback(Common.getToken(), id);
     } else {
         if(helpAuthorized) {
@@ -335,11 +335,11 @@ function getExtCellToken(callback, id) {
                     let tempTCAT = result1[0].access_token; // Transcell Access Token
                     let tempAAAT = result2[0].access_token; // App Authentication Access Token
                     Common.getProtectedBoxAccessToken4ExtCell(operationCellUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
-                        $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+                        $.when(Common.getTranscellToken(organization_cell_url), Common.getAppAuthToken(organization_cell_url))
                             .done(function (result11, result12) {
                                 let tempTCAT2 = result11[0].access_token; // Transcell Access Token
                                 let tempAAAT2 = result12[0].access_token; // App Authentication Access Token
-                                Common.getProtectedBoxAccessToken4ExtCell(ORGANIZATION_CELL_URL, tempTCAT2, tempAAAT2).done(function (appCellToken2) {
+                                Common.getProtectedBoxAccessToken4ExtCell(organization_cell_url, tempTCAT2, tempAAAT2).done(function (appCellToken2) {
                                     callback(appCellToken2.access_token, id);
                                 }).fail(function (error) {
                                     alert("error: get org cell token");
@@ -356,11 +356,11 @@ function getExtCellToken(callback, id) {
                     alert("error: get ext cell token");
                 });
         } else {
-            $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+            $.when(Common.getTranscellToken(organization_cell_url), Common.getAppAuthToken(organization_cell_url))
                 .done(function (result1, result2) {
                     let tempTCAT = result1[0].access_token; // Transcell Access Token
                     let tempAAAT = result2[0].access_token; // App Authentication Access Token
-                    Common.perpareToCellInfo(ORGANIZATION_CELL_URL, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
+                    Common.perpareToCellInfo(organization_cell_url, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
                         callback(token, id);
                     });
                 })

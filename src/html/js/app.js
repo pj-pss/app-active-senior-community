@@ -37,16 +37,19 @@ const ARTICLE_SKIP_NUM = 50;
 
 const APP_URL = "https://demo.personium.io/app-life-enrichers-community/";
 const APP_BOX_NAME = 'io_personium_demo_app-life-enrichers-community';
-const ORGANIZATION_CELL_URL = 'https://demo.personium.io/fst-community-organization/';
+
+var organization_cell_url = sessionStorage.organizationCellUrl || null;
+var organization_cell_urls;
 
 additionalCallback = function () {
     switchAppUrl();
 };
 
-function switchAppUrl() {
+async function switchAppUrl() {
     let cellUrl = Common.getCellUrl();
     let token = Common.getToken();
 
+    await getOrganizationCellUrls();
     $.ajax({
         type: "GET",
         url: cellUrl + "__ctl/Account",
@@ -63,20 +66,23 @@ function switchAppUrl() {
                 'Accept': 'application/json'
             }
         }).done(function (data2, textStatus2, request2) {
-            var appCellName = Common.getAppCellUrl().split("/")[3];
-            var reg = new RegExp("Name=\'(.*)\',\_Box\.Name=\'" + appCellName + "\'");
-            var supportRole = _.find(data2.d.results, $.proxy(function (d) {
-                var matchword = d.uri.match(reg);
-                if (matchword !== null) {
-                    return matchword[1] === "organization";
+            for(let key in organization_cell_urls) {
+                // var appCellName = Common.getAppCellUrl().split("/")[3];
+                var appCellName = key;
+                var reg = new RegExp("Name=\'(.*)\',\_Box\.Name=\'" + appCellName + "\'");
+                var supportRole = _.find(data2.d.results, $.proxy(function (d) {
+                    var matchword = d.uri.match(reg);
+                    if (matchword !== null) {
+                        return matchword[1] === "organization";
+                    }
+                    return false;
+                }, this));
+                if (supportRole !== undefined) {
+                    $("#supporter_" + key).show();
                 }
-                return false;
-            }, this));
-            if (supportRole !== undefined) {
-                $("#supporter").show();
+                $("#user_" + key).show();
+                $("#user2_" + key).show();
             }
-            $("#user").show();
-            $("#user2").show();
         }).fail(function () {
             console.log("fail");
         });
@@ -85,3 +91,45 @@ function switchAppUrl() {
             console.log("fail");
         });
 }
+
+async function getOrganizationCellUrls() {
+    $.ajax({
+        type: 'GET',
+        url: Common.getBoxUrl() + 'organizationCellUrls.json',
+        headers: {
+            'Authorization': 'Bearer ' + Common.getToken(),
+            'Accept': 'application/json'
+        }
+    }).done(res => {
+        organization_cell_urls = res;
+        for (let key in organization_cell_urls) {
+            let supporterBtn = '<a class="btn btn-primary btn-block" id="supporter_' + key + '" style="display:none" href="javascript:supporter(\'' + key + '\')">' + key +  ' (Community Manager Application)' + '</a><br>';
+            let userBtn = '<a class="btn btn-primary btn-block" id="user2_' + key + '" style="display:none" href="javascript:user2(\'' + key + '\')">' + key + ' (Life Enrichers Application)' + '</a><br>';
+            $('#selectApplication').append(supporterBtn);
+            $('#selectApplication').append(userBtn);
+        }
+    })
+}
+
+function supporter(organizationCellName) {
+    sessionStorage.organizationCellUrl = organization_cell_urls[organizationCellName];
+    location.href = './supporter/index.html' + location.hash;
+}
+
+function user(organizationCellName) {
+    organization_cell_url = organization_cell_urls[organizationCellName];
+    location.href = './user/index.html' + location.hash;
+}
+
+function user2(organizationCellName) {
+    sessionStorage.organizationCellUrl = organization_cell_urls[organizationCellName];
+    location.href = './user/index2.html' + location.hash;
+}
+
+getNamesapces = function () {
+    return ['common', 'glossary'];
+};
+
+getEngineEndPoint = function () {
+    return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
+};
