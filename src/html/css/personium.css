@@ -40,6 +40,7 @@ ul {
     list-style-type: none;
     padding: 0px;
     margin: 0px;
+    background-color: #ffffff;
 }
 
 li {
@@ -60,20 +61,26 @@ a:hover {
 
 header {
     height: 4.0rem;
-    flex: 0 0 auto;
+    /* flex: 0 0 auto;
     overflow: hidden;
-    position: relative;
+    position: relative; */
     z-index: 2;
     box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
     text-align: center;
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
+    width: 100%;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 main{
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+    padding-top: 4.0rem;
 }
 
 /*drawer menu*/
@@ -171,6 +178,10 @@ main{
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    color: #D0D0D0;
+}
+
+.check-mark-left.checked::before {
     color: #2978FF;
 }
 
@@ -247,6 +258,13 @@ main{
 
 .ok-btn {
     font-weight: bold;
+}
+
+/*single button dialog*/
+
+.single-btn-modal>.modal-dialog>.modal-content>.pn-modal-footer>button {
+    width: 100%;
+    border-radius: 0 0 .3rem .3rem;
 }
 
 /*slide list*/
@@ -387,6 +405,7 @@ main{
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    word-break: break-word;
 }
 
 .text-hidden{
@@ -454,6 +473,14 @@ main{
 }
 
 /*Footer Button*/
+
+footer {
+    width: 100%;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
 
 .footer-btn {
     width: 50%;
