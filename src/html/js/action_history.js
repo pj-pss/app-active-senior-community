@@ -40,8 +40,7 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 
 	if (id === 'entryList' && arg.hasOwnProperty('detail')) {
 		$(".top .header-title .title").text(i18next.t(arg.detail));
-	} else if (id === 'articleDetail') {
-	} else {
+	} else if (id !== 'articleDetail') {
 		$(".top .header-title .title").text(i18next.t('pageTitle.' + id));
 	}
 	view(id);
