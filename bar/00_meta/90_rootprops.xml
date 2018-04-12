@@ -94,4 +94,12 @@
             </prop>
         </propstat>
     </response>
+    <response>
+        <href>dcbox:/organizationCellUrls.json</href>
+        <propstat>
+            <prop>
+                <getcontenttype>text/plan</getcontenttype>
+            </prop>
+        </propstat>
+    </response>
 </multistatus>

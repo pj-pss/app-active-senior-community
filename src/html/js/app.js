@@ -66,9 +66,9 @@ async function switchAppUrl() {
                 'Accept': 'application/json'
             }
         }).done(function (data2, textStatus2, request2) {
-            for(let key in organization_cell_urls) {
+            for(let val of organization_cell_urls) {
                 // var appCellName = Common.getAppCellUrl().split("/")[3];
-                var appCellName = key;
+                var appCellName = val.name;
                 var reg = new RegExp("Name=\'(.*)\',\_Box\.Name=\'" + appCellName + "\'");
                 var supportRole = _.find(data2.d.results, $.proxy(function (d) {
                     var matchword = d.uri.match(reg);
@@ -78,10 +78,10 @@ async function switchAppUrl() {
                     return false;
                 }, this));
                 if (supportRole !== undefined) {
-                    $("#supporter_" + key).show();
+                    $("#supporter_" + val.name).show();
                 }
-                $("#user_" + key).show();
-                $("#user2_" + key).show();
+                $("#user_" + val.name).show();
+                $("#user2_" + val.name).show();
             }
         }).fail(function () {
             console.log("fail");
@@ -102,27 +102,27 @@ async function getOrganizationCellUrls() {
         }
     }).done(res => {
         organization_cell_urls = res;
-        for (let key in organization_cell_urls) {
-            let supporterBtn = '<a class="btn btn-primary btn-block" id="supporter_' + key + '" style="display:none" href="javascript:supporter(\'' + key + '\')">' + key +  ' (Community Manager Application)' + '</a><br>';
-            let userBtn = '<a class="btn btn-primary btn-block" id="user2_' + key + '" style="display:none" href="javascript:user2(\'' + key + '\')">' + key + ' (Life Enrichers Application)' + '</a><br>';
+        for (let val of organization_cell_urls) {
+            let supporterBtn = '<a class="btn btn-primary btn-block" id="supporter_' + val.name + '" style="display:none" href="javascript:supporter(\'' + val.url + '\')">' + val.name +  ' (Community Manager Application)' + '</a><br>';
+            let userBtn = '<a class="btn btn-primary btn-block" id="user2_' + val.name + '" style="display:none" href="javascript:user2(\'' + val.url + '\')">' + val.name + ' (Life Enrichers Application)' + '</a><br>';
             $('#selectApplication').append(supporterBtn);
             $('#selectApplication').append(userBtn);
         }
     })
 }
 
-function supporter(organizationCellName) {
-    sessionStorage.organizationCellUrl = organization_cell_urls[organizationCellName];
+function supporter(cellUrl) {
+    sessionStorage.organizationCellUrl = cellUrl;
     location.href = './supporter/index.html' + location.hash;
 }
 
-function user(organizationCellName) {
-    organization_cell_url = organization_cell_urls[organizationCellName];
+function user(cellUrl) {
+    organization_cell_url = cellUrl;
     location.href = './user/index.html' + location.hash;
 }
 
-function user2(organizationCellName) {
-    sessionStorage.organizationCellUrl = organization_cell_urls[organizationCellName];
+function user2(cellUrl) {
+    sessionStorage.organizationCellUrl = cellUrl;
     location.href = './user/index2.html' + location.hash;
 }
 
