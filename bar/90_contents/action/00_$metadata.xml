@@ -14,10 +14,10 @@
                 <Property Name="__id" Type="Edm.String" Nullable="false" DefaultValue="UUID()" p:Format="regEx('^.{1,400}$')"></Property>
                 <Property Name="__published" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
                 <Property Name="__updated" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
-                <Property Name="action_detail" Type="Edm.String" Nullable="true" p:IsDeclared="false"></Property>
-                <Property Name="action_target" Type="Edm.String" Nullable="true" p:IsDeclared="false"></Property>
-                <Property Name="action_user_cell_url" Type="Edm.String" Nullable="true" p:IsDeclared="false"></Property>
-                <Property Name="user_cell_url" Type="Edm.String" Nullable="true" p:IsDeclared="false"></Property>
+                <Property Name="action_detail" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="action_target" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="action_user_cell_url" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="user_cell_url" Type="Edm.String" Nullable="true"></Property>
             </EntityType>
             <EntityContainer Name="UserData" m:IsDefaultEntityContainer="true">
                 <EntitySet Name="action_history" EntityType="UserData.action_history"></EntitySet>
