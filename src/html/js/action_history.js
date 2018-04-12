@@ -37,9 +37,10 @@ $.prototype.actionHistoryShowView = function actionHistoryShowView(arg = {}){
 	if(id === "top" && $("#top.d-none").length === 0){
 		isWrite = false;
 	}
+
 	if (id === 'entryList' && arg.hasOwnProperty('detail')) {
 		$(".top .header-title .title").text(i18next.t(arg.detail));
-	} else {
+	} else if (id !== 'articleDetail') {
 		$(".top .header-title .title").text(i18next.t('pageTitle.' + id));
 	}
 	view(id);

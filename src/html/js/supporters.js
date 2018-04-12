@@ -926,14 +926,14 @@ function deleteArticle(id) {
 }
 
 function callArticleFunction(callback, id) {
-  if(Common.getCellUrl() == ORGANIZATION_CELL_URL) {
+  if(Common.getCellUrl() == organization_cell_url) {
     callback(Common.getToken(), id);
   } else {
-    $.when(Common.getTranscellToken(ORGANIZATION_CELL_URL), Common.getAppAuthToken(ORGANIZATION_CELL_URL))
+    $.when(Common.getTranscellToken(organization_cell_url), Common.getAppAuthToken(organization_cell_url))
       .done(function (result1, result2) {
         let tempTCAT = result1[0].access_token; // Transcell Access Token
         let tempAAAT = result2[0].access_token; // App Authentication Access Token
-        Common.perpareToCellInfo(ORGANIZATION_CELL_URL, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
+        Common.perpareToCellInfo(organization_cell_url, tempTCAT, tempAAAT, function (cellUrl, boxUrl, token) {
           callback(token, id);
         });
       })

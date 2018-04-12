@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:p="urn:x-personium:xmlns">
+    <edmx:DataServices m:DataServiceVersion="1.0">
+        <Schema
+            xmlns="http://schemas.microsoft.com/ado/2006/04/edm" Namespace="UserData">
+            <EntityType Name="user_basic_information" OpenType="true">
+                <Key>
+                    <PropertyRef Name="__id"></PropertyRef>
+                </Key>
+                <Property Name="__id" Type="Edm.String" Nullable="false" DefaultValue="UUID()" p:Format="regEx('^.{1,400}$')"></Property>
+                <Property Name="__published" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="__updated" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="address" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="birthday" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="comment" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="email" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="fax_number" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="mobile_phone_number" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="name" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="name_kana" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="other_contacts" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="phone_number" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="postal_code" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="room_floor_plan" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="room_number" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="room_size" Type="Edm.Double" Nullable="true"></Property>
+                <Property Name="room_type" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="sex" Type="Edm.String" Nullable="true"></Property>
+            </EntityType>
+            <EntityType Name="user_evacuation" OpenType="true">
+                <Key>
+                    <PropertyRef Name="__id"></PropertyRef>
+                </Key>
+                <Property Name="__id" Type="Edm.String" Nullable="false" DefaultValue="UUID()" p:Format="regEx('^.{1,400}$')"></Property>
+                <Property Name="__published" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="__updated" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="classification" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="destination_reason" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="finish_date" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="not_at_home" Type="Edm.Boolean" Nullable="true"></Property>
+                <Property Name="notices" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="start_date" Type="Edm.String" Nullable="true"></Property>
+            </EntityType>
+            <EntityType Name="user_health_information" OpenType="true">
+                <Key>
+                    <PropertyRef Name="__id"></PropertyRef>
+                </Key>
+                <Property Name="__id" Type="Edm.String" Nullable="false" DefaultValue="UUID()" p:Format="regEx('^.{1,400}$')"></Property>
+                <Property Name="__published" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="__updated" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="approval_date" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="bmi" Type="Edm.Double" Nullable="true"></Property>
+                <Property Name="care_insurance" Type="Edm.Boolean" Nullable="true"></Property>
+                <Property Name="care_level" Type="Edm.Double" Nullable="true"></Property>
+                <Property Name="expiration_date" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="grade" Type="Edm.Double" Nullable="true"></Property>
+                <Property Name="grith_abdomen" Type="Edm.Double" Nullable="true"></Property>
+                <Property Name="height" Type="Edm.Double" Nullable="true"></Property>
+                <Property Name="insurance_class" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="limit" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="mark" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="number" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="physical_disability_certificate" Type="Edm.Boolean" Nullable="true"></Property>
+                <Property Name="pressure_left" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="pressure_right" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="pressure_second" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="remarks" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="temperature" Type="Edm.Double" Nullable="true"></Property>
+                <Property Name="weight" Type="Edm.Double" Nullable="true"></Property>
+            </EntityType>
+            <EntityType Name="user_household" OpenType="true">
+                <Key>
+                    <PropertyRef Name="__id"></PropertyRef>
+                </Key>
+                <Property Name="__id" Type="Edm.String" Nullable="false" DefaultValue="UUID()" p:Format="regEx('^.{1,400}$')"></Property>
+                <Property Name="__published" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="__updated" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="remarks" Type="Edm.String" Nullable="true"></Property>
+                <Property Name="resident_type" Type="Edm.String" Nullable="true"></Property>
+            </EntityType>
+            <EntityType Name="user_vital" OpenType="true">
+                <Key>
+                    <PropertyRef Name="__id"></PropertyRef>
+                </Key>
+                <Property Name="__id" Type="Edm.String" Nullable="false" DefaultValue="UUID()" p:Format="regEx('^.{1,400}$')"></Property>
+                <Property Name="__published" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="__updated" Type="Edm.DateTime" Nullable="false" DefaultValue="SYSUTCDATETIME()" Precision="3"></Property>
+                <Property Name="max_pressure" Type="Edm.Int32" Nullable="true"></Property>
+                <Property Name="min_pressure" Type="Edm.Int32" Nullable="true"></Property>
+                <Property Name="pulse" Type="Edm.Int32" Nullable="true"></Property>
+                <Property Name="temperature" Type="Edm.Double" Nullable="true"></Property>
+            </EntityType>
+            <EntityContainer Name="UserData" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="user_health_information" EntityType="UserData.user_health_information"></EntitySet>
+                <EntitySet Name="user_vital" EntityType="UserData.user_vital"></EntitySet>
+                <EntitySet Name="user_basic_information" EntityType="UserData.user_basic_information"></EntitySet>
+                <EntitySet Name="user_household" EntityType="UserData.user_household"></EntitySet>
+                <EntitySet Name="user_evacuation" EntityType="UserData.user_evacuation"></EntitySet>
+            </EntityContainer>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

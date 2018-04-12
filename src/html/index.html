@@ -18,32 +18,12 @@
     <script src="./js/common.js"></script>
     <script src="./js/common_personium.js"></script>
     <script>
-      function supporter() {
-        location.href = './supporter/index.html' + location.hash;
-      }
 
-      function user() {
-        location.href = './user/index.html' + location.hash;
-      }
-
-      function user2() {
-        location.href = './user/index2.html' + location.hash;
-      }
-
-      getNamesapces = function () {
-        return ['common', 'glossary'];
-      };
-
-      getEngineEndPoint = function () {
-        return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
-      };
     </script>
   </head>
   <body>
     <div id="selectApplication">
-      <br />
-      <a class="btn btn-primary btn-block" id="supporter" style="display:none" href="javascript:supporter()">Community Manager Application</a><br />
-      <a class="btn btn-primary btn-block" id="user2" style="display:none" href="javascript:user2()">Life Enrichers Application</a><br />
+      <br/>
     </div>
   </body>
 </html>
