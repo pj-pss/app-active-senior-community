@@ -84,12 +84,12 @@ async function getArticleList() {
             setArticle(articleListAll, token, true);
             getJoinInfoList(token);
             getPersonalJoinInfo();
-            $("main").off('scroll');
-            $("main").on('scroll', function(event){
+            $("main").off('touchmove mousewheel');
+            $("main").on('touchmove mousewheel', function(event){
                 if ($("#sort_btn").css("display") === "none" || skip * ARTICLE_SKIP_NUM > ARTICLE_NUM || isLoad1 || isLoad2){
                     return;
                 }
-                var current = $(this).scrollTop() + $(this).innerHeight();
+                var current = window.scrollY + window.innerHeight;
                 if (current < $(this).get(0).scrollHeight - 50) return;
                 isLoad1 = isLoad2 = true;
                 getExtCellToken(function (token){
