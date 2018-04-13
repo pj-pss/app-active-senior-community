@@ -53,7 +53,7 @@ getNamesapces = function () {
 };
 
 async function getArticleList() {
-    await getUserProfile();
+    await getUserBasicInfo();
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
@@ -550,8 +550,8 @@ function createTopContent(id, title, date, type) {
 
 async function getUserProfile() {
     getCurrentCellToken(await function (token) {
-        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
         let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
+        let boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : cellUrl + APP_BOX_NAME + '/';
         $.when(
             $.ajax({
                 type: 'GET',
@@ -735,6 +735,97 @@ async function getUserProfile() {
         });
     });
 
+}
+
+async function getUserBasicInfo () {
+    getCurrentCellToken(await function (token) {
+        let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
+        let boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : cellUrl + APP_BOX_NAME + '/';
+        $.when(
+            $.ajax({
+                type: 'GET',
+                url: boxUrl + "user_info/user_basic_information",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: cellUrl + '__/profile.json',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }),
+            $.ajax({
+                type: "GET",
+                url: boxUrl + 'user_info/user_evacuation',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            })
+        )
+        .done(function (res1, res5, res6) {
+            var basicInfo = res1[0].d.results[0];
+            var profileJson = res5[0];
+            var evacuation = res6[0].d.results[0];
+
+            if (!profileJson.Image || profileJson.Image.length == 0) {
+                var cellImgDef = ut.getJdenticon(Common.getCellUrl());
+                $("#drawer_menu .user-info .pn-list-icon img").attr("src", cellImgDef);
+                $("#editPicturePreview").attr("src", cellImgDef);
+            } else {
+                $("#drawer_menu .user-info .pn-list-icon img").attr("src", profileJson.Image);
+                $("#editPicturePreview").attr("src", profileJson.Image);
+            }
+
+            $('#user-name-form').attr('placeholder', profileJson.DisplayName);
+            $('#user-name-form').attr('aria-label', profileJson.DisplayName);
+
+            var sex;
+            switch (basicInfo.sex) {
+                case 'male':
+                    sex = i18next.t('sex.male');
+                    userInfo.sex = SEX.MALE;
+                    break;
+
+                case 'female':
+                    sex = i18next.t('sex.female');
+                    userInfo.sex = SEX.FEMALE;
+                    break;
+
+                default:
+                    sex = i18next.t('sex.other');
+                    userInfo.sex = SEX.ALL;
+            }
+
+            var age = currentTime.diff(moment(basicInfo.birthday), 'years');
+            if (age < 60) {
+                userInfo.age = AGE.UNDER_FIFTY;
+            } else if (age < 70) {
+                userInfo.age = AGE.SIXTY;
+            } else if (age < 80) {
+                userInfo.age = AGE.SEVENTY;
+            } else {
+                userInfo.age = AGE.OVER_EIGHTY;
+            }
+
+            let location = evacuation.not_at_home ? i18next.t('locationState.outdoor') : i18next.t('locationState.indoor');
+            $('#userLocation').html(location);
+            $("#drawer_menu .user-info .account-info .user-name").text(profileJson.DisplayName);
+
+            $('#modal-helpConfirm .userName').html(basicInfo.name);
+            $('#modal-startHelpOp .userName').html(basicInfo.name);
+
+            $("#drawer_menu .user-info .user-status span").text(location);
+
+        })
+        .fail(function () {
+            alert('error: get user profile');
+        });
+    });
 }
 
 function view(menuId) {
