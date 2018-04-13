@@ -409,8 +409,21 @@ function setArticle(articleListAll, token, isClear = true){
     }else{
         first = false;
     }
+
+    let filterType = null;
+    if ($('#sort_btn').hasClass('active') ) {
+        if($('#sort-menu .checked').hasClass('event')) {
+            filterType = TYPE.EVENT;
+        } else {
+            filterType = TYPE.INFO;
+        }
+    }
     var skipArticleList = articleListAll.slice(skip * ARTICLE_SKIP_NUM, (skip + 1) * ARTICLE_SKIP_NUM);
     for(let article of skipArticleList){
+        if (filterType != null && filterType != article.type) {
+            getArticleListImage(article.__id, token);
+            continue;
+        }
         if (first) {
             $('#top .top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('#top .top-content').attr('data-href', "javascript:getArticleDetail('" + article.__id + "')");
@@ -420,8 +433,8 @@ function setArticle(articleListAll, token, isClear = true){
         getArticleListImage(article.__id, token, first);
         first = false;
     }
-    skip = skip + 1;
     articleList = articleListAll.slice(0, (skip + 1) * ARTICLE_SKIP_NUM);
+    skip = skip + 1;
     setNewBadge();
     addLinkToGrid();
 }
