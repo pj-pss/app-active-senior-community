@@ -831,11 +831,11 @@ $(function () {
                 '<div class="evaluation">' +
                     '<i class="fa fa-star fa-2x icon-large"></i>' +
                     '<span class="news-icon-text">' +
-                        '<a id="considerNum" href="#"></a>' +
+                        '<a id="considerNum"></a>' +
                     '</span>' +
                     '<i class="fas fa-calendar-check fa-2x icon-large"></i>' +
                     '<span class="news-icon-text">' +
-                        '<a id="joinNum" href="#"></a>' +
+                        '<a id="joinNum"></a>' +
                     '</span>' +
                 '</div>' +
             '</div>' +
@@ -1512,8 +1512,8 @@ function getArticleDetail(id) {
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
 
-                    $('#joinNum').attr('onclick', "viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
-                    $('#considerNum').attr('onclick', "viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
+                    $('#joinNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
+                    $('#considerNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
 
                     // get reply information
                     getCurrentCellToken(function (currentToken) {
