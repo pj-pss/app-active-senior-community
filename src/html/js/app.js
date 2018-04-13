@@ -36,7 +36,7 @@ const ARTICLE_NUM = 200;
 const ARTICLE_SKIP_NUM = 50;
 
 const APP_URL = "https://demo.personium.io/app-life-enrichers-community/";
-const APP_BOX_NAME = 'io_personium_demo_app-life-enrichers-community';
+const APP_BOX_NAME = 'app-life-enrichers-community';
 
 var organization_cell_url = sessionStorage.organizationCellUrl || null;
 var organization_cell_urls;
@@ -95,7 +95,7 @@ async function switchAppUrl() {
 async function getOrganizationCellUrls() {
     $.ajax({
         type: 'GET',
-        url: Common.getBoxUrl() + 'organizationCellUrls.json',
+        url: Common.getCellUrl() + APP_BOX_NAME + '/organizationCellUrls.json',
         headers: {
             'Authorization': 'Bearer ' + Common.getToken(),
             'Accept': 'application/json'
