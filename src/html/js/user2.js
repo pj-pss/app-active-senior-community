@@ -43,7 +43,15 @@ additionalCallback = function () {
     })
     .done(function(res) {
         currentTime = moment(res.st * 1000);
-        getArticleList();
+        getCurrentCellToken(token => {
+            getUserBasicInfo(token)
+            .done(() => { getArticleList();});
+            getUserHealthInfo(token);
+            getUserVital(token);
+            getUserHousehold(token);
+            getUserProfile(token);
+            getUserEvacuation(token);
+        });
         actionHistory.logWrite('top');
     });
 };
@@ -52,11 +60,7 @@ getNamesapces = function () {
     return ['common', 'glossary'];
 };
 
-async function getArticleList() {
-    getCurrentCellToken(await function (token) {
-        getUserBasicInfo(token);
-    });
-    getUserBasicProfile();
+function getArticleList() {
     getExtCellToken(function (token){
         var oData = 'article';
         var entityType = 'provide_information';
@@ -563,14 +567,6 @@ function getUserAllProfile() {
 
 }
 
-function getUserBasicProfile () {
-    getCurrentCellToken(function (token) {
-        getUserBasicInfo(token);
-        getUserProfile(token);
-        getUserEvacuation(token);
-    });
-}
-
 function getUserBasicInfo (token) {
     let boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
 
@@ -807,7 +803,6 @@ function viewProfile() {
     });
     ut.createCropperModal2({ dispCircleMaskBool: true });
 
-    getUserAllProfile();
     $("#popupEditDisplayNameErrorMsg").empty();
     switchCurrentButton('fa-address-card');
     $('#profile').actionHistoryShowView();
