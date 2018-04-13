@@ -45,10 +45,12 @@ additionalCallback = function () {
         currentTime = moment(res.st * 1000);
         getCurrentCellToken(token => {
             getUserBasicInfo(token)
-            .done(() => { getArticleList();});
+                .done(() => {
+                    getArticleList();
+                    getUserHousehold(token);
+                });
             getUserHealthInfo(token);
             getUserVital(token);
-            getUserHousehold(token);
             getUserProfile(token);
             getUserEvacuation(token);
         });
@@ -557,10 +559,10 @@ function createTopContent(id, title, date, type) {
 
 function getUserAllProfile() {
     getCurrentCellToken(function (token) {
-        getUserBasicInfo(token);
+        getUserBasicInfo(token)
+            .done(() => { getUserHousehold(token);});
         getUserHealthInfo(token);
         getUserVital(token);
-        getUserHousehold(token);
         getUserProfile(token);
         getUserEvacuation(token);
     });
@@ -726,7 +728,7 @@ function getUserHousehold (token) {
 
         let resident = '<dt>' + i18next.t('basicInfo.residentType') + ':</dt>' +
             '<dd>' + household.resident_type + '</dd>';
-        $('#basicInfo>dt').append(resident);
+        $('#basicInfo').append(resident);
     })
 }
 
