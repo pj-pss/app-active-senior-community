@@ -80,7 +80,7 @@ actionHistory.post = function (messageid, arg = {}) {
 	    Common.refreshToken(function(){
 			$.ajax({
 		        type: "POST",
-		        url: Common.getBoxUrl() + 'action/action_history',
+		        url: Common.getCellUrl() + APP_BOX_NAME + '/action/action_history',
 	            headers: {
 	                "Authorization": "Bearer " + Common.getToken()
 	            },
@@ -97,7 +97,7 @@ actionHistory.post = function (messageid, arg = {}) {
 				getCurrentCellToken(function(ctoken){
 					$.ajax({
 				        type: "POST",
-				        url: operationCellUrl + Common.getBoxName() + '/action/action_history',
+				        url: operationCellUrl + APP_BOX_NAME + '/action/action_history',
 			            headers: {
 			                "Authorization": "Bearer " + ctoken
 			            },

@@ -210,7 +210,7 @@ function getPersonalJoinInfo() {
         var oData = 'reply';
         var entityType = 'reply_history';
 
-        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
         $.ajax({
             type: "GET",
             url: boxUrl + oData + '/' + entityType,
@@ -738,7 +738,7 @@ function getUserProfile (token) {
     return $.ajax({
         type: "GET",
         dataType: 'json',
-        url: Common.getCellUrl() + '__/profile.json',
+        url: cellUrl + '__/profile.json',
         headers: {
             "Accept": "application/json"
         }
@@ -998,7 +998,7 @@ function authorizedQrReader(qrJsonStr) {
                     'Authorization': 'Bearer ' + res.access_token
                 },
                 data: JSON.stringify({
-                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='" + Common.getBoxName() + "')"
+                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='" + APP_BOX_NAME + "')"
                 })
             })
                 .then(
@@ -1375,7 +1375,7 @@ function openHistory(){
 			getCurrentCellToken(function(ctoken){
 				$.ajax({
 			        type: "GET",
-			        url: operationCellUrl + Common.getBoxName() + '/action/action_history' + query,
+			        url: operationCellUrl + APP_BOX_NAME + '/action/action_history' + query,
 		            headers: {
 						"Accept" : "application/json",
 		                "Authorization": "Bearer " + ctoken
@@ -1387,7 +1387,7 @@ function openHistory(){
 	    Common.refreshToken(function(){
 			$.ajax({
 		        type: "GET",
-		        url: Common.getBoxUrl() + 'action/action_history' + query,
+		        url: Common.getCellUrl() + APP_BOX_NAME + '/action/action_history' + query,
 	            headers: {
 					"Accept" : "application/json",
 	                "Authorization": "Bearer " + Common.getToken()
@@ -1399,7 +1399,7 @@ function openHistory(){
 
 function setNewBadge() {
     getCurrentCellToken(function (token) {
-        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        let boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
         $.ajax({
             type: 'GET',
             url: boxUrl + "action/action_history",
@@ -1559,7 +1559,7 @@ function getArticleDetail(id) {
 
                     // get reply information
                     getCurrentCellToken(function (currentToken) {
-                        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                        let boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
                         let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
                         $.when(
                             $.ajax({
@@ -1645,7 +1645,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
     getExtCellToken(function (token) {
         var err = [];
         var anonymous = $('[name=checkAnonymous]').prop('checked');
-        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
         var userCellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
 
         getCurrentCellToken(function (currentToken) {
