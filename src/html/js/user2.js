@@ -189,10 +189,10 @@ function getJoinInfoList(token) {
             }
         }
         for (let key in count) {
-            var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i>'+
+            var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i><span class="consider">'+
             count[key].consider +
-            ' <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i>' +
-            count[key].join;
+            '</span> <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i><span class="join">' +
+            count[key].join + '</span>';
             joinList[key] = joinHtml;
             $('#join_' + key).html(joinHtml);
         }
@@ -1553,6 +1553,8 @@ function getArticleDetail(id) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+                    $('#join_' + article.__id + '>.join').html(join);
+                    $('#join_' + article.__id + '>.consider').html(consider);
 
                     $('#joinNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
                     $('#considerNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
@@ -1782,6 +1784,8 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+                    $('#join_' + articleId + '>.join').html(join);
+                    $('#join_' + articleId + '>.consider').html(consider);
                     disableEntryListLink();
 
                     actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text(), reply: replyStr});
