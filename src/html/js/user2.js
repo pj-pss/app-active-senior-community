@@ -773,6 +773,26 @@ function viewTop() {
 }
 
 function viewArticleDetail() {
+    // get cell name
+    getExtCellToken(token => {
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: organization_cell_url + "__/profile.json",
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            },
+            success: function (res) {
+                return res;
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+            }
+        }).done(profile => {
+            $(".top .header-title .title").text(profile.DisplayName);
+        })
+    });
     disableEntryListLink();
     $('#articleDetail').actionHistoryShowView({ detail: $('#articleDetail .news-title').text()});
 }
@@ -1427,26 +1447,9 @@ function getArticleDetail(id) {
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
                 }
-            }),
-
-            // get cell name
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: organization_cell_url + "__/profile.json",
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Accept': 'application/json'
-                },
-                success: function (res) {
-                    return res;
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
-                }
             })
         )
-            .done(function (text, image, reply, profile) {
+            .done(function (text, image, reply) {
                 // construct text
                 var article = text[0].d.results;
 
@@ -1479,9 +1482,6 @@ function getArticleDetail(id) {
                 $('#articleDetail .news-venue').html(venue);
                 $('#articleDetail .news-date').html(term);
                 $('#articleDetail .news-text').html(article.detail);
-
-                // let profile = JSON.parse(profileJson);
-                $(".top .header-title .title").text(profile[0].DisplayName);
 
                 // show image
                 var reader = new FileReader();
