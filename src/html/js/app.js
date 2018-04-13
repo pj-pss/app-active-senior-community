@@ -95,7 +95,7 @@ async function switchAppUrl() {
 async function getOrganizationCellUrls() {
     $.ajax({
         type: 'GET',
-        url: Common.getBoxUrl() + 'organizationCellUrls.json',
+        url: Common.getCellUrl() + APP_BOX_NAME + '/organizationCellUrls.json',
         headers: {
             'Authorization': 'Bearer ' + Common.getToken(),
             'Accept': 'application/json'
