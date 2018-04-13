@@ -109,7 +109,7 @@ function getArticleList() {
             });
         })
         .fail(function() {
-            alert('failed to get article list');
+            showMessage('failed to get article list');
         });
     });
 }
@@ -148,7 +148,7 @@ function getArticleListImage(id, token, topContent) {
         reader.readAsArrayBuffer(res);
     })
     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-        alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+        showMessage(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
     });
 }
 
@@ -183,23 +183,23 @@ function getJoinInfoList(token) {
                 switch(parseInt(val.entry_flag)) {
                     case REPLY.JOIN: count[val.provide_id].join++; break;
                     case REPLY.CONSIDER: count[val.provide_id].consider++; break;
-                    default: alert('error: get reply information');
+                    default: showMessage('error: get reply information');
                 }
 
             }
         }
         for (let key in count) {
-            var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i>'+
+            var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i><span class="consider">'+
             count[key].consider +
-            ' <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i>' +
-            count[key].join;
+            '</span> <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i><span class="join">' +
+            count[key].join + '</span>';
             joinList[key] = joinHtml;
             $('#join_' + key).html(joinHtml);
         }
         isLoad1 = false;
     })
     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-        alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+        showMessage(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
     });
 }
 
@@ -210,7 +210,7 @@ function getPersonalJoinInfo() {
         var oData = 'reply';
         var entityType = 'reply_history';
 
-        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
         $.ajax({
             type: "GET",
             url: boxUrl + oData + '/' + entityType,
@@ -234,7 +234,7 @@ function getPersonalJoinInfo() {
             isLoad2 = false;
         })
         .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-            alert(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+            showMessage(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
         });
     });
 }
@@ -323,7 +323,7 @@ function viewJoinConsiderList(entryFlag,articleId){
 			});
 	    })
 	    .fail(function() {
-	        alert('error: get reply_history');
+	        showMessage('error: get reply_history');
 	    });
 
     }, [entryFlag,articleId]);
@@ -351,18 +351,18 @@ function getExtCellToken(callback, id) {
                                 Common.getProtectedBoxAccessToken4ExtCell(organization_cell_url, tempTCAT2, tempAAAT2).done(function (appCellToken2) {
                                     callback(appCellToken2.access_token, id);
                                 }).fail(function (error) {
-                                    alert("error: get org cell token");
+                                    showMessage("error: get org cell token");
                                 });
                             })
                             .fail(function (error) {
-                                alert("error: get trance cell token");
+                                showMessage("error: get trance cell token");
                             });
                     }).fail(function (error) {
-                        alert("error: get ext cell token");
+                        showMessage("error: get ext cell token");
                     });
                 })
                 .fail(function () {
-                    alert("error: get ext cell token");
+                    showMessage("error: get ext cell token");
                 });
         } else {
             $.when(Common.getTranscellToken(organization_cell_url), Common.getAppAuthToken(organization_cell_url))
@@ -374,7 +374,7 @@ function getExtCellToken(callback, id) {
                     });
                 })
                 .fail(function () {
-                    alert('failed to get token');
+                    showMessage('failed to get token');
                 });
         }
     }
@@ -389,11 +389,11 @@ function getCurrentCellToken(callback, id) {
                  Common.getProtectedBoxAccessToken4ExtCell(operationCellUrl, tempTCAT, tempAAAT).done(function (appCellToken) {
                     callback(appCellToken.access_token, id);
                 }).fail(function (error) {
-                    alert("error: get ext cell access token");
+                    showMessage("error: get ext cell access token");
                 });
             })
             .fail(function () {
-                alert("error: get trance cell token");
+                showMessage("error: get trance cell token");
             });
     } else {
         callback(Common.getToken(), id);
@@ -409,8 +409,21 @@ function setArticle(articleListAll, token, isClear = true){
     }else{
         first = false;
     }
+
+    let filterType = null;
+    if ($('#sort_btn').hasClass('active') ) {
+        if($('#sort-menu .checked').hasClass('event')) {
+            filterType = TYPE.EVENT;
+        } else {
+            filterType = TYPE.INFO;
+        }
+    }
     var skipArticleList = articleListAll.slice(skip * ARTICLE_SKIP_NUM, (skip + 1) * ARTICLE_SKIP_NUM);
     for(let article of skipArticleList){
+        if (filterType != null && filterType != article.type) {
+            getArticleListImage(article.__id, token);
+            continue;
+        }
         if (first) {
             $('#top .top-content').html(createTopContent(article.__id, article.title, article.start_date, article.type));
             $('#top .top-content').attr('data-href', "javascript:getArticleDetail('" + article.__id + "')");
@@ -420,8 +433,8 @@ function setArticle(articleListAll, token, isClear = true){
         getArticleListImage(article.__id, token, first);
         first = false;
     }
-    skip = skip + 1;
     articleList = articleListAll.slice(0, (skip + 1) * ARTICLE_SKIP_NUM);
+    skip = skip + 1;
     setNewBadge();
     addLinkToGrid();
 }
@@ -738,7 +751,7 @@ function getUserProfile (token) {
     return $.ajax({
         type: "GET",
         dataType: 'json',
-        url: Common.getCellUrl() + '__/profile.json',
+        url: cellUrl + '__/profile.json',
         headers: {
             "Accept": "application/json"
         }
@@ -935,7 +948,7 @@ function authorizedQrReader(qrJsonStr) {
     try {
         qrJson = JSON.parse(qrJsonStr);
     } catch(e) {
-        alert('error: json parse error');
+        showMessage('error: json parse error');
         return;
     }
 
@@ -985,7 +998,7 @@ function authorizedQrReader(qrJsonStr) {
                         return res;
                     },
                     function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                        showMessage(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
                     }
                 );
         };
@@ -998,7 +1011,7 @@ function authorizedQrReader(qrJsonStr) {
                     'Authorization': 'Bearer ' + res.access_token
                 },
                 data: JSON.stringify({
-                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='" + Common.getBoxName() + "')"
+                    'uri': operationCellUrl + "__ctl/Role(Name='supporter',_Box.Name='" + APP_BOX_NAME + "')"
                 })
             })
                 .then(
@@ -1006,7 +1019,7 @@ function authorizedQrReader(qrJsonStr) {
                         return res;
                     },
                     function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+                        showMessage(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
                     }
                 );
         };
@@ -1029,7 +1042,7 @@ function authorizedQrReader(qrJsonStr) {
                         startHelpOp();
                     })
                     .fail(function () {
-                        alert('error: help operation');
+                        showMessage('error: help operation');
                     });
             } else {
                 createExtCell().then(setRole)
@@ -1040,14 +1053,14 @@ function authorizedQrReader(qrJsonStr) {
                         startHelpOp();
                     })
                     .fail(function () {
-                        alert('error: help operation');
+                        showMessage('error: help operation');
                     });
             }
         });
 
     })
     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-        alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+        showMessage(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
     });
 
     $('#modal-qrReader').modal('hide');
@@ -1100,11 +1113,11 @@ function closeHelpConfirm(f) {
 
             })
             .fail(function() {
-                alert('error: delete ext cell');
+                showMessage('error: delete ext cell');
             });
         })
         .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-            alert(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
+            showMessage(XMLHttpRequest.status + '\n' + textStatus + '\n' + errorThrown);
         });
     }
     $('#modal-helpConfirm').modal('hide');
@@ -1142,25 +1155,25 @@ function validateQRInfo(qrJson) {
         let pass = qrJson.password;
         if (MIN_PASS_LENGTH >= pass.length || pass.length >= MAX_PASS_LENGTH ||
             !pass.match(/^([a-zA-Z0-9\-\_])+$/)) {
-                alert('error: invalid password');
+                showMessage('error: invalid password');
             return false;
         }
 
         let pUrl = $.url(qrJson.url);
         if (!(pUrl.attr('protocol').match(/^(https)$/) && pUrl.attr('host'))) {
-            alert('error: invalid url');
+            showMessage('error: invalid url');
             return false;
         } else {
             let labels = pUrl.attr('host').split('.');
             for (let label of labels) {
                 if (!label.match(/^([a-zA-Z0-9\-])+$/) || label.match(/(^-)|(-$)/)) {
-                    alert('error: invalid url');
+                    showMessage('error: invalid url');
                     return false;
                 }
             }
 
             if (pUrl.attr('source') == Common.getCellUrl()) {
-                alert('error: own user cell');
+                showMessage('error: own user cell');
                 return false;
             }
         }
@@ -1168,7 +1181,7 @@ function validateQRInfo(qrJson) {
         return true;
     }
 
-    alert('error: invalid QRcode data');
+    showMessage('error: invalid QRcode data');
     return false;
 }
 
@@ -1375,7 +1388,7 @@ function openHistory(){
 			getCurrentCellToken(function(ctoken){
 				$.ajax({
 			        type: "GET",
-			        url: operationCellUrl + Common.getBoxName() + '/action/action_history' + query,
+			        url: operationCellUrl + APP_BOX_NAME + '/action/action_history' + query,
 		            headers: {
 						"Accept" : "application/json",
 		                "Authorization": "Bearer " + ctoken
@@ -1387,7 +1400,7 @@ function openHistory(){
 	    Common.refreshToken(function(){
 			$.ajax({
 		        type: "GET",
-		        url: Common.getBoxUrl() + 'action/action_history' + query,
+		        url: Common.getCellUrl() + APP_BOX_NAME + '/action/action_history' + query,
 	            headers: {
 					"Accept" : "application/json",
 	                "Authorization": "Bearer " + Common.getToken()
@@ -1399,7 +1412,7 @@ function openHistory(){
 
 function setNewBadge() {
     getCurrentCellToken(function (token) {
-        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        let boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
         $.ajax({
             type: 'GET',
             url: boxUrl + "action/action_history",
@@ -1553,13 +1566,15 @@ function getArticleDetail(id) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+                    $('#join_' + article.__id + '>.join').html(join);
+                    $('#join_' + article.__id + '>.consider').html(consider);
 
                     $('#joinNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
                     $('#considerNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
 
                     // get reply information
                     getCurrentCellToken(function (currentToken) {
-                        let boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+                        let boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
                         let cellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
                         $.when(
                             $.ajax({
@@ -1599,7 +1614,7 @@ function getArticleDetail(id) {
                             }
                         })
                         .fail(function () {
-                            alert('error: get reply information');
+                            showMessage('error: get reply information');
                         });
                     });
 
@@ -1613,7 +1628,7 @@ function getArticleDetail(id) {
 
             })
             .fail(function () {
-                alert('failed to get article detail\n\n' + err.join('\n'));
+                showMessage('failed to get article detail\n\n' + err.join('\n'));
             });
     }, id);
 }
@@ -1645,7 +1660,7 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
     getExtCellToken(function (token) {
         var err = [];
         var anonymous = $('[name=checkAnonymous]').prop('checked');
-        var boxUrl = helpAuthorized ? operationCellUrl + Common.getBoxName() + '/' : Common.getBoxUrl();
+        var boxUrl = helpAuthorized ? operationCellUrl + APP_BOX_NAME + '/' : Common.getCellUrl() + APP_BOX_NAME + '/';
         var userCellUrl = helpAuthorized ? operationCellUrl : Common.getCellUrl();
 
         getCurrentCellToken(function (currentToken) {
@@ -1721,10 +1736,10 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                                     }
                                 })
                                     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                        alert('delete failed');
+                                        showMessage('delete failed');
                                     })
                                     .done(function () {
-                                        alert('delete done');
+                                        showMessage('delete done');
                                     });
                             } else {
                                 $.ajax({
@@ -1739,10 +1754,10 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                                     })
                                 })
                                     .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                        alert('change failed');
+                                        showMessage('change failed');
                                     })
                                     .done(function () {
-                                        alert('change done');
+                                        showMessage('change done');
                                     });
                             }
 
@@ -1782,6 +1797,8 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
+                    $('#join_' + articleId + '>.join').html(join);
+                    $('#join_' + articleId + '>.consider').html(consider);
                     disableEntryListLink();
 
                     actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text(), reply: replyStr});
@@ -1818,7 +1835,7 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId) {
 
         default:
             // data is not exist
-            alert('error: read reply information');
+            showMessage('error: read reply information');
             break;
     }
 

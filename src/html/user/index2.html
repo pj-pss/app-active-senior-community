@@ -54,7 +54,7 @@
 </head>
 
 <body>
-  <div class="modal fade" id="modal-qrReader" tabindex="-1" role="dialog" aria-labelledby="modal-qrReaderLabel" aria-hidden="true">
+  <div class="modal fade single-btn-modal" id="modal-qrReader" tabindex="-1" role="dialog" aria-labelledby="modal-qrReaderLabel" aria-hidden="true">
     <div class="modal-dialog pn-modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -66,11 +66,12 @@
           <video id="camera-preview" playsinline autoplay muted loop style="width: 100%;"></video>
         </div>
         <div class="modal-footer pn-modal-footer">
+          <button type="button" class="btn" data-dismiss="modal" data-i18n="btn.close"></button>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="modal-startHelpOp" tabindex="-1" role="dialog" aria-labelledby="modal-startHelpOpLabel" aria-hidden="true">
+  <div class="modal fade single-btn-modal" id="modal-startHelpOp" tabindex="-1" role="dialog" aria-labelledby="modal-startHelpOpLabel" aria-hidden="true">
     <div class="modal-dialog pn-modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-body pn-modal-body">
@@ -142,9 +143,9 @@
         <ul class="hover-action">
           <li class="sort-menu-list all checked" data-i18n="sort.all">
           </li>
-          <li class="sort-menu-list" data-i18n="sort.event">
+          <li class="sort-menu-list event" data-i18n="sort.event">
           </li>
-          <li class="sort-menu-list" data-i18n="sort.info">
+          <li class="sort-menu-list info" data-i18n="sort.info">
           </li>
         </ul>
       </div>
@@ -204,14 +205,13 @@
   </footer>
 </body>
 
-<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div class="modal fade single-btn-modal" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
   <div class="modal-dialog pn-modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body pn-modal-body">
       </div>
       <div class="modal-footer pn-modal-footer">
-        <button type="button" class="btn" data-dismiss="modal" data-i18n="btn.cancel"></button>
-        <button type="button" class="btn ok-btn" data-dismiss="modal" data-i18n="btn.ok"></button>
+        <button type="button" class="btn" data-dismiss="modal" data-i18n="btn.close"></button>
       </div>
     </div>
   </div>
