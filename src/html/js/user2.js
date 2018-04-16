@@ -17,8 +17,8 @@
 var articleList;
 var articleListAll;
 var imageList = {};
-var joinList = {};
-var personalJoinList = {};
+var entryList = {};
+var personalEntryList = {};
 var sort_key = 'updated';
 var filter = null;
 var currentTime = moment();
@@ -182,7 +182,7 @@ function getArticleListImage(id, token, topContent) {
 }
 
 function getJoinInfoList(token) {
-    joinList = {};
+    entryList = {};
     // get reply list
     var oData = 'reply';
     var entityType = 'reply_history';
@@ -222,7 +222,7 @@ function getJoinInfoList(token) {
             count[key].consider +
             '</span> <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i><span class="join">' +
             count[key].join + '</span>';
-            joinList[key] = joinHtml;
+            entryList[key] = joinHtml;
             $('#join_' + key).html(joinHtml);
         }
         isLoad1 = false;
@@ -233,7 +233,7 @@ function getJoinInfoList(token) {
 }
 
 function getPersonalJoinInfo() {
-    personalJoinList = {};
+    personalEntryList = {};
     getCurrentCellToken(function (token) {
         // get reply list
         var oData = 'reply';
@@ -257,7 +257,7 @@ function getPersonalJoinInfo() {
             for (let val of res.d.results) {
                 if ($('#join_' + val.provide_id)[0]) {
                     $('#join_' + val.provide_id).parents('li').addClass('entry' + val.entry_flag);
-                    personalJoinList[val.provide_id] = val.entry_flag;
+                    personalEntryList[val.provide_id] = val.entry_flag;
                 }
             }
             isLoad2 = false;
@@ -505,7 +505,7 @@ function setFilter(key, reset) {
 function setPersonalFilter(key) {
     let first = true;
     for (let article of articleList) {
-        if (!personalJoinList.hasOwnProperty(article.__id) || personalJoinList[article.__id] != key) continue;
+        if (!personalEntryList.hasOwnProperty(article.__id) || personalEntryList[article.__id] != key) continue;
         if (first) {
             $('#topInfoList>ul').children().remove();
             $('#top .top-content').children().remove();
@@ -541,8 +541,8 @@ function clearFilter() {
 }
 
 function setEntryNumber() {
-    for (let key in joinList) {
-        $('#join_' + key).html(joinList[key]);
+    for (let key in entryList) {
+        $('#join_' + key).html(entryList[key]);
     }
 }
 
