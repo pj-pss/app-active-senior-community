@@ -29,6 +29,7 @@ var nowViewMenu = 'top';
 var skip = 0;
 var isLoad1 = false;
 var isLoad2 = false;
+var communityName;
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -54,6 +55,29 @@ additionalCallback = function () {
             getUserProfile(token);
             getUserEvacuation(token);
         });
+
+        // get cell name
+        getExtCellToken(token => {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: organization_cell_url + "__/profile.json",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                },
+                success: function (res) {
+                    return res;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+                }
+            }).done(profile => {
+                communityName = profile.DisplayName;
+                $(".top .header-title .title").text(communityName);
+            })
+        });
+
         actionHistory.logWrite('top');
     });
 };
@@ -69,11 +93,16 @@ function getArticleList() {
 
         var now = String(new Date().getTime());
 
-        var filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
-        if (userInfo.sex == SEX.ALL) {
-            filter += 'true';
+        var filter;
+        if (hasBasicInfo()) {
+            filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
+            if (userInfo.sex == SEX.ALL) {
+                filter += 'true';
+            } else {
+                filter += '(target_sex eq ' + SEX.ALL + ' or target_sex eq ' + userInfo.sex + ')';
+            }
         } else {
-            filter += '(target_sex eq ' + SEX.ALL + ' or target_sex eq ' + userInfo.sex + ')';
+            filter = '(target_age eq ' + AGE.ALL + ' and target_sex eq ' + SEX.ALL + ')';
         }
         $.ajax({
             type: "GET",
@@ -240,6 +269,11 @@ function getPersonalJoinInfo() {
 }
 
 function viewJoinConsiderList(entryFlag,articleId){
+    if (!hasBasicInfo()) {
+        showMessage(i18next.t('msg.requestBasicInfo'));
+        return;
+    }
+
     getExtCellToken(function (token,arg) {
 	    var oData = 'reply';
 	    var entityType = 'reply_history';
@@ -594,6 +628,10 @@ function getUserBasicInfo (token) {
         }
     }).done(res => {
         let basicInfo = res.d.results[0];
+        if (res.d.results.length === 0 ||
+            !basicInfo.hasOwnProperty('birthday') ||
+            !basicInfo.hasOwnProperty('sex'))
+            return;
 
         let sex;
         switch (basicInfo.sex) {
@@ -917,6 +955,11 @@ function showMessage(msg) {
 var scanner;
 
 function openQrReader() {
+    if (!hasBasicInfo()) {
+        showMessage(i18next.t('msg.requestBasicInfo'));
+        return;
+    }
+
 	helpAuthorized = false;
     $('#modal-qrReader').localize();
 
@@ -1844,6 +1887,11 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId) {
 }
 
 function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
+    if (!hasBasicInfo()) {
+        showMessage(i18next.t('msg.requestBasicInfo'));
+        return;
+    }
+
     var arg = reply + ",'" + articleId + "'";
     if (userReplyId && orgReplyId) {
             arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
@@ -1869,4 +1917,8 @@ function disableEntryListLink() {
 
     if ($('#considerNum').text() == 0) $('#considerNum').addClass('disabled');
     if ($('#joinNum').text() == 0) $('#joinNum').addClass('disabled');
+}
+
+function hasBasicInfo() {
+    return userInfo.hasOwnProperty('age') && userInfo.hasOwnProperty('sex');
 }
