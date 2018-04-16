@@ -69,11 +69,16 @@ function getArticleList() {
 
         var now = String(new Date().getTime());
 
-        var filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
-        if (userInfo.sex == SEX.ALL) {
-            filter += 'true';
+        var filter;
+        if (hasBasicInfo()) {
+            filter = '(target_age eq ' + AGE.ALL + ' or target_age eq ' + userInfo.age + ') and ';
+            if (userInfo.sex == SEX.ALL) {
+                filter += 'true';
+            } else {
+                filter += '(target_sex eq ' + SEX.ALL + ' or target_sex eq ' + userInfo.sex + ')';
+            }
         } else {
-            filter += '(target_sex eq ' + SEX.ALL + ' or target_sex eq ' + userInfo.sex + ')';
+            filter = '(target_age eq ' + AGE.ALL + ' and target_sex eq ' + SEX.ALL + ')';
         }
         $.ajax({
             type: "GET",
