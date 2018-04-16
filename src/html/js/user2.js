@@ -245,6 +245,11 @@ function getPersonalJoinInfo() {
 }
 
 function viewJoinConsiderList(entryFlag,articleId){
+    if (!hasBasicInfo()) {
+        showMessage(i18next.t('msg.requestBasicInfo'));
+        return;
+    }
+
     getExtCellToken(function (token,arg) {
 	    var oData = 'reply';
 	    var entityType = 'reply_history';
@@ -599,6 +604,10 @@ function getUserBasicInfo (token) {
         }
     }).done(res => {
         let basicInfo = res.d.results[0];
+        if (res.d.results.length === 0 ||
+            !basicInfo.hasOwnProperty('birthday') ||
+            !basicInfo.hasOwnProperty('sex'))
+            return;
 
         let sex;
         switch (basicInfo.sex) {
@@ -922,6 +931,11 @@ function showMessage(msg) {
 var scanner;
 
 function openQrReader() {
+    if (!hasBasicInfo()) {
+        showMessage(i18next.t('msg.requestBasicInfo'));
+        return;
+    }
+
 	helpAuthorized = false;
     $('#modal-qrReader').localize();
 
@@ -1849,6 +1863,11 @@ function updateReplyLink(reply, articleId, userReplyId, orgReplyId) {
 }
 
 function openSendReplyModal(reply, articleId, userReplyId, orgReplyId, sameReply) {
+    if (!hasBasicInfo()) {
+        showMessage(i18next.t('msg.requestBasicInfo'));
+        return;
+    }
+
     var arg = reply + ",'" + articleId + "'";
     if (userReplyId && orgReplyId) {
             arg += ", '" + userReplyId + "', '" + orgReplyId + "'";
@@ -1874,4 +1893,8 @@ function disableEntryListLink() {
 
     if ($('#considerNum').text() == 0) $('#considerNum').addClass('disabled');
     if ($('#joinNum').text() == 0) $('#joinNum').addClass('disabled');
+}
+
+function hasBasicInfo() {
+    return userInfo.hasOwnProperty('age') && userInfo.hasOwnProperty('sex');
 }

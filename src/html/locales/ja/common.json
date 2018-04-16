@@ -43,6 +43,7 @@
         "noContent" : "対象記事がありません",
         "back" : "戻る",
         "deleteConfirm" : "本当に削除してよろしいですか?",
+        "requestBasicInfo" : "この機能を利用するには基本情報の登録が必要です",
         "error": {
             "targetCellNotSelected": "対象セルが設定されていません。",
             "refreshTokenMissing": "リフレッシュ$t(msg.error.tokenMissing)",
