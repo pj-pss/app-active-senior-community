@@ -29,6 +29,7 @@ var nowViewMenu = 'top';
 var skip = 0;
 var isLoad1 = false;
 var isLoad2 = false;
+var communityName;
 
 getEngineEndPoint = function () {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -55,7 +56,29 @@ additionalCallback = function () {
             getUserEvacuation(token);
         });
 
-        viewTop();
+        // get cell name
+        getExtCellToken(token => {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: organization_cell_url + "__/profile.json",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                },
+                success: function (res) {
+                    return res;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
+                }
+            }).done(profile => {
+                communityName = profile.DisplayName;
+                $(".top .header-title .title").text(communityName);
+            })
+        });
+
+        actionHistory.logWrite('top');
     });
 };
 
@@ -839,26 +862,6 @@ function viewProfile() {
 }
 
 function viewTop() {
-    // get cell name
-    getExtCellToken(token => {
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: organization_cell_url + "__/profile.json",
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Accept': 'application/json'
-            },
-            success: function (res) {
-                return res;
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                err.push(XMLHttpRequest.status + ' ' + textStatus + ' ' + errorThrown);
-            }
-        }).done(profile => {
-            $(".top .header-title .title").text(profile.DisplayName);
-        })
-    });
     $('#top').actionHistoryShowView();
 }
 
