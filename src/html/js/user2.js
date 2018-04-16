@@ -222,7 +222,9 @@ function getJoinInfoList(token) {
             count[key].consider +
             '</span> <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i><span class="join">' +
             count[key].join + '</span>';
-            entryList[key] = joinHtml;
+            entryList[key] = {};
+            entryList[key].join = count[key].join;
+            entryList[key].consider = count[key].consider;
             $('#entry_' + key).html(joinHtml);
         }
         isLoad1 = false;
@@ -542,7 +544,11 @@ function clearFilter() {
 
 function setEntryNumber() {
     for (let key in entryList) {
-        $('#entry_' + key).html(entryList[key]);
+        let html = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i><span class="consider">' +
+            entryList[key].consider +
+            '</span> <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i><span class="join">' +
+            entryList[key].join + '</span>';
+        $('#entry_' + key).html(html);
     }
 }
 
@@ -1611,6 +1617,8 @@ function getArticleDetail(id) {
                     $('#considerNum').html(consider);
                     $('#entry_' + article.__id + '>.join').html(join);
                     $('#entry_' + article.__id + '>.consider').html(consider);
+                    entryList[article.__id].join = join;
+                    entryList[article.__id].consider = consider;
 
                     $('#joinNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
                     $('#considerNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
@@ -1842,7 +1850,11 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     $('#considerNum').html(consider);
                     $('#entry_' + articleId + '>.join').html(join);
                     $('#entry_' + articleId + '>.consider').html(consider);
+                    entryList[articleId].join = join;
+                    entryList[articleId].consider = consider;
                     disableEntryListLink();
+
+                    personalEntryList[articleId] = reply;
 
                     actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text(), reply: replyStr});
                     showMessage(i18next.t('msg.completeReply'));
