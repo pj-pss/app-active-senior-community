@@ -202,7 +202,7 @@ function getJoinInfoList(token) {
         // set num
         var count = {};
         for (let val of res.d.results) {
-            if($('#join_' + val.provide_id)[0]) {
+            if($('#entry_' + val.provide_id)[0]) {
                 if(count[val.provide_id] == null) {
                     count[val.provide_id] = {};
                     count[val.provide_id].join = 0;
@@ -223,7 +223,7 @@ function getJoinInfoList(token) {
             '</span> <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i><span class="join">' +
             count[key].join + '</span>';
             entryList[key] = joinHtml;
-            $('#join_' + key).html(joinHtml);
+            $('#entry_' + key).html(joinHtml);
         }
         isLoad1 = false;
     })
@@ -255,8 +255,8 @@ function getPersonalJoinInfo() {
             // set num
             var count = {};
             for (let val of res.d.results) {
-                if ($('#join_' + val.provide_id)[0]) {
-                    $('#join_' + val.provide_id).parents('li').addClass('entry' + val.entry_flag);
+                if ($('#entry_' + val.provide_id)[0]) {
+                    $('#entry_' + val.provide_id).parents('li').addClass('entry' + val.entry_flag);
                     personalEntryList[val.provide_id] = val.entry_flag;
                 }
             }
@@ -542,7 +542,7 @@ function clearFilter() {
 
 function setEntryNumber() {
     for (let key in entryList) {
-        $('#join_' + key).html(entryList[key]);
+        $('#entry_' + key).html(entryList[key]);
     }
 }
 
@@ -576,7 +576,7 @@ function createArticleGrid(id, title, date, type){
                     '<div class="date">' +
                         dispDate +
                     '</div>' +
-                    '<div class="evaluation" id="join_' + id + '">' +
+                    '<div class="evaluation" id="entry_' + id + '">' +
                         (dispDate ? entry : '') +
                     '</div>' +
                 '</div>' +
@@ -595,7 +595,7 @@ function createTopContent(id, title, date, type) {
                 '<div class="date">' +
                     dispDate +
                 '</div>' +
-                '<div class="evaluation" id="join_' + id + '">' +
+                '<div class="evaluation" id="entry_' + id + '">' +
                     (dispDate ? entry : '') +
                 '</div>' +
             '</div>' +
@@ -1476,7 +1476,7 @@ function setNewBadge() {
             for (let article of articleListAll) {
                 if (article.__updated > userInfo.lastAction) {
                     $('#img_' + article.__id).parents('.list-image').addClass('new');
-                    $('#join_' + article.__id).parents('#top .top-content').addClass('new');
+                    $('#entry_' + article.__id).parents('#top .top-content').addClass('new');
                 }
             }
         });
@@ -1609,8 +1609,8 @@ function getArticleDetail(id) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
-                    $('#join_' + article.__id + '>.join').html(join);
-                    $('#join_' + article.__id + '>.consider').html(consider);
+                    $('#entry_' + article.__id + '>.join').html(join);
+                    $('#entry_' + article.__id + '>.consider').html(consider);
 
                     $('#joinNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.JOIN + ", '" + article.__id + "')");
                     $('#considerNum').attr('href', "javascript:viewJoinConsiderList(" + REPLY.CONSIDER + ", '" + article.__id + "')");
@@ -1840,8 +1840,8 @@ function replyEvent(reply, articleId, userReplyId, orgReplyId, sameReply) {
                     }
                     $('#joinNum').html(join);
                     $('#considerNum').html(consider);
-                    $('#join_' + articleId + '>.join').html(join);
-                    $('#join_' + articleId + '>.consider').html(consider);
+                    $('#entry_' + articleId + '>.join').html(join);
+                    $('#entry_' + articleId + '>.consider').html(consider);
                     disableEntryListLink();
 
                     actionHistory.logWrite('editReplyHistory', {detail: $('#articleDetail .news-title').text(), reply: replyStr});
