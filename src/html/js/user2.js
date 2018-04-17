@@ -631,6 +631,10 @@ function getUserBasicInfo (token) {
         headers: {
             "Authorization": "Bearer " + token,
             "Accept": "application/json"
+        },
+        data: {
+            '\$orderby': '__updated desc',
+            '\$top': 1
         }
     }).done(res => {
         let basicInfo = res.d.results[0];
@@ -700,6 +704,10 @@ function getUserHealthInfo (token) {
         headers: {
             "Authorization": "Bearer " + token,
             "Accept": "application/json"
+        },
+        data: {
+            '\$orderby': '__updated desc',
+            '\$top': 1
         }
     }).done(res => {
         let healthInfo = res.d.results[0];
@@ -730,12 +738,14 @@ function getUserVital (token) {
         headers: {
             "Authorization": "Bearer " + token,
             "Accept": "application/json"
+        },
+        data: {
+            '\$orderby': '__updated desc',
+            '\$top': 2
         }
     }).done(res => {
-        vitalList = _.sortBy(res.d.results, function (item) { return item.__updated; });
-        vitalList.reverse();
-        let vital = vitalList[0];
-        let preVital = vitalList[1];
+        let vital = res.d.results[0];
+        let preVital = res.d.results[1];
 
         let tempDiff;
         let minDiff;
@@ -779,6 +789,10 @@ function getUserHousehold (token) {
         headers: {
             "Authorization": "Bearer " + token,
             "Accept": "application/json"
+        },
+        data: {
+            '\$orderby': '__updated desc',
+            '\$top': 1
         }
     }).done(res => {
         let household = res.d.results[0];
