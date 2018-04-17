@@ -98,7 +98,7 @@
         <href>dcbox:/organizationCellUrls.json</href>
         <propstat>
             <prop>
-                <getcontenttype>text/plan</getcontenttype>
+                <getcontenttype>application/json</getcontenttype>
             </prop>
         </propstat>
     </response>
