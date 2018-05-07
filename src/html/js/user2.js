@@ -217,7 +217,15 @@ function getJoinInfoList(token) {
 
             }
         }
-        for (let key in count) {
+        for (let article of articleList) {
+            if(article.type === TYPE.INFO) continue;
+
+            let key = article.__id;
+            if (count[key] == null) {
+                count[key] = {};
+                count[key].join = 0;
+                count[key].consider = 0;
+            }
             var joinHtml = '<i class="fa fa-star fa-2x icon" aria-hidden="true"></i><span class="consider">'+
             count[key].consider +
             '</span> <i class="fas fa-calendar-check fa-2x icon" aria-hidden="true"></i><span class="join">' +
