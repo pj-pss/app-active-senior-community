@@ -46,8 +46,8 @@ function(request){
     // Get App Token
     var appCellAuthInfo = {
         "cellUrl": appCellUrl,
-        "userId": "tokenAcc",
-        "password": "personiumtoken"
+        "userId": "***",
+        "password": "***"
     };
     var ret;
     try {
