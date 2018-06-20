@@ -1173,6 +1173,7 @@ function closeHelpConfirm(f) {
                 helpAuthorized = false;
                 qrJson = null;
                 getArticleList();
+                getUserAllProfile();
 
                 $(".startHelpOp").show();
                 $(".endHelpOp").hide();
