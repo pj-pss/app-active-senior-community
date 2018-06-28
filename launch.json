@@ -2,6 +2,7 @@
   "personal": {
      "web": "https://demo.personium.io/app-life-enrichers-community/__/html/index.html",
      "android": "***:",
-     "ios": "***:"
+     "ios": "***:",
+     "sendRefreshToken": true
   }
 }
